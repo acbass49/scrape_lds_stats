@@ -32,7 +32,7 @@ while count<3:
     try:
         current_d = datetime.datetime.now()
         link = 'https://x.com/Ch_JesusChrist?ref_src=twsrc%5Egoogle%7Ctwcamp%5Eserp%7Ctwgr%5Eauthor'
-        driver = start_chrome(url = link, headless=False)
+        driver = start_chrome(url = link, headless=True)
         driver.maximize_window()
         time.sleep(10)
         driver.execute_script("window.scrollTo(0, 150)")
@@ -61,5 +61,7 @@ if os.path.isfile(fpath):
     data = pd.concat([full_file, insta, twitter], ignore_index=True)
 else:
     data = pd.concat([insta, twitter], ignore_index=True)
+
+data.drop_duplicates(subset=['account', 'social', 'date'], inplace=True)
 
 data.to_csv(fpath, index = False)
