@@ -17,8 +17,6 @@ jobs:
         with:
           token: ${{ secrets.SECRETS }}
       - uses: browser-actions/setup-chrome@v1
-        with:
-          install-dependencies: true
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
