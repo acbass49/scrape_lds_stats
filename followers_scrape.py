@@ -7,7 +7,10 @@ from selenium.webdriver.chrome.options import Options
 
 current_d = datetime.datetime.now()
 link = 'https://www.instagram.com/churchofjesuschrist/?hl=en'
-driver = start_chrome(url = link, headless=True)
+user_agent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36 OPR/112.0.0.0'
+options = Options()
+options.add_argument(f'user-agent={user_agent}')
+driver = start_chrome(url = link, headless=True,options=options)
 time.sleep(10)
 followers = find_all(S("span[class = 'x5n08af x1s688f']"))[1].web_element.get_attribute("title")
 
