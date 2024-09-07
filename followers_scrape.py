@@ -18,6 +18,7 @@ insta = pd.DataFrame({
     'followers':int(followers.replace(",",""))
 }, index = [0])
 count = 4
+kill_browser()
 
 current_d = datetime.datetime.now()
 link = 'https://x.com/Ch_JesusChrist?ref_src=twsrc%5Egoogle%7Ctwcamp%5Eserp%7Ctwgr%5Eauthor'
@@ -25,14 +26,13 @@ user_agent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36
 options = Options()
 options.add_argument(f'user-agent={user_agent}')
 driver = start_chrome(url = link, headless=True,options=options)
-get_driver().save_screenshot('./screenshot1.png')
 time.sleep(10)
 driver.execute_script("window.scrollTo(0, 150)")
-get_driver().save_screenshot('./screenshot2.png')
 time.sleep(10)
 hover("Followers")
 time.sleep(5)
 followers = find_all(S("span[style = 'text-overflow: unset;']", above="Affiliates", below="Followers"))[0].web_element.text
+kill_browser()
 
 twitter = pd.DataFrame({
     'account':'churchofjesuschrist',
