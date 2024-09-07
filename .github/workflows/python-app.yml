@@ -1,5 +1,6 @@
 # This workflow will install Python dependencies, run tests and lint with a single version of Python
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python
+# Chrome github actions found here: https://github.com/marketplace/actions/setup-chrome
 
 name: 'Daily Follower Count Scrape'
 
@@ -20,7 +21,6 @@ jobs:
           token: ${{ secrets.SECRETS }}
       - uses: browser-actions/setup-chrome@v1
         with:
-          chrome-version: 120
           install-dependencies: true
       - name: Set up Python
         uses: actions/setup-python@v5
