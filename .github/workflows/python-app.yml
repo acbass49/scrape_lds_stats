@@ -9,7 +9,7 @@ on:
     - cron: "0 10 * * *"
 
 jobs:
-  update_election:
+  get_follower_counts:
     runs-on: macos-latest
     steps: 
       - name: Check out repository
