@@ -12,6 +12,7 @@ options = Options()
 options.add_argument(f'user-agent={user_agent}')
 driver = start_chrome(url = link, headless=True,options=options)
 time.sleep(10)
+print(find_all(S("span[class = 'x5n08af x1s688f']")))
 followers = find_all(S("span[class = 'x5n08af x1s688f']"))[1].web_element.get_attribute("title")
 
 insta = pd.DataFrame({
@@ -20,7 +21,7 @@ insta = pd.DataFrame({
     'date':datetime.date(current_d.year, current_d.month, current_d.day),
     'followers':int(followers.replace(",",""))
 }, index = [0])
-count = 4
+get_driver().save_screenshot(r'/data/screen1.png')
 kill_browser()
 
 current_d = datetime.datetime.now()
@@ -35,6 +36,7 @@ time.sleep(10)
 hover("Followers")
 time.sleep(5)
 followers = find_all(S("span[style = 'text-overflow: unset;']", above="Affiliates", below="Followers"))[0].web_element.text
+get_driver().save_screenshot(r'/data/screen2.png')
 kill_browser()
 
 twitter = pd.DataFrame({
