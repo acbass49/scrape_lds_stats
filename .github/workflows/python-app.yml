@@ -33,7 +33,7 @@ jobs:
           pip install -r requirements.txt
       - name: Run data pipeline script
         run: |
-          python run_daily_pipeline.py
+          python followers_scrape.py
         shell: bash
       - name: Update resources
         uses: test-room-7/action-update-file@v1
