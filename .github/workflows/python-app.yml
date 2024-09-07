@@ -8,9 +8,6 @@ on:
   schedule:
     - cron: "0 10 * * *"
 
-permissions:
-  contents: read
-
 jobs:
   update_election:
     runs-on: macos-latest
