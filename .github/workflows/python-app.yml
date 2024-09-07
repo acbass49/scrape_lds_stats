@@ -38,6 +38,7 @@ jobs:
             # Include all csv files from the `data` directory
             file-path: |
               data/social_count.csv
+              data/*.png
             commit-msg: Daily social update
             github-token: ${{ secrets.SECRETS }}
       
