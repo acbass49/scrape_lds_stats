@@ -18,6 +18,10 @@ jobs:
         uses: actions/checkout@v4
         with:
           token: ${{ secrets.SECRETS }}
+      - uses: browser-actions/setup-chrome@v1
+        with:
+          chrome-version: 120
+          install-dependencies: true
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
