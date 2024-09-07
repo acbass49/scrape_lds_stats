@@ -1,0 +1,42 @@
+# This workflow will install Python dependencies, run tests and lint with a single version of Python
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python
+
+name: 'Daily Follower Count Scrape'
+
+on:
+  schedule:
+    - cron: "0 10 * * *"
+
+permissions:
+  contents: read
+
+jobs:
+  update_election:
+    runs-on: macos-latest
+    steps: 
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.SECRETS }}
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      - name: Run data pipeline script
+        run: |
+          python run_daily_pipeline.py
+        shell: bash
+      - name: Update resources
+        uses: test-room-7/action-update-file@v1
+        with:
+            # Include all csv files from the `data` directory
+            file-path: |
+              data/social_count.csv
+            commit-msg: Daily social update
+            github-token: ${{ secrets.SECRETS }}
+      
