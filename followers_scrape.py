@@ -4,6 +4,8 @@ import datetime
 import time
 import os
 from selenium.webdriver.chrome.options import Options
+from bs4 import BeautifulSoup
+import requests
 
 current_d = datetime.datetime.now()
 link = 'https://www.instagram.com/churchofjesuschrist/?hl=en'
