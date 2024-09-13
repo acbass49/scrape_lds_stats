@@ -10,16 +10,14 @@ on:
 
 jobs:
   get_follower_counts:
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     steps: 
       - name: Check out repository
         uses: actions/checkout@v4
         with:
           token: ${{ secrets.SECRETS }}
-      - name: Set up Chrome for Twitter
+      - name: Set up Chrome
         uses: browser-actions/setup-chrome@v1
-      - name: Set up Firefox for Instagram
-        uses: browser-actions/setup-firefox@v1
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
