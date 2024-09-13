@@ -8,8 +8,11 @@ from bs4 import BeautifulSoup
 import requests
 
 current_d = datetime.datetime.now()
+user_agent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36 OPR/112.0.0.0'
 link = 'https://www.instagram.com/churchofjesuschrist/?hl=en'
-driver = start_firefox(url = link, headless=True)
+options = Options()
+options.add_argument(f'user-agent={user_agent}')
+driver = start_chrome(url = link, headless=True)
 time.sleep(10)
 # followers = find_all(S("span[class = 'x5n08af x1s688f']"))[1].web_element.get_attribute("title")
 
@@ -22,9 +25,7 @@ time.sleep(10)
 driver.save_screenshot('./data/screen1.png')
 kill_browser()
 
-current_d = datetime.datetime.now()
 link = 'https://x.com/Ch_JesusChrist?ref_src=twsrc%5Egoogle%7Ctwcamp%5Eserp%7Ctwgr%5Eauthor'
-user_agent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36 OPR/112.0.0.0'
 options = Options()
 options.add_argument(f'user-agent={user_agent}')
 driver = start_chrome(url = link, headless=True,options=options)
