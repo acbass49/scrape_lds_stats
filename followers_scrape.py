@@ -4,14 +4,15 @@ import datetime
 import time
 import os
 from selenium.webdriver.chrome.options import Options
+import undetected_chromedriver as uc
 
 
 current_d = datetime.datetime.now()
 user_agent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36 OPR/112.0.0.0'
 link = 'https://www.instagram.com/churchofjesuschrist'
-options = Options()
-options.add_argument(f'user-agent={user_agent}')
-driver = start_chrome(url = link, headless=False)
+# options = Options()
+# options.add_argument(f'user-agent={user_agent}')
+driver = uc.Chrome(headless=True,use_subprocess=False)
 time.sleep(10)
 # followers = find_all(S("span[class = 'x5n08af x1s688f']"))[1].web_element.get_attribute("title")
 
