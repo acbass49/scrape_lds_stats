@@ -19,7 +19,7 @@ jobs:
       - name: Set up Chrome
         uses: browser-actions/setup-chrome@v1
         with:
-          chrome-version: 129
+          chrome-version: 130
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
