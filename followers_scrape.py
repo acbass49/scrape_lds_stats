@@ -23,7 +23,7 @@ time.sleep(10)
 #     'followers':int(followers.replace(",",""))
 # }, index = [0])
 driver.save_screenshot('./data/screen1.png')
-kill_browser()
+driver.close() # `quit` to end all sessions
 
 link = 'https://x.com/Ch_JesusChrist?ref_src=twsrc%5Egoogle%7Ctwcamp%5Eserp%7Ctwgr%5Eauthor'
 options = Options()
