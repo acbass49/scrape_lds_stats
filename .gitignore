@@ -2,3 +2,4 @@
 __pycache__
 scrape_env
 venv
+.env
