@@ -18,8 +18,6 @@ jobs:
           token: ${{ secrets.SECRETS }}
       - name: Set up Chrome
         uses: browser-actions/setup-chrome@v1
-        with:
-          chrome-version: 132
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
