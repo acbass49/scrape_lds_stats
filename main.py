@@ -22,11 +22,11 @@ def main():
     dict_data = [get_data(link) for link in state_links]
     state_data = pd.DataFrame(dict_data)
 
-    # Temple Data: LDS.ORG
+    # # Temple Data: LDS.ORG
     base_link_temples = "https://www.churchofjesuschrist.org/temples/list?lang=eng"
     res = requests.get(base_link_temples)
     soup = BeautifulSoup(res.content, "html.parser")
-    script_json = soup.find_all("script")[15].text.strip()
+    script_json = soup.find_all("script")[len(soup.find_all("script"))-1].text.strip()
     data = json.loads(script_json)
     temple_data = pd.json_normalize(data, ['props','pageProps','templeList'])
 
@@ -37,7 +37,7 @@ def main():
     
     # Temple Dimension Data: https://churchofjesuschristtemples.org
     # + https://church-of-jesus-christ-facts.net
-    get_temple_data().to_csv(f"./data/temple-dim-{str(current_date)}.csv", index = False)
+    # get_temple_data().to_csv(f"./data/temple-dim-{str(current_date)}.csv", index = False)
 
 if __name__ == '__main__':
     main()

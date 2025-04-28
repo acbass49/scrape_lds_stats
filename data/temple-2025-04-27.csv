@@ -1,0 +1,383 @@
+name,location,status,date,templeOrgId,templeNameId,city,stateRegion,country,sortDate
+Laie Hawaii Temple,"Laie, Hawaii, United States",OPERATING,"November 27, 1919",1,laie-hawaii-temple,Laie, Hawaii, United States,"November 27, 1919"
+Johannesburg South Africa Temple,"Johannesburg, Gauteng, South Africa",OPERATING,"August 24, 1985",2,johannesburg-south-africa-temple,Johannesburg, Gauteng, South Africa,"August 24, 1985"
+Logan Utah Temple,"Logan, Utah, United States",OPERATING,"May 17, 1884",3,logan-utah-temple,Logan, Utah, United States,"May 17, 1884"
+Las Vegas Nevada Temple,"Las Vegas, Nevada, United States",OPERATING,"December 16, 1989",4,las-vegas-nevada-temple,Las Vegas, Nevada, United States,"December 16, 1989"
+Mexico City Mexico Temple,"México, Distrito Federal, Mexico",OPERATING,"December 2, 1983",5,mexico-city-mexico-temple,México, Distrito Federal, Mexico,"December 2, 1983"
+Ogden Utah Temple,"Ogden, Utah, United States",OPERATING,"January 18, 1972",6,ogden-utah-temple,Ogden, Utah, United States,"January 18, 1972"
+Orlando Florida Temple,"Windermere, Florida, United States",RENOVATION,Renovation,7,orlando-florida-temple,Windermere, Florida, United States,
+Provo Utah Rock Canyon Temple,"Provo, Utah, United States",RENOVATION,Renovation,8,provo-utah-rock-canyon-temple,Provo, Utah, United States,
+Sydney Australia Temple,"Carlingford, New South Wales, Australia",OPERATING,"September 20, 1984",9,sydney-australia-temple,Carlingford, New South Wales, Australia,"September 20, 1984"
+St. George Utah Temple,"St. George, Utah, United States",OPERATING,"April 6, 1877",10,st.-george-utah-temple,St. George, Utah, United States,"April 6, 1877"
+São Paulo Brazil Temple,"São Paulo, Sao Paulo, Brazil",OPERATING,"October 30, 1978",11,sao-paulo-brazil-temple,São Paulo, Sao Paulo, Brazil,"October 30, 1978"
+Nuku'alofa Tonga Temple,"Liahona, Tongatapu, Tonga",OPERATING,"August 9, 1983",12,nuku'alofa-tonga-temple,Liahona, Tongatapu, Tonga,"August 9, 1983"
+Nashville Tennessee Temple,"Franklin, Tennessee, United States",OPERATING,"May 21, 2000",13,nashville-tennessee-temple,Franklin, Tennessee, United States,"May 21, 2000"
+Papeete Tahiti Temple,"Papeete, Tahiti, French Polynesia",OPERATING,"October 27, 1983",14,papeete-tahiti-temple,Papeete, Tahiti, French Polynesia,"October 27, 1983"
+Tokyo Japan Temple,"Minato-ku, Tokyo, Japan",OPERATING,"October 27, 1980",15,tokyo-japan-temple,Minato-ku, Tokyo, Japan,"October 27, 1980"
+Vernal Utah Temple,"Vernal, Utah, United States",OPERATING,"November 2, 1997",16,vernal-utah-temple,Vernal, Utah, United States,"November 2, 1997"
+Boston Massachusetts Temple,"Belmont, Massachusetts, United States",OPERATING,"October 1, 2000",17,boston-massachusetts-temple,Belmont, Massachusetts, United States,"October 1, 2000"
+Antofagasta Chile Temple,"Antofagasta, Chile",CONSTRUCTION,Construction,4119596,antofagasta-chile-temple,Antofagasta,, Chile,
+Mount Timpanogos Utah Temple,"American Fork, Utah, United States",OPERATING,"October 13, 1996",18,mount-timpanogos-utah-temple,American Fork, Utah, United States,"October 13, 1996"
+Budapest Hungary Temple,Hungary,ANNOUNCED,Announced,4119597,budapest-hungary-temple,,,,
+Preston England Temple,"Chorley, Lancashire, England",OPERATING,"June 7, 1998",19,preston-england-temple,Chorley, Lancashire, England,"June 7, 1998"
+Moses Lake Washington Temple,"Moses Lake, Washington, United States",OPERATING,"September 17, 2023",4119594,moses-lake-washington-temple,Moses Lake, Washington, United States,"September 17, 2023"
+St. Louis Missouri Temple,"St. Louis, Missouri, United States",OPERATING,"June 1, 1997",20,st.-louis-missouri-temple,St. Louis, Missouri, United States,"June 1, 1997"
+Cardston Alberta Temple,"Cardston, Alberta, Canada",OPERATING,"August 26, 1923",21,cardston-alberta-temple,Cardston, Alberta, Canada,"August 26, 1923"
+San Pedro Sula Honduras Temple,"San Pedro Sula, Honduras",OPERATING,"October 13, 2024",4119595,san-pedro-sula-honduras-temple,San Pedro Sula,, Honduras,"October 13, 2024"
+Mesa Arizona Temple,"Mesa, Arizona, United States",OPERATING,"October 23, 1927",22,mesa-arizona-temple,Mesa, Arizona, United States,"October 23, 1927"
+Neiafu Tonga Temple,"Neiafu Vava’u, Tonga",CONSTRUCTION,Construction,4119592,neiafu-tonga-temple,Neiafu Vava’u,, Tonga,
+Boise Idaho Temple,"Boise, Idaho, United States",OPERATING,"May 25, 1984",23,boise-idaho-temple,Boise, Idaho, United States,"May 25, 1984"
+Deseret Peak Utah Temple,"Tooele, Utah, United States",OPERATING,"November 10, 2024",4119593,deseret-peak-utah-temple,Tooele, Utah, United States,"November 10, 2024"
+Chicago Illinois Temple,"Glenview, Illinois, United States",OPERATING,"August 9, 1985",24,chicago-illinois-temple,Glenview, Illinois, United States,"August 9, 1985"
+Kansas City Missouri Temple,"Kansas City, Missouri, United States",OPERATING,"May 6, 2012",4005413,kansas-city-missouri-temple,Kansas City, Missouri, United States,"May 6, 2012"
+Pago Pago American Samoa Temple,"Tafuna, Western District, American Samoa",CONSTRUCTION,Construction,4119590,pago-pago-american-samoa-temple,Tafuna, Western District, American Samoa,
+Córdoba Argentina Temple,"Córdoba, Argentina",OPERATING,"May 17, 2015",4005412,cordoba-argentina-temple,Córdoba,, Argentina,"May 17, 2015"
+Denver Colorado Temple,"Centennial, Colorado, United States",OPERATING,"October 24, 1986",25,denver-colorado-temple,Centennial, Colorado, United States,"October 24, 1986"
+Okinawa Japan Temple,"Okinawa, Japan",OPERATING,"November 12, 2023",4119591,okinawa-japan-temple,Okinawa,, Japan,"November 12, 2023"
+Frankfurt Germany Temple,"Friedrichsdorf, Hessen, Germany",OPERATING,"August 28, 1987",26,frankfurt-germany-temple,Friedrichsdorf, Hessen, Germany,"August 28, 1987"
+Rome Italy Temple,"Rome, Roma, Italy",OPERATING,"March 10, 2019",4005415,rome-italy-temple,Rome, Roma, Italy,"March 10, 2019"
+Madrid Spain Temple,"Madrid, Madrid, Spain",OPERATING,"March 19, 1999",27,madrid-spain-temple,Madrid, Madrid, Spain,"March 19, 1999"
+Philadelphia Pennsylvania Temple,"Philadelphia, Pennsylvania, United States",OPERATING,"September 18, 2016",4005414,philadelphia-pennsylvania-temple,Philadelphia, Pennsylvania, United States,"September 18, 2016"
+Apia Samoa Temple,"Apia, Pesega, Samoa",OPERATING,"August 5, 1983",28,apia-samoa-temple,Apia, Pesega, Samoa,"August 5, 1983"
+Tuxtla Gutiérrez Mexico Temple,"Tuxtla Gutiérrez, Chiapas, Mexico",OPERATING,"March 12, 2000",37916,tuxtla-gutierrez-mexico-temple,Tuxtla Gutiérrez, Chiapas, Mexico,"March 12, 2000"
+Atlanta Georgia Temple,"Sandy Springs, Georgia, United States",OPERATING,"June 1, 1983",29,atlanta-georgia-temple,Sandy Springs, Georgia, United States,"June 1, 1983"
+Buenos Aires Argentina Temple,"Ciudad Evita, Buenos Aires, Argentina",OPERATING,"January 17, 1986",30,buenos-aires-argentina-temple,Ciudad Evita, Buenos Aires, Argentina,"January 17, 1986"
+Calgary Alberta Temple,"Calgary, Alberta, Canada",OPERATING,"October 28, 2012",4005411,calgary-alberta-temple,Calgary, Alberta, Canada,"October 28, 2012"
+Bogotá Colombia Temple,"Bogotá, Distrito Capital, Colombia",OPERATING,"April 24, 1999",31,bogota-colombia-temple,Bogotá, Distrito Capital, Colombia,"April 24, 1999"
+Bountiful Utah Temple,"Bountiful, Utah, United States",OPERATING,"January 8, 1995",32,bountiful-utah-temple,Bountiful, Utah, United States,"January 8, 1995"
+Dallas Texas Temple,"Dallas, Texas, United States",OPERATING,"October 19, 1984",33,dallas-texas-temple,Dallas, Texas, United States,"October 19, 1984"
+Freiberg Germany Temple,"Freiberg, Sachsen, Germany",OPERATING,"June 29, 1985",35,freiberg-germany-temple,Freiberg, Sachsen, Germany,"June 29, 1985"
+Guatemala City Guatemala Temple,"Guatemala City, Guatemala, Guatemala",OPERATING,"December 14, 1984",36,guatemala-city-guatemala-temple,Guatemala City, Guatemala, Guatemala,"December 14, 1984"
+Guayaquil Ecuador Temple,"Guayaquil, Guayas, Ecuador",OPERATING,"August 1, 1999",37,guayaquil-ecuador-temple,Guayaquil, Guayas, Ecuador,"August 1, 1999"
+Idaho Falls Idaho Temple,"Idaho Falls, Idaho, United States",OPERATING,"September 23, 1945",38,idaho-falls-idaho-temple,Idaho Falls, Idaho, United States,"September 23, 1945"
+Jordan River Utah Temple,"South Jordan, Utah, United States",OPERATING,"November 16, 1981",39,jordan-river-utah-temple,South Jordan, Utah, United States,"November 16, 1981"
+Los Angeles California Temple,"Los Angeles, California, United States",OPERATING,"March 11, 1956",40,los-angeles-california-temple,Los Angeles, California, United States,"March 11, 1956"
+London England Temple,"Newchapel, Surrey, England",OPERATING,"September 7, 1958",41,london-england-temple,Newchapel, Surrey, England,"September 7, 1958"
+Lima Peru Temple,"La Molina, Lima, Peru",OPERATING,"January 10, 1986",42,lima-peru-temple,La Molina, Lima, Peru,"January 10, 1986"
+Manti Utah Temple,"Manti, Utah, United States",OPERATING,"May 21, 1888",43,manti-utah-temple,Manti, Utah, United States,"May 21, 1888"
+Nauvoo Illinois Temple,"Nauvoo, Illinois, United States",OPERATING,"June 27, 2002",44,nauvoo-illinois-temple,Nauvoo, Illinois, United States,"June 27, 2002"
+Hamilton New Zealand Temple,"Hamilton, Auckland, New Zealand",OPERATING,"April 20, 1958",45,hamilton-new-zealand-temple,Hamilton, Auckland, New Zealand,"April 20, 1958"
+Oakland California Temple,"Oakland, California, United States",OPERATING,"November 17, 1964",46,oakland-california-temple,Oakland, California, United States,"November 17, 1964"
+Seattle Washington Temple,"Bellevue, Washington, United States",OPERATING,"November 17, 1980",48,seattle-washington-temple,Bellevue, Washington, United States,"November 17, 1980"
+Salt Lake Temple,"Salt Lake City, Utah, United States",RENOVATION,Renovation,49,salt-lake-temple,Salt Lake City, Utah, United States,
+Santiago Chile Temple,"Providencia, Santiago, Chile",OPERATING,"September 15, 1983",50,santiago-chile-temple,Providencia, Santiago, Chile,"September 15, 1983"
+Seoul Korea Temple,"Seoul, Seoul-teukbyeolsi, South Korea",OPERATING,"December 14, 1985",51,seoul-korea-temple,Seoul, Seoul-teukbyeolsi, South Korea,"December 14, 1985"
+Bern Switzerland Temple,"Zollikofen, Bern, Switzerland",OPERATING,"September 11, 1955",52,bern-switzerland-temple,Zollikofen, Bern, Switzerland,"September 11, 1955"
+Mérida Mexico Temple,"Mérida, Yucatan, Mexico",OPERATING,"July 8, 2000",36916,merida-mexico-temple,Mérida, Yucatan, Mexico,"July 8, 2000"
+Taipei Taiwan Temple,"Taipei, Taipei, Taiwan",OPERATING,"November 17, 1984",53,taipei-taiwan-temple,Taipei, Taipei, Taiwan,"November 17, 1984"
+Washington D.C. Temple,"Kensington, Maryland, United States",OPERATING,"November 19, 1974",54,washington-d.c.-temple,Kensington, Maryland, United States,"November 19, 1974"
+Hong Kong China Temple,"Kowloon Tong, Kowloon City, Hong Kong",OPERATING,"May 26, 1996",55,hong-kong-china-temple,Kowloon Tong, Kowloon City, Hong Kong,"May 26, 1996"
+Cochabamba Bolivia Temple,"Alto Queru Queru, Cochabamba, Bolivia",OPERATING,"April 30, 2000",56,cochabamba-bolivia-temple,Alto Queru Queru, Cochabamba, Bolivia,"April 30, 2000"
+Recife Brazil Temple,"Recife, Pernambuco, Brazil",OPERATING,"December 15, 2000",57,recife-brazil-temple,Recife, Pernambuco, Brazil,"December 15, 2000"
+Billings Montana Temple,"Billings, Montana, United States",OPERATING,"November 20, 1999",58,billings-montana-temple,Billings, Montana, United States,"November 20, 1999"
+Manila Philippines Temple,"Quezon City, Metro Manila, Philippines",OPERATING,"September 25, 1984",59,manila-philippines-temple,Quezon City, Metro Manila, Philippines,"September 25, 1984"
+Monterrey Mexico Temple,"Monterrey, Nuevo Leon, Mexico",OPERATING,"April 28, 2002",60,monterrey-mexico-temple,Monterrey, Nuevo Leon, Mexico,"April 28, 2002"
+Portland Oregon Temple,"Lake Oswego, Oregon, United States",OPERATING,"August 19, 1989",63,portland-oregon-temple,Lake Oswego, Oregon, United States,"August 19, 1989"
+San Diego California Temple,"San Diego, California, United States",RENOVATION,Renovation,64,san-diego-california-temple,San Diego, California, United States,
+Santo Domingo Dominican Republic Temple,"Santo Domingo, Distrito Nacional, Dominican Republic",OPERATING,"September 17, 2000",65,santo-domingo-dominican-republic-temple,Santo Domingo, Distrito Nacional, Dominican Republic,"September 17, 2000"
+Cobán Guatemala Temple,"Coban, Guatemala",OPERATING,"June 9, 2024",4124796,coban-guatemala-temple,Coban,, Guatemala,"June 9, 2024"
+Stockholm Sweden Temple,"Vasterhaninge, Sweden",RENOVATION,Renovation,66,stockholm-sweden-temple,Vasterhaninge,, Sweden,
+Taylorsville Utah Temple,"Taylorsville, Utah, United States",OPERATING,"June 2, 2024",4124797,taylorsville-utah-temple,Taylorsville, Utah, United States,"June 2, 2024"
+Toronto Ontario Temple,"Brampton, Ontario, Canada",OPENING SOON,Opening Soon,67,toronto-ontario-temple,Brampton, Ontario, Canada,
+Bacolod Philippines Temple,"Lanao Del Norte, Philippines",CONSTRUCTION,Construction,4124794,bacolod-philippines-temple,Lanao Del Norte,, Philippines,
+Caracas Venezuela Temple,"Caracas, Dependencias Federales, Venezuela",OPERATING,"August 20, 2000",68,caracas-venezuela-temple,Caracas, Dependencias Federales, Venezuela,"August 20, 2000"
+McAllen Texas Temple,"McAllen, Texas, United States",OPERATING,"October 8, 2023",4124795,mcallen-texas-temple,McAllen, Texas, United States,"October 8, 2023"
+Port Moresby Papua New Guinea Temple,Papua New Guinea,CONSTRUCTION,Construction,4124792,port-moresby-papua-new-guinea-temple,,,,
+Bentonville Arkansas Temple,"Bentonville, Arkansas, United States",OPERATING,"September 17, 2023",4124793,bentonville-arkansas-temple,Bentonville, Arkansas, United States,"September 17, 2023"
+Freetown Sierra Leone Temple,Sierra Leone,CONSTRUCTION,Construction,4124790,freetown-sierra-leone-temple,,,,
+Orem Utah Temple,"Orem, Utah, United States",OPERATING,"January 21, 2024",4124791,orem-utah-temple,Orem, Utah, United States,"January 21, 2024"
+Panama City Panama Temple,"Corozal, Ancon, Panamá, Panama",OPERATING,"August 10, 2008",69207,panama-city-panama-temple,Corozal, Ancon, Panama,"August 10, 2008"
+Curitiba Brazil Temple,"Curitiba, Parana, Brazil",OPERATING,"June 1, 2008",69206,curitiba-brazil-temple,Curitiba, Parana, Brazil,"June 1, 2008"
+Manhattan New York Temple,"New York, New York, United States",RENOVATION,Renovation,69208,manhattan-new-york-temple,New York, New York, United States,
+San Antonio Texas Temple,"San Antonio, Texas, United States",OPERATING,"May 22, 2005",46179,san-antonio-texas-temple,San Antonio, Texas, United States,"May 22, 2005"
+Monticello Utah Temple,"Monticello, Utah, United States",OPERATING,"July 26, 1998",36462,monticello-utah-temple,Monticello, Utah, United States,"July 26, 1998"
+Santa Cruz Bolivia Temple,Bolivia,CONSTRUCTION,Construction,4134475,santa-cruz-bolivia-temple,,,,
+São Paulo East Brazil Temple,Brazil,ANNOUNCED,Announced,4134474,sao-paulo-east-brazil-temple,,,,
+Miraflores Guatemala City Guatemala Temple,Guatemala,CONSTRUCTION,Construction,4134473,miraflores-guatemala-city-guatemala-temple,,,,
+Lindon Utah Temple,"Lindon, Utah, United States",CONSTRUCTION,Construction,4134472,lindon-utah-temple,Lindon, Utah, United States,
+Baton Rouge Louisiana Temple,"Baton Rouge, Louisiana, United States",OPERATING,"July 16, 2000",36984,baton-rouge-louisiana-temple,Baton Rouge, Louisiana, United States,"July 16, 2000"
+Port Vila Vanuatu Temple,Vanuatu,CONSTRUCTION,Construction,4134471,port-vila-vanuatu-temple,,,,
+Birmingham Alabama Temple,"Gardendale, Alabama, United States",OPERATING,"September 3, 2000",36985,birmingham-alabama-temple,Gardendale, Alabama, United States,"September 3, 2000"
+Tarawa Kiribati Temple,Kiribati,CONSTRUCTION,Construction,4134470,tarawa-kiribati-temple,,,,
+Melbourne Australia Temple,"Wantirna South, Victoria, Australia",CLOSED,Temporarily Closed,36986,melbourne-australia-temple,Wantirna South, Victoria, Australia,
+Columbia South Carolina Temple,"Hopkins, South Carolina, United States",OPERATING,"October 16, 1999",36987,columbia-south-carolina-temple,Hopkins, South Carolina, United States,"October 16, 1999"
+Memphis Tennessee Temple,"Bartlett, Tennessee, United States",OPERATING,"April 23, 2000",36988,memphis-tennessee-temple,Bartlett, Tennessee, United States,"April 23, 2000"
+Montevideo Uruguay Temple,"Carrasco, Montevideo, Uruguay",OPERATING,"March 18, 2001",36989,montevideo-uruguay-temple,Carrasco, Montevideo, Uruguay,"March 18, 2001"
+Villahermosa Mexico Temple,"Villahermosa, Tabasco, Mexico",OPERATING,"May 21, 2000",36991,villahermosa-mexico-temple,Villahermosa, Tabasco, Mexico,"May 21, 2000"
+Iquitos Peru Temple,Peru,ANNOUNCED,Announced,4156607,iquitos-peru-temple,,,,
+Retalhuleu Guatemala Temple,Guatemala,ANNOUNCED,Announced,4156606,retalhuleu-guatemala-temple,,,,
+Vancouver British Columbia Temple,"Langley, British Columbia, Canada",OPERATING,"May 2, 2010",4007091,vancouver-british-columbia-temple,Langley, British Columbia, Canada,"May 2, 2010"
+Cedar City Utah Temple,"Cedar City, Utah, United States",OPERATING,"December 10, 2017",4028590,cedar-city-utah-temple,Cedar City, Utah, United States,"December 10, 2017"
+Manaus Brazil Temple,"Manaus, Amazonas, Brazil",OPERATING,"June 10, 2012",79543,manaus-brazil-temple,Manaus, Amazonas, Brazil,"June 10, 2012"
+Aba Nigeria Temple,"Aba, Abia, Nigeria",OPERATING,"August 7, 2005",43202,aba-nigeria-temple,Aba, Abia, Nigeria,"August 7, 2005"
+Helsinki Finland Temple,"Espoo, Uusimaa, Finland",OPERATING,"October 22, 2006",43203,helsinki-finland-temple,Espoo, Uusimaa, Finland,"October 22, 2006"
+Asunción Paraguay Temple,"Asunción, Alto Paraguay, Paraguay",OPERATING,"May 19, 2002",43204,asuncion-paraguay-temple,Asunción, Alto Paraguay, Paraguay,"May 19, 2002"
+Accra Ghana Temple,"Accra, Greater Accra, Ghana",OPERATING,"January 11, 2004",36549,accra-ghana-temple,Accra, Greater Accra, Ghana,"January 11, 2004"
+Lubbock Texas Temple,"Lubbock, Texas, United States",OPERATING,"April 21, 2002",43205,lubbock-texas-temple,Lubbock, Texas, United States,"April 21, 2002"
+Albuquerque New Mexico Temple,"Albuquerque, New Mexico, United States",OPERATING,"March 5, 2000",36550,albuquerque-new-mexico-temple,Albuquerque, New Mexico, United States,"March 5, 2000"
+Snowflake Arizona Temple,"Snowflake, Arizona, United States",OPERATING,"March 3, 2002",43206,snowflake-arizona-temple,Snowflake, Arizona, United States,"March 3, 2002"
+Anchorage Alaska Temple,"Anchorage, Alaska, United States",OPERATING,"January 9, 1999",36551,anchorage-alaska-temple,Anchorage, Alaska, United States,"January 9, 1999"
+Columbia River Washington Temple,"Richland, Washington, United States",OPERATING,"November 18, 2001",43207,columbia-river-washington-temple,Richland, Washington, United States,"November 18, 2001"
+Bismarck North Dakota Temple,"Bismarck, North Dakota, United States",OPERATING,"September 19, 1999",36552,bismarck-north-dakota-temple,Bismarck, North Dakota, United States,"September 19, 1999"
+Brisbane Australia Temple,"Kangaroo Point, Queensland, Australia",OPERATING,"June 15, 2003",36553,brisbane-australia-temple,Kangaroo Point, Queensland, Australia,"June 15, 2003"
+Campinas Brazil Temple,"Campinas, Sao Paulo, Brazil",OPERATING,"May 17, 2002",36554,campinas-brazil-temple,Campinas, Sao Paulo, Brazil,"May 17, 2002"
+Ciudad Juárez Mexico Temple,"Ciudad Juárez, Chihuahua, Mexico",OPERATING,"February 26, 2000",36555,ciudad-juarez-mexico-temple,Ciudad Juárez, Chihuahua, Mexico,"February 26, 2000"
+Colonia Juárez Chihuahua Mexico Temple,"Colonia Juárez, Chihuahua, Mexico",OPERATING,"March 6, 1999",36556,colonia-juarez-chihuahua-mexico-temple,Colonia Juárez, Chihuahua, Mexico,"March 6, 1999"
+Columbus Ohio Temple,"Columbus, Ohio, United States",OPERATING,"September 4, 1999",36557,columbus-ohio-temple,Columbus, Ohio, United States,"September 4, 1999"
+Edmonton Alberta Temple,"Edmonton, Alberta, Canada",OPERATING,"December 11, 1999",36558,edmonton-alberta-temple,Edmonton, Alberta, Canada,"December 11, 1999"
+Fukuoka Japan Temple,"Fukuoka-shi, Fukuoka, Japan",OPERATING,"June 11, 2000",36559,fukuoka-japan-temple,Fukuoka-shi, Fukuoka, Japan,"June 11, 2000"
+Halifax Nova Scotia Temple,"Dartmouth, Nova Scotia, Canada",OPERATING,"November 14, 1999",36560,halifax-nova-scotia-temple,Dartmouth, Nova Scotia, Canada,"November 14, 1999"
+Hermosillo Sonora Mexico Temple,"Hermosillo, Sonora, Mexico",OPERATING,"February 27, 2000",36561,hermosillo-sonora-mexico-temple,Hermosillo, Sonora, Mexico,"February 27, 2000"
+Houston Texas Temple,"Spring, Texas, United States",OPERATING,"August 26, 2000",36562,houston-texas-temple,Spring, Texas, United States,"August 26, 2000"
+Kyiv Ukraine Temple,"Kyevo-Sviatoshyns’ky Rayon, Kyiv, Ukraine",OPERATING,"August 29, 2010",36563,kyiv-ukraine-temple,Kyevo-Sviatoshyns’ky Rayon, Kyiv, Ukraine,"August 29, 2010"
+Kona Hawaii Temple,"Kailua-Kona, Hawaii, United States",RENOVATION,Renovation,36564,kona-hawaii-temple,Kailua-Kona, Hawaii, United States,
+Montreal Quebec Temple,"Longueuil, Quebec, Canada",OPERATING,"June 4, 2000",36565,montreal-quebec-temple,Longueuil, Quebec, Canada,"June 4, 2000"
+Porto Alegre Brazil Temple,"Porto Alegre, Rio Grande do Sul, Brazil",OPERATING,"December 17, 2000",36566,porto-alegre-brazil-temple,Porto Alegre, Rio Grande do Sul, Brazil,"December 17, 2000"
+Regina Saskatchewan Temple,"Regina, Saskatchewan, Canada",OPERATING,"November 14, 1999",36567,regina-saskatchewan-temple,Regina, Saskatchewan, Canada,"November 14, 1999"
+St. Paul Minnesota Temple,"Oakdale, Minnesota, United States",OPERATING,"January 9, 2000",36568,st.-paul-minnesota-temple,Oakdale, Minnesota, United States,"January 9, 2000"
+Suva Fiji Temple,"Samabula, Suva, Fiji",OPERATING,"June 18, 2000",36569,suva-fiji-temple,Samabula, Suva, Fiji,"June 18, 2000"
+Tampico Mexico Temple,"Ciudad Madero, Tamaulipas, Mexico",OPERATING,"May 20, 2000",36570,tampico-mexico-temple,Ciudad Madero, Tamaulipas, Mexico,"May 20, 2000"
+Tijuana Mexico Temple,"Tijuana, Baja California, Mexico",OPERATING,"December 13, 2015",4009693,tijuana-mexico-temple,Tijuana, Baja California, Mexico,"December 13, 2015"
+Hartford Connecticut Temple,"Farmington, Connecticut, United States",OPERATING,"November 20, 2016",4009692,hartford-connecticut-temple,Farmington, Connecticut, United States,"November 20, 2016"
+Lisbon Portugal Temple,"Lisbon, Portugal",OPERATING,"September 15, 2019",4009689,lisbon-portugal-temple,Lisbon,, Portugal,"September 15, 2019"
+Spokane Washington Temple,"Spokane, Washington, United States",OPERATING,"August 21, 1999",36582,spokane-washington-temple,Spokane, Washington, United States,"August 21, 1999"
+Urdaneta Philippines Temple,"Urdaneta, Pangasinan, Philippines",OPERATING,"April 28, 2024",4009691,urdaneta-philippines-temple,Urdaneta, Pangasinan, Philippines,"April 28, 2024"
+Detroit Michigan Temple,"Bloomfield Hills, Michigan, United States",OPERATING,"October 23, 1999",36583,detroit-michigan-temple,Bloomfield Hills, Michigan, United States,"October 23, 1999"
+Indianapolis Indiana Temple,"Carmel, Indiana, United States",OPERATING,"August 23, 2015",4009690,indianapolis-indiana-temple,Carmel, Indiana, United States,"August 23, 2015"
+Harrisburg Pennsylvania Temple,"Pennsylvania, United States",ANNOUNCED,Announced,4156620,harrisburg-pennsylvania-temple,Pennsylvania,, United States,
+Charlotte North Carolina Temple,"North Carolina, United States",ANNOUNCED,Announced,4156619,charlotte-north-carolina-temple,North Carolina,, United States,
+Tegucigalpa Honduras Temple,"Comayagüela, Francisco Morazán, Honduras",OPERATING,"March 17, 2013",77556,tegucigalpa-honduras-temple,Comayagüela, Francisco Morazán, Honduras,"March 17, 2013"
+Winchester Virginia Temple,"Virginia, United States",ANNOUNCED,Announced,4156618,winchester-virginia-temple,Virginia,, United States,
+Springfield Missouri Temple,"Missouri, United States",ANNOUNCED,Announced,4156617,springfield-missouri-temple,Missouri,, United States,
+Bakersfield California Temple,"California, United States",ANNOUNCED,Announced,4156616,bakersfield-california-temple,California,, United States,
+San Jose California Temple,"California, United States",ANNOUNCED,Announced,4156615,san-jose-california-temple,California,, United States,
+Lethbridge Alberta Temple,"Alberta, Canada",ANNOUNCED,Announced,4156614,lethbridge-alberta-temple,Alberta,, Canada,
+Hamburg Germany Temple,Germany,ANNOUNCED,Announced,4156613,hamburg-germany-temple,,,,
+Jakarta Indonesia Temple,Indonesia,ANNOUNCED,Announced,4156612,jakarta-indonesia-temple,,,,
+Raleigh North Carolina Temple,"Apex, North Carolina, United States",OPERATING,"December 18, 1999",36603,raleigh-north-carolina-temple,Apex, North Carolina, United States,"December 18, 1999"
+Iloilo Philippines Temple,Philippines,ANNOUNCED,Announced,4156611,iloilo-philippines-temple,,,,
+Tuguegarao City Philippines Temple,Philippines,ANNOUNCED,Announced,4156610,tuguegarao-city-philippines-temple,,,,
+Natal Brazil Temple,Brazil,ANNOUNCED,Announced,4156609,natal-brazil-temple,,,,
+Rio de Janeiro Brazil Temple,"Rio de Janeiro, Brazil",OPERATING,"May 8, 2022",4028611,rio-de-janeiro-brazil-temple,Rio de Janeiro,, Brazil,"May 8, 2022"
+Teresina Brazil Temple,Brazil,ANNOUNCED,Announced,4156608,teresina-brazil-temple,,,,
+San Salvador El Salvador Temple,"Antiguo Cuscatlán, La Libertad, El Salvador",OPERATING,"August 21, 2011",4004669,san-salvador-el-salvador-temple,Antiguo Cuscatlán, La Libertad, El Salvador,"August 21, 2011"
+The Hague Netherlands Temple,"Zoetermeer, Zuid-Holland, Netherlands",OPERATING,"September 8, 2002",40705,the-hague-netherlands-temple,Zoetermeer, Zuid-Holland, Netherlands,"September 8, 2002"
+Gilbert Arizona Temple,"Gilbert, Arizona, United States",OPERATING,"March 2, 2014",4004671,gilbert-arizona-temple,Gilbert, Arizona, United States,"March 2, 2014"
+The Gila Valley Arizona Temple,"Central, Arizona, United States",OPERATING,"May 23, 2010",4004670,the-gila-valley-arizona-temple,Central, Arizona, United States,"May 23, 2010"
+Twin Falls Idaho Temple,"Twin Falls, Idaho, United States",OPERATING,"August 24, 2008",75531,twin-falls-idaho-temple,Twin Falls, Idaho, United States,"August 24, 2008"
+Winter Quarters Nebraska Temple,"Omaha, Nebraska, United States",OPERATING,"April 22, 2001",40202,winter-quarters-nebraska-temple,Omaha, Nebraska, United States,"April 22, 2001"
+Draper Utah Temple,"Draper, Utah, United States",OPERATING,"March 20, 2009",75530,draper-utah-temple,Draper, Utah, United States,"March 20, 2009"
+Perth Australia Temple,"Yokine, Western Australia, Australia",OPERATING,"May 20, 2001",40203,perth-australia-temple,Yokine, Western Australia, Australia,"May 20, 2001"
+Lima Peru Los Olivos Temple,"Los Olivos, Lima, Peru",OPERATING,"January 14, 2024",4086056,lima-peru-los-olivos-temple,Los Olivos, Lima, Peru,"January 14, 2024"
+West Jordan Utah Temple,"Utah, United States",ANNOUNCED,Announced,4163881,west-jordan-utah-temple,Utah,, United States,
+Lehi Utah Temple,"Utah, United States",ANNOUNCED,Announced,4163880,lehi-utah-temple,Utah,, United States,
+Cincinnati Ohio Temple,"Ohio, United States",ANNOUNCED,Announced,4163879,cincinnati-ohio-temple,Ohio,, United States,
+Quito Ecuador Temple,"Quito, Ecuador",OPERATING,"November 20, 2022",4086054,quito-ecuador-temple,Quito,, Ecuador,"November 20, 2022"
+Veracruz Mexico Temple,"Boca del Rio, Veracruz, Mexico",OPERATING,"July 9, 2000",38680,veracruz-mexico-temple,Boca del Rio, Veracruz, Mexico,"July 9, 2000"
+Belém Brazil Temple,"Belém, Para, Brazil",OPERATING,"November 20, 2022",4086055,belem-brazil-temple,Belém, Para, Brazil,"November 20, 2022"
+Des Moines Iowa Temple,"Iowa, United States",ANNOUNCED,Announced,4163878,des-moines-iowa-temple,Iowa,, United States,
+Reno Nevada Temple,"Reno, Nevada, United States",OPERATING,"April 23, 2000",38681,reno-nevada-temple,Reno, Nevada, United States,"April 23, 2000"
+Guadalajara Mexico Temple,"Zapopan, Jalisco, Mexico",OPERATING,"April 29, 2001",38682,guadalajara-mexico-temple,Zapopan, Jalisco, Mexico,"April 29, 2001"
+Houston Texas South Temple,"Texas, United States",ANNOUNCED,Announced,4163877,houston-texas-south-temple,Texas,, United States,
+Harare Zimbabwe Temple,"Harare, Zimbabwe",CONSTRUCTION,Construction,4086053,harare-zimbabwe-temple,Harare,, Zimbabwe,
+Yuma Arizona Temple,"Arizona, United States",ANNOUNCED,Announced,4163876,yuma-arizona-temple,Arizona,, United States,
+Victoria British Columbia Temple,Canada,ANNOUNCED,Announced,4163875,victoria-british-columbia-temple,,,,
+Honolulu Hawaii Temple,"Hawaii, United States",ANNOUNCED,Announced,4163874,honolulu-hawaii-temple,Hawaii,, United States,
+Brisbane Australia South Temple,Australia,ANNOUNCED,Announced,4163873,brisbane-australia-south-temple,,,,
+Edinburgh Scotland Temple,United Kingdom,ANNOUNCED,Announced,4163872,edinburgh-scotland-temple,,,,
+Rosario Argentina Temple,Argentina,ANNOUNCED,Announced,4163871,rosario-argentina-temple,,,,
+Florianopolis Brazil Temple,Brazil,ANNOUNCED,Announced,4163870,florianopolis-brazil-temple,,,,
+Maracaibo Venezuela Temple,Venezuela,ANNOUNCED,Announced,4163869,maracaibo-venezuela-temple,,,,
+Uturoa French Polynesia Temple,French Polynesia,ANNOUNCED,Announced,4163868,uturoa-french-polynesia-temple,,,,
+Chihuahua Mexico Temple,Mexico,ANNOUNCED,Announced,4163867,chihuahua-mexico-temple,,,,
+Trujillo Peru Temple,"Trujillo, La Libertad, Peru",OPERATING,"June 21, 2015",4005658,trujillo-peru-temple,Trujillo, La Libertad, Peru,"June 21, 2015"
+Culiacán Mexico Temple,Mexico,ANNOUNCED,Announced,4142975,culiacan-mexico-temple,,,,
+Elko Nevada Temple,"Nevada, United States",CONSTRUCTION,Construction,4138367,elko-nevada-temple,Nevada,, United States,
+Salta Argentina Temple,"Salta, Argentina",OPERATING,"June 16, 2024",4108670,salta-argentina-temple,Salta,, Argentina,"June 16, 2024"
+Antananarivo Madagascar Temple,Madagascar,CONSTRUCTION,Construction,4142974,antananarivo-madagascar-temple,,,,
+Bengaluru India Temple,"Bangalore, India",CONSTRUCTION,Construction,4108671,bengaluru-india-temple,Bangalore,, India,
+Willamette Valley Oregon Temple,"Oregon, United States",CONSTRUCTION,Construction,4138366,willamette-valley-oregon-temple,Oregon,, United States,
+Burley Idaho Temple,United States,CONSTRUCTION,Construction,4138365,burley-idaho-temple,,,,
+Kananga Democratic Republic of the Congo Temple,Democratic Republic of the Congo,ANNOUNCED,Announced,4142973,kananga-democratic-republic-of-the-congo-temple,,,,
+Farmington New Mexico Temple,"New Mexico, United States",CONSTRUCTION,Construction,4138364,farmington-new-mexico-temple,New Mexico,, United States,
+Monrovia Liberia Temple,Liberia,ANNOUNCED,Announced,4142972,monrovia-liberia-temple,,,,
+Grand Junction Colorado Temple,"Colorado, United States",CONSTRUCTION,Construction,4138363,grand-junction-colorado-temple,Colorado,, United States,
+Tacloban City Philippines Temple,Philippines,CONSTRUCTION,Construction,4142971,tacloban-city-philippines-temple,,,,
+Casper Wyoming Temple,"Casper, Wyoming, United States",OPERATING,"November 24, 2024",4138362,casper-wyoming-temple,Casper, Wyoming, United States,"November 24, 2024"
+Kaohsiung Taiwan Temple,Taiwan,CONSTRUCTION,Construction,4142970,kaohsiung-taiwan-temple,,,,
+Helena Montana Temple,"Helena, Montana, United States",OPERATING,"June 18, 2023",4138361,helena-montana-temple,Helena, Montana, United States,"June 18, 2023"
+Torreón Mexico Temple,Mexico,CONSTRUCTION,Construction,4138360,torreon-mexico-temple,,,,
+Querétaro Mexico Temple,Mexico,CONSTRUCTION,Construction,4138359,queretaro-mexico-temple,,,,
+Cali Colombia Temple,Colombia,CONSTRUCTION,Construction,4138358,cali-colombia-temple,,,,
+Belo Horizonte Brazil Temple,Brazil,CONSTRUCTION,Construction,4138357,belo-horizonte-brazil-temple,,,,
+Singapore Temple,Singapore,ANNOUNCED,Announced,4138356,singapore-temple,,,,
+Cape Town South Africa Temple,South Africa,ANNOUNCED,Announced,4138355,cape-town-south-africa-temple,,,,
+Beira Mozambique Temple,Mozambique,ANNOUNCED,Announced,4138354,beira-mozambique-temple,,,,
+Sacramento California Temple,"Rancho Cordova, California, United States",OPERATING,"September 3, 2006",45901,sacramento-california-temple,Rancho Cordova, California, United States,"September 3, 2006"
+Kumasi Ghana Temple,Ghana,ANNOUNCED,Announced,4138353,kumasi-ghana-temple,,,,
+Redlands California Temple,"Redlands, California, United States",OPERATING,"September 14, 2003",45902,redlands-california-temple,Redlands, California, United States,"September 14, 2003"
+Newport Beach California Temple,"Newport Beach, California, United States",OPERATING,"August 28, 2005",45903,newport-beach-california-temple,Newport Beach, California, United States,"August 28, 2005"
+Vienna Austria Temple,Austria,ANNOUNCED,Announced,4138352,vienna-austria-temple,,,,
+Brussels Belgium Temple,Belgium,ANNOUNCED,Announced,4138351,brussels-belgium-temple,,,,
+Oslo Norway Temple,Norway,ANNOUNCED,Announced,4138350,oslo-norway-temple,,,,
+Price Utah Temple,"Utah, United States",ANNOUNCED,Announced,4168043,price-utah-temple,Utah,, United States,
+Summit New Jersey Temple,"New Jersey, United States",ANNOUNCED,Announced,4168042,summit-new-jersey-temple,New Jersey,, United States,
+Milwaukee Wisconsin Temple,"Wisconsin, United States",ANNOUNCED,Announced,4168041,milwaukee-wisconsin-temple,Wisconsin,, United States,
+Huntsville Alabama Temple,"Alabama, United States",ANNOUNCED,Announced,4168040,huntsville-alabama-temple,Alabama,, United States,
+El Paso Texas Temple,"Texas, United States",ANNOUNCED,Announced,4168039,el-paso-texas-temple,Texas,, United States,
+Coeur d'Alene Idaho Temple,"Idaho, United States",ANNOUNCED,Announced,4168038,coeur-d'alene-idaho-temple,Idaho,, United States,
+Maputo Mozambique Temple,Mozambique,ANNOUNCED,Announced,4168037,maputo-mozambique-temple,,,,
+Kampala Uganda Temple,Uganda,ANNOUNCED,Announced,4168036,kampala-uganda-temple,,,,
+Abuja Nigeria Temple,Nigeria,ANNOUNCED,Announced,4168035,abuja-nigeria-temple,,,,
+Milan Italy Temple,Italy,ANNOUNCED,Announced,4168034,milan-italy-temple,,,,
+Puerto Montt Chile Temple,Chile,ANNOUNCED,Announced,4168033,puerto-montt-chile-temple,,,,
+Santiago Dominican Republic Temple,Dominican Republic,ANNOUNCED,Announced,4168032,santiago-dominican-republic-temple,,,,
+Medellín Colombia Temple,Colombia,ANNOUNCED,Announced,4168031,medellin-colombia-temple,,,,
+Santa Ana El Salvador Temple,El Salvador,ANNOUNCED,Announced,4168030,santa-ana-el-salvador-temple,,,,
+Juchitán de Zaragoza Mexico Temple,Mexico,ANNOUNCED,Announced,4168029,juchitan-de-zaragoza-mexico-temple,,,,
+Dublin Ireland Temple,Ireland,ANNOUNCED,Announced,4168028,dublin-ireland-temple,,,,
+Queen Creek Arizona Temple,"Arizona, United States",ANNOUNCED,Announced,4168027,queen-creek-arizona-temple,Arizona,, United States,
+Quetzaltenango Guatemala Temple,"Quetzaltenango, Quezaltenango, Guatemala",OPERATING,"December 11, 2011",78698,quetzaltenango-guatemala-temple,Quetzaltenango, Quezaltenango, Guatemala,"December 11, 2011"
+Bangkok Thailand Temple,"Bangkok, Thailand",OPERATING,"October 22, 2023",4069712,bangkok-thailand-temple,Bangkok,, Thailand,"October 22, 2023"
+Abidjan Ivory Coast Temple,"Abidjan, Côte d'Ivoire",OPENING SOON,Opening Soon,4069710,abidjan-ivory-coast-temple,Abidjan,, Côte d'Ivoire,
+Port-au-Prince Haiti Temple,"Port-au-Prince, Haiti",OPERATING,"September 1, 2019",4069711,port-au-prince-haiti-temple,Port-au-Prince,, Haiti,"September 1, 2019"
+Phoenix Arizona Temple,"Phoenix, Arizona, United States",OPERATING,"November 16, 2014",4004672,phoenix-arizona-temple,Phoenix, Arizona, United States,"November 16, 2014"
+Winnipeg Manitoba Temple,"Winnipeg, Manitoba, Canada",OPERATING,"October 31, 2021",4010937,winnipeg-manitoba-temple,Winnipeg, Manitoba, Canada,"October 31, 2021"
+Fort Collins Colorado Temple,"Fort Collins, Colorado, United States",OPERATING,"October 16, 2016",4010939,fort-collins-colorado-temple,Fort Collins, Colorado, United States,"October 16, 2016"
+Meridian Idaho Temple,"Meridian, Idaho, United States",OPERATING,"November 19, 2017",4010938,meridian-idaho-temple,Meridian, Idaho, United States,"November 19, 2017"
+Brigham City Utah Temple,"Brigham City, Utah, United States",OPERATING,"September 23, 2012",4007349,brigham-city-utah-temple,Brigham City, Utah, United States,"September 23, 2012"
+Fort Lauderdale Florida Temple,"Davie, Florida, United States",OPERATING,"May 4, 2014",4007348,fort-lauderdale-florida-temple,Davie, Florida, United States,"May 4, 2014"
+Fortaleza Brazil Temple,"Fortaleza, Ceara, Brazil",OPERATING,"June 2, 2019",4007351,fortaleza-brazil-temple,Fortaleza, Ceara, Brazil,"June 2, 2019"
+Sapporo Japan Temple,"Atsubetsu-ku Sapporo, Hokkaido, Japan",OPERATING,"August 21, 2016",4007350,sapporo-japan-temple,Atsubetsu-ku Sapporo, Hokkaido, Japan,"August 21, 2016"
+Cebu City Philippines Temple,"Cebu City, Cebu, Philippines",OPERATING,"June 13, 2010",77199,cebu-city-philippines-temple,Cebu City, Cebu, Philippines,"June 13, 2010"
+Concepción Chile Temple,"Concepcion, Chile",OPERATING,"October 28, 2018",4007347,concepcion-chile-temple,Concepcion,, Chile,"October 28, 2018"
+Palmyra New York Temple,"Palmyra, New York, United States",OPERATING,"April 6, 2000",37774,palmyra-new-york-temple,Palmyra, New York, United States,"April 6, 2000"
+Oquirrh Mountain Utah Temple,"South Jordan, Utah, United States",OPERATING,"August 21, 2009",77200,oquirrh-mountain-utah-temple,South Jordan, Utah, United States,"August 21, 2009"
+Pocatello Idaho Temple,"Pocatello, Idaho, United States",OPERATING,"November 7, 2021",4098474,pocatello-idaho-temple,Pocatello, Idaho, United States,"November 7, 2021"
+Saratoga Springs Utah Temple,"Saratoga Springs, Utah, United States",OPERATING,"August 13, 2023",4098475,saratoga-springs-utah-temple,Saratoga Springs, Utah, United States,"August 13, 2023"
+Alabang Philippines Temple,Philippines,CONSTRUCTION,Construction,4098472,alabang-philippines-temple,Manila,, Filippyne,
+Modesto California Temple,"California, United States",CONSTRUCTION,Construction,4148136,modesto-california-temple,California,, United States,
+Nairobi Kenya Temple,"Nairobi, Kenya",OPENING SOON,Opening Soon,4098473,nairobi-kenya-temple,Nairobi,, Kenya,
+Montpelier Idaho Temple,"Idaho, United States",CONSTRUCTION,Construction,4148135,montpelier-idaho-temple,Idaho,, United States,
+Brasília Brazil Temple,"Brasilia, Brazil",OPERATING,"September 17, 2023",4098471,brasilia-brazil-temple,Brasilia,, Brazil,"September 17, 2023"
+Missoula Montana Temple,"Montana, United States",ANNOUNCED,Announced,4148134,missoula-montana-temple,Montana,, United States,
+Adelaide Australia Temple,"Marden, South Australia, Australia",OPERATING,"June 15, 2000",38298,adelaide-australia-temple,Marden, South Australia, Australia,"June 15, 2000"
+Austin Texas Temple,"Texas, United States",CONSTRUCTION,Construction,4148133,austin-texas-temple,Texas,, United States,
+Wichita Kansas Temple,"Kansas, United States",CONSTRUCTION,Construction,4148132,wichita-kansas-temple,Kansas,, United States,
+Cleveland Ohio Temple,"Ohio, United States",CONSTRUCTION,Construction,4148131,cleveland-ohio-temple,Ohio,, United States,
+Knoxville Tennessee Temple,"Tennessee, United States",CONSTRUCTION,Construction,4148130,knoxville-tennessee-temple,Tennessee,, United States,
+Tampa Florida Temple,"Florida, United States",ANNOUNCED,Announced,4148129,tampa-florida-temple,Florida,, United States,
+Tucson Arizona Temple,"Tucson, Arizona, United States",OPERATING,"August 13, 2017",4017571,tucson-arizona-temple,Tucson, Arizona, United States,"August 13, 2017"
+Arequipa Peru Temple,"Arequipa, Peru",OPERATING,"December 15, 2019",4017570,arequipa-peru-temple,Arequipa,, Peru,"December 15, 2019"
+Mexico City Benemérito Mexico Temple,Mexico,ANNOUNCED,Announced,4148128,mexico-city-benemerito-mexico-temple,,,,
+San Luis Potosí Mexico Temple,Mexico,CONSTRUCTION,Construction,4148127,san-luis-potosi-mexico-temple,,,,
+Santos Brazil Temple,Brazil,ANNOUNCED,Announced,4148126,santos-brazil-temple,,,,
+Maceió Brazil Temple,Brazil,ANNOUNCED,Announced,4148125,maceio-brazil-temple,,,,
+Norfolk Virginia Temple,Location Not Available,ANNOUNCED,Announced,4171165,norfolk-virginia-temple,,,,
+Cusco Peru Temple,Peru,ANNOUNCED,Announced,4148124,cusco-peru-temple,,,,
+Greenville South Carolina Temple,Location Not Available,ANNOUNCED,Announced,4171164,greenville-south-carolina-temple,,,,
+Shanghai People’s Republic of China Temple,China,ANNOUNCED,Announced,4130716,shanghai-people’s-republic-of-china-temple,,,,
+Birmingham England Temple,United Kingdom,CONSTRUCTION,Construction,4148123,birmingham-england-temple,,,,
+Dubai United Arab Emirates Temple,United Arab Emirates,ANNOUNCED,Announced,4130715,dubai-united-arab-emirates-temple,,,,
+Rapid City South Dakota Temple,Location Not Available,ANNOUNCED,Announced,4171163,rapid-city-south-dakota-temple,,,,
+Barcelona Spain Temple,Spain,ANNOUNCED,Announced,4148122,barcelona-spain-temple,,,,
+Benin City Nigeria Temple,Nigeria,ANNOUNCED,Announced,4130714,benin-city-nigeria-temple,,,,
+Liverpool Australia Temple,Location Not Available,ANNOUNCED,Announced,4171162,liverpool-australia-temple,,,,
+Brazzaville Republic of the Congo Temple,Republic of the Congo,ANNOUNCED,Announced,4148121,brazzaville-republic-of-the-congo-temple,,,,
+Nouméa New Caledonia Temple,Location Not Available,ANNOUNCED,Announced,4171161,noumea-new-caledonia-temple,,,,
+Pittsburgh Pennsylvania Temple,"Cranberry Township, Pennsylvania, United States",OPERATING,"September 15, 2024",4130713,pittsburgh-pennsylvania-temple,Cranberry Township, Pennsylvania, United States,"September 15, 2024"
+Lubumbashi Democratic Republic of the Congo Temple,Democratic Republic of the Congo,CONSTRUCTION,Construction,4130712,lubumbashi-democratic-republic-of-the-congo-temple,,,,
+San Jose del Monte Philippines Temple,Location Not Available,ANNOUNCED,Announced,4171160,san-jose-del-monte-philippines-temple,,,,
+Wellington New Zealand Temple,New Zealand,ANNOUNCED,Announced,4148120,wellington-new-zealand-temple,,,,
+Tallahassee Florida Temple,"Tallahassee, Florida, United States",OPERATING,"December 8, 2024",4130711,tallahassee-florida-temple,Tallahassee, Florida, United States,"December 8, 2024"
+Uyo Nigeria Temple,Location Not Available,ANNOUNCED,Announced,4171159,uyo-nigeria-temple,,,,
+Bahía Blanca Argentina Temple,Argentina,CONSTRUCTION,Construction,4130710,bahia-blanca-argentina-temple,,,,
+Porto Portugal Temple,Location Not Available,ANNOUNCED,Announced,4171158,porto-portugal-temple,,,,
+Campo Grande Brazil Temple,Location Not Available,ANNOUNCED,Announced,4171157,campo-grande-brazil-temple,,,,
+Rivera Uruguay Temple,Location Not Available,ANNOUNCED,Announced,4171156,rivera-uruguay-temple,,,,
+Ulaanbaatar Mongolia Temple,Mongolia,ANNOUNCED,Announced,4160404,ulaanbaatar-mongolia-temple,,,,
+Chorrillos Peru Temple,Location Not Available,ANNOUNCED,Announced,4171155,chorrillos-peru-temple,,,,
+Vancouver Washington Temple,"Washington, United States",ANNOUNCED,Announced,4160403,vancouver-washington-temple,Washington,, United States,
+Fairbanks Alaska Temple,"Alaska, United States",ANNOUNCED,Announced,4160402,fairbanks-alaska-temple,Alaska,, United States,
+Reynosa Mexico Temple,Location Not Available,ANNOUNCED,Announced,4171154,reynosa-mexico-temple,,,,
+Kahului Hawaii Temple,"Hawaii, United States",ANNOUNCED,Announced,4160401,kahului-hawaii-temple,Hawaii,, United States,
+Spanish Fork Utah Temple,Location Not Available,ANNOUNCED,Announced,4171153,spanish-fork-utah-temple,,,,
+Flagstaff Arizona Temple,Location Not Available,ANNOUNCED,Announced,4171152,flagstaff-arizona-temple,,,,
+Roanoke Virginia Temple,"Virginia, United States",ANNOUNCED,Announced,4160400,roanoke-virginia-temple,Virginia,, United States,
+Caldwell Idaho Temple,Location Not Available,ANNOUNCED,Announced,4171151,caldwell-idaho-temple,,,,
+Tulsa Oklahoma Temple,"Oklahoma, United States",ANNOUNCED,Announced,4160399,tulsa-oklahoma-temple,Oklahoma,, United States,
+Colorado Springs Colorado Temple,"Colorado, United States",ANNOUNCED,Announced,4160398,colorado-springs-colorado-temple,Colorado,, United States,
+Osaka Japan Temple,Japan,ANNOUNCED,Announced,4160397,osaka-japan-temple,,,,
+Laoag Philippines Temple,Philippines,ANNOUNCED,Announced,4160396,laoag-philippines-temple,,,,
+Mbuji-Mayi Democratic Republic of the Congo Temple,Democratic Republic of the Congo,ANNOUNCED,Announced,4160395,mbuji-mayi-democratic-republic-of-the-congo-temple,,,,
+Luanda Angola Temple,Angola,ANNOUNCED,Announced,4160394,luanda-angola-temple,,,,
+Cape Coast Ghana Temple,Ghana,ANNOUNCED,Announced,4160393,cape-coast-ghana-temple,,,,
+Calabar Nigeria Temple,Nigeria,ANNOUNCED,Announced,4160392,calabar-nigeria-temple,,,,
+João Pessoa Brazil Temple,Brazil,ANNOUNCED,Announced,4160391,joao-pessoa-brazil-temple,,,,
+Star Valley Wyoming Temple,"Afton, Wyoming, United States",OPERATING,"October 30, 2016",4012421,star-valley-wyoming-temple,Afton, Wyoming, United States,"October 30, 2016"
+Barranquilla Colombia Temple,"Barranquilla, Colombia",OPERATING,"December 9, 2018",4012420,barranquilla-colombia-temple,Barranquilla,, Colombia,"December 9, 2018"
+Goiânia Brazil Temple,Brazil,ANNOUNCED,Announced,4160390,goiania-brazil-temple,,,,
+Heber Valley Utah Temple,"Utah, United States",CONSTRUCTION,Construction,4142982,heber-valley-utah-temple,Utah,, United States,
+Russia Temple,Russia,ANNOUNCED,Announced,4108676,russia-temple,,,,
+Teton River Idaho Temple,"Idaho, United States",CONSTRUCTION,Construction,4142981,teton-river-idaho-temple,Idaho,, United States,
+Viña del Mar Chile Temple,Chile,ANNOUNCED,Announced,4160389,vina-del-mar-chile-temple,,,,
+Cody Wyoming Temple,"Wyoming, United States",CONSTRUCTION,Construction,4142980,cody-wyoming-temple,Wyoming,, United States,
+Huancayo Peru Temple,Peru,ANNOUNCED,Announced,4160388,huancayo-peru-temple,,,,
+Fort Worth Texas Temple,"Texas, United States",CONSTRUCTION,Construction,4142979,fort-worth-texas-temple,Texas,, United States,
+Layton Utah Temple,"Layton, Utah, United States",OPERATING,"June 16, 2024",4108674,layton-utah-temple,Layton, Utah, United States,"June 16, 2024"
+Paris France Temple,"Le Chesnay, France",OPERATING,"May 21, 2017",4012417,paris-france-temple,Le Chesnay,, France,"May 21, 2017"
+Piura Peru Temple,Peru,ANNOUNCED,Announced,4160387,piura-peru-temple,,,,
+Cancún Mexico Temple,Mexico,ANNOUNCED,Announced,4160386,cancun-mexico-temple,,,,
+Provo City Center Temple,"Provo, Utah, United States",OPERATING,"March 20, 2016",4012416,provo-city-center-temple,Provo, Utah, United States,"March 20, 2016"
+Richmond Virginia Temple,"Glen Allen, Virginia, United States",OPERATING,"May 7, 2023",4108675,richmond-virginia-temple,Glen Allen, Virginia, United States,"May 7, 2023"
+Santiago West Chile Temple,Chile,CONSTRUCTION,Construction,4142978,santiago-west-chile-temple,,,,
+Syracuse Utah Temple,"Syracuse, Utah, United States",OPENING SOON,Opening Soon,4130690,syracuse-utah-temple,Syracuse, Utah, United States,
+Durban South Africa Temple,"Durban, South Africa",OPERATING,"February 16, 2020",4012419,durban-south-africa-temple,Durban,, South Africa,"February 16, 2020"
+La Paz Bolivia Temple,Bolivia,ANNOUNCED,Announced,4142977,la-paz-bolivia-temple,,,,
+Managua Nicaragua Temple,Nicaragua,CONSTRUCTION,Construction,4108672,managua-nicaragua-temple,,,,
+Payson Utah Temple,"Payson, Utah, United States",OPERATING,"June 7, 2015",4007811,payson-utah-temple,Payson, Utah, United States,"June 7, 2015"
+Savai'i Samoa Temple,Location Not Available,ANNOUNCED,Announced,4160385,savai'i-samoa-temple,,,,
+Smithfield Utah Temple,"Utah, United States",CONSTRUCTION,Construction,4138369,smithfield-utah-temple,Utah,, United States,
+Cagayan de Oro Philippines Temple,Philippines,CONSTRUCTION,Construction,4108673,cagayan-de-oro-philippines-temple,,,,
+Kinshasa Democratic Republic of the Congo Temple,"Kinshasa, Democratic Republic of the Congo",OPERATING,"April 14, 2019",4012418,kinshasa-democratic-republic-of-the-congo-temple,Kinshasa,, Democratic Republic of the Congo,"April 14, 2019"
+Rexburg Idaho Temple,"Rexburg, Idaho, United States",OPERATING,"February 10, 2008",72126,rexburg-idaho-temple,Rexburg, Idaho, United States,"February 10, 2008"
+Vitória Brazil Temple,Brazil,ANNOUNCED,Announced,4142976,vitoria-brazil-temple,,,,
+Yorba Linda California Temple,"California, United States",CONSTRUCTION,Construction,4138368,yorba-linda-california-temple,California,, United States,
+San Juan Puerto Rico Temple,"San Juan, Puerto Rico",OPERATING,"January 15, 2023",4114420,san-juan-puerto-rico-temple,San Juan,, Puerto Rico,"January 15, 2023"
+Oaxaca Mexico Temple,"Oaxaca, Oaxaca, Mexico",OPERATING,"March 11, 2000",37835,oaxaca-mexico-temple,Oaxaca, Oaxaca, Mexico,"March 11, 2000"
+Red Cliffs Utah Temple,"St. George, Utah, United States",OPERATING,"March 24, 2024",4114421,red-cliffs-utah-temple,St. George, Utah, United States,"March 24, 2024"
+Lagos Nigeria Temple,Nigeria,ANNOUNCED,Announced,4114418,lagos-nigeria-temple,,,,
+Davao Philippines Temple,"Davao, Philippines",CONSTRUCTION,Construction,4114419,davao-philippines-temple,Davao,, Philippines,
+Puebla Mexico Temple,"Puebla, Puebla, Mexico",OPERATING,"May 19, 2024",4114416,puebla-mexico-temple,Puebla, Puebla, Mexico,"May 19, 2024"
+Auckland New Zealand Temple,"Auckland, New Zealand",OPERATING,"April 13, 2025",4114417,auckland-new-zealand-temple,Auckland,, New Zealand,"April 13, 2025"
+Praia Cape Verde Temple,"Praia, Cape Verde",OPERATING,"June 19, 2022",4114414,praia-cape-verde-temple,Praia,, Cape Verde,"June 19, 2022"
+Ephraim Utah Temple,"Utah, United States",CONSTRUCTION,Construction,4138990,ephraim-utah-temple,Utah,, United States,
+Yigo Guam Temple,"Yigo, Guam",OPERATING,"May 22, 2022",4114415,yigo-guam-temple,Yigo,, Guam,"May 22, 2022"
+Feather River California Temple,"Yuba City, California, United States",OPERATING,"October 8, 2023",4114412,feather-river-california-temple,Yuba City, California, United States,"October 8, 2023"
+Phnom Penh Cambodia Temple,"Phnom Penh, Cambodia",CONSTRUCTION,Construction,4114413,phnom-penh-cambodia-temple,Phnom Penh,, Cambodia,
+Mendoza Argentina Temple,"Mendoza, Argentina",OPERATING,"September 22, 2024",4114410,mendoza-argentina-temple,Mendoza,, Argentina,"September 22, 2024"
+Salvador Brazil Temple,"Salvador, Bahia, Brazil",OPERATING,"October 20, 2024",4114411,salvador-brazil-temple,Salvador, Bahia, Brazil,"October 20, 2024"
+Tula Mexico Temple,Mexico,ANNOUNCED,Announced,4153320,tula-mexico-temple,,,,
+Toluca Mexico Temple,Mexico,ANNOUNCED,Announced,4153319,toluca-mexico-temple,,,,
+Pachuca Mexico Temple,Mexico,ANNOUNCED,Announced,4153318,pachuca-mexico-temple,,,,
+Cuernavaca Mexico Temple,Mexico,ANNOUNCED,Announced,4153317,cuernavaca-mexico-temple,,,,
+Tacoma Washington Temple,"Washington, United States",ANNOUNCED,Announced,4153316,tacoma-washington-temple,Washington,, United States,
+Lone Mountain Nevada Temple,"Nevada, United States",ANNOUNCED,Announced,4153315,lone-mountain-nevada-temple,Nevada,, United States,
+McKinney Texas Temple,"Texas, United States",ANNOUNCED,Announced,4153314,mckinney-texas-temple,Texas,, United States,
+Grand Rapids Michigan Temple,"Michigan, United States",CONSTRUCTION,Construction,4153313,grand-rapids-michigan-temple,Michigan,, United States,
+Jacksonville Florida Temple,"Florida, United States",ANNOUNCED,Announced,4153312,jacksonville-florida-temple,Florida,, United States,
+Huehuetenango Guatemala Temple,Guatemala,ANNOUNCED,Announced,4153311,huehuetenango-guatemala-temple,,,,
+Ribeirão Prêto Brazil Temple,Brazil,CONSTRUCTION,Construction,4153310,ribeirao-preto-brazil-temple,,,,
+Londrina Brazil Temple,Brazil,CONSTRUCTION,Construction,4153309,londrina-brazil-temple,,,,
+Buenos Aires City Center Argentina Temple,Argentina,ANNOUNCED,Announced,4153308,buenos-aires-city-center-argentina-temple,,,,
+Chiclayo Peru Temple,Peru,ANNOUNCED,Announced,4153307,chiclayo-peru-temple,,,,
+Eket Nigeria Temple,Nigeria,ANNOUNCED,Announced,4153306,eket-nigeria-temple,,,,
+Santiago Philippines Temple,Philippines,ANNOUNCED,Announced,4153305,santiago-philippines-temple,,,,
+Naga Philippines Temple,Philippines,ANNOUNCED,Announced,4153304,naga-philippines-temple,,,,
+Busan Korea Temple,South Korea,ANNOUNCED,Announced,4153303,busan-korea-temple,,,,
+Louisville Kentucky Temple,"Crestwood, Kentucky, United States",OPERATING,"March 19, 2000",38376,louisville-kentucky-temple,Crestwood, Kentucky, United States,"March 19, 2000"
+Medford Oregon Temple,"Central Point, Oregon, United States",OPERATING,"April 16, 2000",38377,medford-oregon-temple,Central Point, Oregon, United States,"April 16, 2000"
+Fresno California Temple,"Fresno, California, United States",RENOVATION,Renovation,37354,fresno-california-temple,Fresno, California, United States,
+Oklahoma City Oklahoma Temple,"Yukon, Oklahoma, United States",OPERATING,"July 30, 2000",38378,oklahoma-city-oklahoma-temple,Yukon, Oklahoma, United States,"July 30, 2000"
+Copenhagen Denmark Temple,"Frederiksberg, Hovedstaden, Denmark",OPERATING,"May 23, 2004",38397,copenhagen-denmark-temple,Frederiksberg, Hovedstaden, Denmark,"May 23, 2004"
+San José Costa Rica Temple,"Belén, Heredia, Costa Rica",OPERATING,"June 4, 2000",38398,san-jose-costa-rica-temple,Belén, Heredia, Costa Rica,"June 4, 2000"
