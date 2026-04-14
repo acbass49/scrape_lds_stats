@@ -5,3 +5,5 @@ Wanted to do some analysis of membership in the church across the world. Feel fr
 You can also fork or clone the repository directly if you wish.
 
 After cloning on your machine, run the main.py file to scrape.
+
+Using all publicly available data on LDS.org, I created a dashboard accessed [here](https://acbass49.github.io/scrape_lds_stats/).

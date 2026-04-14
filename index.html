@@ -21,6 +21,9 @@ nav{display:flex;align-items:center;gap:16px;padding:0 24px;height:52px;backgrou
 nav .brand{font-size:1rem;font-weight:700;letter-spacing:-.3px}
 nav .sub{color:var(--mu);font-size:.8rem}
 nav .spacer{flex:1}
+nav .nav-credit{color:var(--mu);font-size:.75rem}
+nav .src-btn{font-size:.75rem;padding:4px 10px;border:1px solid var(--br);border-radius:6px;background:transparent;color:var(--tx);cursor:pointer;text-decoration:none;white-space:nowrap}
+nav .src-btn:hover{background:var(--br)}
 #back-btn{background:var(--sf2);border:1px solid var(--br);color:var(--tx);padding:5px 14px;border-radius:6px;cursor:pointer;font-size:.85rem}
 #back-btn:hover{background:var(--br)}
 #country-name-nav{font-size:1rem;font-weight:600}
@@ -91,6 +94,8 @@ nav .spacer{flex:1}
     <input id="search" type="text" placeholder="Search a country…" autocomplete="off">
     <div id="search-list"></div>
   </div>
+  <span class="nav-credit">Created by Mormon Metrics</span>
+  <a class="src-btn" href="https://github.com/acbass49/scrape_lds_stats" target="_blank" rel="noopener">View Source</a>
 </nav>
 
 <div id="map-tooltip"><div class="tt-name"></div><div class="tt-pct"></div></div>
