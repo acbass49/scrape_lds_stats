@@ -108,6 +108,7 @@ nav .yr-label{color:var(--mu);font-size:.75rem;white-space:nowrap}
   <select id="yr-start" onchange="onYearChange()" class="yr-select">
     <option value="0">2018</option>
     <option value="1">2019</option>
+    <option disabled>── 2020 (no data released) ──</option>
     <option value="2">2021</option>
     <option value="3">2022</option>
     <option value="4">2023</option>
@@ -116,6 +117,7 @@ nav .yr-label{color:var(--mu);font-size:.75rem;white-space:nowrap}
   <span style="color:var(--mu);font-size:.8rem">→</span>
   <select id="yr-end" onchange="onYearChange()" class="yr-select">
     <option value="1">2019</option>
+    <option disabled>── 2020 (no data released) ──</option>
     <option value="2">2021</option>
     <option value="3">2022</option>
     <option value="4">2023</option>
@@ -123,7 +125,6 @@ nav .yr-label{color:var(--mu);font-size:.75rem;white-space:nowrap}
     <option value="6" selected>2025</option>
   </select>
   <a class="nav-credit" href="https://mormonmetrics.com" target="_blank" rel="noopener">Created by Mormon Metrics</a>
-  <a class="nav-credit" href="https://newsroom.churchofjesuschrist.org/facts-and-statistics/state" target="_blank" rel="noopener">Data from churchofjesuschrist.org</a>
   <a class="src-btn" href="https://github.com/acbass49/scrape_lds_stats" target="_blank" rel="noopener">View Source</a>
 </nav>
 
@@ -212,19 +213,20 @@ nav .yr-label{color:var(--mu);font-size:.75rem;white-space:nowrap}
   </div>
 
   <div class="sec-hd">How does <span id="c-dist-name" style="color:var(--ac4)"></span> compare to all countries?</div>
+  <p style="font-size:.82rem;color:var(--mu);margin:-8px 0 18px;line-height:1.6">Each chart shows the distribution of all countries for that metric — the curve represents how common each value is. The dashed line marks where the selected country falls, and the label shows its value and percentile rank among all countries with data.</p>
   <div class="g4">
     <div class="chart-card">
-      <div class="ct">Members · % Change 2018→2025</div>
+      <div class="ct" id="dt-members">Members · % Change 2018→2025</div>
       <canvas id="d-members"></canvas>
       <div class="hist-note" id="dn-members"></div>
     </div>
     <div class="chart-card">
-      <div class="ct">Congregations · % Change 2018→2025</div>
+      <div class="ct" id="dt-cong">Congregations · % Change 2018→2025</div>
       <canvas id="d-cong"></canvas>
       <div class="hist-note" id="dn-cong"></div>
     </div>
     <div class="chart-card">
-      <div class="ct">Temples · Absolute Change 2018→2025</div>
+      <div class="ct" id="dt-temples">Temples · Absolute Change 2018→2025</div>
       <canvas id="d-temples"></canvas>
       <div class="hist-note" id="dn-temples"></div>
     </div>
@@ -578,8 +580,8 @@ function buildCountryKPIs(name, d){
     {lbl:`Members (${eYr})`, val:fmtN(mLast), delta:`${fmtP(mPct)} since ${sYr}  (${mDelta!=null?(mDelta>=0?'+':'')+fmtN(mDelta):'—'})`, cls:cls(mPct)},
     {lbl:`Congregations (${eYr})`, val:fmtN(cLast), delta:`${fmtP(cPct)} since ${sYr}`, cls:cls(cPct)},
     {lbl:`Temples (${eYr})`, val:fmtN(tLast), delta:tLast===0?'No temples':tLast===1?'1 temple':'', cls:'neu'},
-    {lbl:'Members / Congregation', val:mpc!=null?mpc.toFixed(1):'—', delta:'2025 ratio', cls:'neu'},
-    {lbl:'Congregation % Change', val:fmtP(cPct), delta:'2018 → 2025', cls:cls(cPct)},
+    {lbl:'Members / Congregation', val:mpc!=null?mpc.toFixed(1):'—', delta:`${eYr} ratio`, cls:'neu'},
+    {lbl:'Congregation % Change', val:fmtP(cPct), delta:`${sYr} → ${eYr}`, cls:cls(cPct)},
   ];
   document.getElementById('c-kpis').innerHTML = kpis.map(k=>`<div class="kpi"><div class="lbl">${k.lbl}</div><div class="val">${k.val}</div><div class="delta ${k.cls}">${k.delta}</div></div>`).join('');
 }
@@ -729,6 +731,11 @@ function mkDensity(canvasId, noteId, allVals, selVal, unit='%', nPoints=300){
 }
 
 function buildCountryDistributions(name, d){
+  const sYr = YEARS[START_IDX], eYr = YEARS[END_IDX];
+  document.getElementById('dt-members').textContent = `Members · % Change ${sYr}→${eYr}`;
+  document.getElementById('dt-cong').textContent    = `Congregations · % Change ${sYr}→${eYr}`;
+  document.getElementById('dt-temples').textContent = `Temples · Absolute Change ${sYr}→${eYr}`;
+
   // --- Members % change ---
   const mVals=[], mSel = (() => {
     const f=getFirst(d.m), l=getLatest(d.m);
@@ -937,5 +944,9 @@ buildGlobalCharts();
 buildMap();
 initSearch();
 </script>
+
+<footer style="padding:16px 24px;border-top:1px solid var(--br);display:flex;justify-content:flex-end;font-size:.75rem;color:var(--mu)">
+  <a href="https://newsroom.churchofjesuschrist.org/facts-and-statistics/state" target="_blank" rel="noopener" style="color:var(--mu)">Data accessed from churchofjesuschrist.org</a>
+</footer>
 </body>
 </html>
