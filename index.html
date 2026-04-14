@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LDS Church Growth Dashboard · 2018–2025</title>
+<script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/dist/topojson-client.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1/dist/chartjs-plugin-annotation.min.js"></script>
+<style>
+:root{--bg:#0f1117;--sf:#1a1d27;--sf2:#22263a;--ac:#4e7de9;--ac2:#e96b4e;--ac3:#4ec98c;--ac4:#f5c842;--tx:#e2e6f0;--mu:#8b91a8;--br:#2e3450}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:var(--bg);color:var(--tx);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:14px;line-height:1.5}
+a{color:var(--ac);text-decoration:none}
+
+/* NAV */
+nav{display:flex;align-items:center;gap:16px;padding:0 24px;height:52px;background:var(--sf);border-bottom:1px solid var(--br);position:sticky;top:0;z-index:100}
+nav .brand{font-size:1rem;font-weight:700;letter-spacing:-.3px}
+nav .sub{color:var(--mu);font-size:.8rem}
+nav .spacer{flex:1}
+#back-btn{background:var(--sf2);border:1px solid var(--br);color:var(--tx);padding:5px 14px;border-radius:6px;cursor:pointer;font-size:.85rem}
+#back-btn:hover{background:var(--br)}
+#country-name-nav{font-size:1rem;font-weight:600}
+#search-wrap{position:relative}
+#search{background:var(--sf2);border:1px solid var(--br);color:var(--tx);padding:5px 12px;border-radius:6px;width:220px;font-size:.85rem;outline:none}
+#search:focus{border-color:var(--ac)}
+#search-list{position:absolute;top:calc(100% + 4px);left:0;right:0;background:var(--sf);border:1px solid var(--br);border-radius:8px;max-height:240px;overflow-y:auto;z-index:200;display:none}
+#search-list.open{display:block}
+#search-list div{padding:7px 12px;cursor:pointer;font-size:.85rem}
+#search-list div:hover{background:var(--sf2)}
+
+/* VIEWS */
+#world-view,#country-view{padding:20px 24px 48px}
+#country-view{display:none}
+
+/* MAP */
+#map-container{position:relative;background:var(--sf);border:1px solid var(--br);border-radius:12px;overflow:hidden;margin-bottom:24px}
+#map-container svg{display:block;width:100%;height:auto}
+#map-tooltip{position:fixed;pointer-events:none;display:none;background:rgba(26,29,39,.97);border:1px solid var(--br);border-radius:8px;padding:8px 12px;font-size:.82rem;z-index:500;min-width:140px}
+#map-tooltip .tt-name{font-weight:600;margin-bottom:2px}
+#map-tooltip .tt-pct{font-size:.78rem;color:var(--mu)}
+#map-legend{display:flex;align-items:center;gap:8px;padding:10px 16px;font-size:.75rem;color:var(--mu)}
+#map-legend .grad{height:10px;width:200px;border-radius:4px;background:linear-gradient(to right,#e96b4e,#f5c842,#4ec98c)}
+
+/* KPI cards */
+.kpi-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:24px}
+.kpi{background:var(--sf);border:1px solid var(--br);border-radius:10px;padding:16px 18px}
+.kpi .lbl{font-size:.72rem;text-transform:uppercase;letter-spacing:.07em;color:var(--mu);margin-bottom:4px}
+.kpi .val{font-size:1.5rem;font-weight:700}
+.kpi .delta{font-size:.78rem;margin-top:3px;color:var(--ac3)}
+.kpi .delta.neg{color:var(--ac2)}
+.kpi .delta.neu{color:var(--mu)}
+
+/* CHART GRIDS */
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px}
+.g2{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-bottom:24px}
+.g1{display:grid;grid-template-columns:1fr;gap:16px;margin-bottom:24px}
+@media(max-width:1100px){.g4{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:700px){.g4,.g3,.g2{grid-template-columns:1fr}}
+
+.chart-card{background:var(--sf);border:1px solid var(--br);border-radius:10px;padding:18px 16px}
+.chart-card .ct{font-size:.78rem;font-weight:600;color:var(--mu);text-transform:uppercase;letter-spacing:.06em;margin-bottom:12px}
+.chart-card canvas{max-height:240px;width:100%!important}
+.chart-card.tall canvas{max-height:300px}
+
+.sec-hd{font-size:.9rem;font-weight:600;color:var(--mu);text-transform:uppercase;letter-spacing:.07em;margin:28px 0 14px;border-bottom:1px solid var(--br);padding-bottom:8px}
+
+/* histogram note */
+.hist-note{font-size:.75rem;color:var(--ac4);margin-top:6px;min-height:14px}
+
+/* country header */
+.c-header{display:flex;align-items:center;gap:16px;margin-bottom:20px}
+.c-header h2{font-size:1.4rem;font-weight:700}
+
+/* summary box */
+.summary-box{background:var(--sf);border:1px solid var(--br);border-left:3px solid var(--ac);border-radius:0 10px 10px 0;padding:16px 22px;font-size:.9rem;line-height:1.75;color:var(--tx);margin-bottom:22px}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="main-nav">
+  <span class="brand">⛪ LDS Church Growth</span>
+  <span class="sub">2018 – 2025</span>
+  <span class="spacer"></span>
+  <div id="search-wrap">
+    <input id="search" type="text" placeholder="Search a country…" autocomplete="off">
+    <div id="search-list"></div>
+  </div>
+</nav>
+
+<div id="map-tooltip"><div class="tt-name"></div><div class="tt-pct"></div></div>
+
+<!-- ══════════════════════ WORLD VIEW ══════════════════════ -->
+<div id="world-view">
+
+  <div id="map-container">
+    <div id="map-legend">
+      <span>Membership % change 2018–2025:</span>
+      <span style="color:var(--ac2)">−20%</span>
+      <div class="grad"></div>
+      <span style="color:var(--ac3)">+100%+</span>
+      <span style="margin-left:12px;color:var(--mu)">Click a country to explore</span>
+    </div>
+  </div>
+
+  <div class="kpi-row" id="g-kpis"></div>
+
+  <div class="sec-hd">Global Trends</div>
+  <div class="g4">
+    <div class="chart-card"><div class="ct">Year-over-Year % Change · Members</div><canvas id="g-yoy"></canvas></div>
+    <div class="chart-card"><div class="ct">Total Members Worldwide</div><canvas id="g-members"></canvas></div>
+    <div class="chart-card"><div class="ct">Temples Worldwide</div><canvas id="g-temples"></canvas></div>
+    <div class="chart-card"><div class="ct">Congregations Worldwide</div><canvas id="g-cong"></canvas></div>
+  </div>
+
+</div><!-- /world-view -->
+
+<!-- ══════════════════════ COUNTRY VIEW ══════════════════════ -->
+<div id="country-view">
+
+  <div class="c-header">
+    <button id="back-btn" onclick="showWorld()">← World</button>
+    <h2 id="country-name-nav"></h2>
+  </div>
+
+  <div id="c-summary" class="summary-box"></div>
+
+  <div class="kpi-row" id="c-kpis"></div>
+
+  <div class="sec-hd">Trends · <span id="c-trend-lbl"></span></div>
+  <div class="g4">
+    <div class="chart-card"><div class="ct">Members</div><canvas id="c-members"></canvas></div>
+    <div class="chart-card"><div class="ct">Congregations</div><canvas id="c-cong"></canvas></div>
+    <div class="chart-card"><div class="ct">Temples</div><canvas id="c-temples"></canvas></div>
+    <div class="chart-card"><div class="ct">Members per Congregation</div><canvas id="c-mpc"></canvas></div>
+  </div>
+
+  <div class="sec-hd">% Change in Congregations · Year-over-Year</div>
+  <div class="g1">
+    <div class="chart-card tall"><div class="ct">Congregation count change vs prior data point</div><canvas id="c-cong-pct"></canvas></div>
+  </div>
+
+  <div class="sec-hd">How does <span id="c-dist-name" style="color:var(--ac4)"></span> compare to all countries?</div>
+  <div class="g4">
+    <div class="chart-card">
+      <div class="ct">Members · % Change 2018→2025</div>
+      <canvas id="d-members"></canvas>
+      <div class="hist-note" id="dn-members"></div>
+    </div>
+    <div class="chart-card">
+      <div class="ct">Congregations · % Change 2018→2025</div>
+      <canvas id="d-cong"></canvas>
+      <div class="hist-note" id="dn-cong"></div>
+    </div>
+    <div class="chart-card">
+      <div class="ct">Temples · Absolute Change 2018→2025</div>
+      <canvas id="d-temples"></canvas>
+      <div class="hist-note" id="dn-temples"></div>
+    </div>
+    <div class="chart-card">
+      <div class="ct">Members per Congregation · 2025</div>
+      <canvas id="d-mpc"></canvas>
+      <div class="hist-note" id="dn-mpc"></div>
+    </div>
+  </div>
+
+</div><!-- /country-view -->
+
+<script>
+// ─────────────────────────────────────────────
+// DATA
+// ─────────────────────────────────────────────
+const YEARS = [2018,2019,2021,2022,2023,2024,2025];
+const YL = YEARS.map(String);
+
+const DATA = {"Albania":{"m":[3086,3216,3280,3314,3328,3317,3317],"c":[14,14,14,14,14,14,14],"t":[0,0,0,0,0,0,0],"s":[1,1,1,1,1,1,1]},"American Samoa":{"m":[16390,16490,16512,16436,16611,16900,16900],"c":[43,43,43,43,44,43,43],"t":[0,0,0,0,0,0,0],"s":[5,5,5,5,5,5,5]},"Andorra":{"m":[null,null,null,null,null,null,null],"c":[null,null,null,null,null,null,null],"t":[null,null,null,null,null,null,null],"s":[null,null,null,null,null,null,null]},"Angola":{"m":[2933,3490,4160,4760,5898,7321,7321],"c":[15,15,18,19,25,29,29],"t":[0,0,0,0,0,0,0],"s":[1,1,1,1,2,2,2]},"Antigua and Barbuda":{"m":[244,264,276,286,313,342,366],"c":[1,1,1,1,1,1,1],"t":[0,0,0,0,0,0,0],"s":[0,0,0,0,0,0,0]},"Argentina":{"m":[460764,470843,474399,474985,481518,491160,491160],"c":[751,734,725,726,729,732,732],"t":[2,2,2,2,2,4,4],"s":[77,78,78,78,79,80,80]},"Armenia":{"m":[3560,3579,3537,3546,3572,3625,3625],"c":[11,11,5,5,7,8,8],"t":[0,0,0,0,0,0,0],"s":[0,0,0,0,0,0,0]},"Aruba":{"m":[587,590,618,626,638,661,686],"c":[2,2,2,2,2,2,2],"t":[0,0,0,0,0,0,0],"s":[0,0,0,0,0,0,0]},"Australia":{"m":[152948,154595,155383,155586,157079,158969,158969],"c":[303,308,309,310,306,296,296],"t":[5,5,5,5,5,5,5],"s":[41,42,42,41,41,40,40]},"Austria":{"m":[4702,4693,4662,4677,4648,4678,4678],"c":[17,17,17,17,17,17,17],"t":[0,0,0,0,0,0,0],"s":[2,2,2,2,2,2,2]},"Bahamas":{"m":[1071,1074,1054,1075,1076,1095,1095],"c":[3,3,3,3,3,3,3],"t":[0,0,0,0,0,0,0],"s":[0,0,0,0,0,0,0]},"Bahrain":{"m":[null,245,228,252,261,276,231],"c":[null,1,1,1,1,1,1],"t":[null,0,0,0,0,0,0],"s":[null,1,1,1,1,1,1]},"Barbados":{"m":[1057,1089,1134,1163,1185,1205,1205],"c":[3,4,3,3,3,3,3],"t":[0,0,0,0,0,0,0],"s":[0,0,0,0,0,0,0]},"Belgium":{"m":[6585,6605,6499,6602,6685,6713,6713],"c":[12,12,12,12,12,12,12],"t":[0,0,0,0,0,0,0],"s":[2,2,2,2,2,2,2]},"Belize":{"m":[5429,5485,5519,5534,5631,5688,5688],"c":[12,12,12,12,12,12,12],"t":[0,0,0,0,0,0,0],"s":[0,0,0,0,0,0,0]},"Benin":{"m":[3463,4018,4765,5606,6140,7071,7071],"c":[18,19,19,20,26,32,32],"t":[0,0,0,0,0,0,0],"s":[1,1,2,2,2,2,2]},"Bolivia":{"m":[207534,212148,217331,221030,225140,229006,229006],"c":[257,270,271,272,273,285,285],"t":[1,1,1,1,1,1,1],"s":[33,33,33,33,33,33,33]},"Bosnia and Herzegovina":{"m":[80,73,67,69,78,86,86],"c":[2,2,2,2,1,1,1],"t":[0,0,0,0,0,0,0],"s":[0,0,0,0,0,0,0]},"Botswana":{"m":[3524,3653,3826,4031,4406,4841,5465],"c":[15,15,16,16,17,17,23],"t":[0,0,0,0,0,0,0],"s":[1,1,1,1,1,1,1]},"Brazil":{"m":[1394616,1429935,1456238,1472521,1494571,1525436,1525436],"c":[2111,2142,2176,2176,2172,2096,2096],"t":[6,7,7,9,10,11,11],"s":[273,277,281,281,285,287,287]},"Bulgaria":{"m":[2444,2440,2395,2398,2414,2412,2412],"c":[7,7,7,7,7,7,7],"t":[0,0,0,0,0,0,0],"s":[0,0,0,0,0,0,0]},"Burundi":{"m":[730,749,823,1240,1541,1807,2070],"c":[3,3,3,4,4,12,12],"t":[0,0,0,0,0,0,0],"s":[0,0,0,0,0,0,0]},"Cambodia":{"m":[14725,15187,15671,16317,16857,17365,18070],"c":[29,28,28,28,28,31,30],"t":[0,0,0,0,0,0,0],"s":[2,2,2,2,2,2,2]},"Cameroon":{"m":[2125,2245,2409,2721,3071,3327,3327],"c":[13,14,14,15,16,19,19],"t":[0,0,0,0,0,0,0],"s":[0,0,0,0,0,0,0]},"Canada":{"m":[197710,199054,199534,200836,203339,205907,205907],"c":[492,497,499,493,489,502,502],"t":[8,8,9,9,9,9,9],"s":[50,51,53,53,53,53,53]},"Cape Verde":{"m":[14967,15780,16334,16773,17124,17471,16334],"c":[42,42,41,41,40,45,41],"t":[0,0,0,1,1,1,0],"s":[3,3,4,4,4,4,4]},"Cayman Islands":{"m":[226,231,224,230,234,255,264],"c":[1,1,1,1,1,1,1],"t":[0,0,0,0,0,0,0],"s":[0,0,0,0,0,0,0]},"Central African Republic":{"m":[239,248,263,270,278,281,357],"c":[1,1,1,1,1,1,3],"t":[0,0,0,0,0,0,0],"s":[0,0,0,0,0,0,0]},"Chile":{"m":[595526,602373,602696,604302,607583,613054,613054],"c":[590,568,568,572,571,575,575],"t":[2,2,2,2,2,2,2],"s":[77,74,74,74,78,79,79]},"China":{"m":[null,null,null,null,null,null,null],"c":[null,null,null,null,null,null,null],"t":[null,null,null,null,null,null,null],"s":[null,null,null,null,null,null,null]},"Colombia":{"m":[205431,209985,212840,214454,215331,217514,217514],"c":[246,249,254,257,256,260,260],"t":[2,2,2,2,2,2,2],"s":[29,30,30,30,31,31,31]},"Cook Islands":{"m":[1854,1865,1893,1862,1888,1912,1912],"c":[5,5,5,5,5,5,5],"t":[0,0,0,0,0,0,0],"s":[0,0,0,0,0,0,0]},"Costa Rica":{"m":[50282,51320,52047,53234,54473,55678,55678],"c":[79,79,78,78,80,80,80],"t":[1,1,1,1,1,1,1],"s":[10,10,10,10,10,10,10]},"Cote d'Ivoire":{"m":[48776,52241,56804,60162,63058,66399,71182],"c":[231,250,257,257,262,267,274],"t":[0,0,0,0,0,0,1],"s":[14,14,16,18,20,21,23]},"Croatia":{"m":[632,635,637,633,655,656,656],"c":[6,6,6,6,6,6,6],"t":[0,0,0,0,0,0,0],"s":[0,0,0,0,0,0,0]},"Curacao":{"m":[553,565,575,582,589,602,639],"c":[1,1,1,1,1,1,1],"t":[0,0,0,0,0,0,0],"s":[0,0,0,0,0,0,0]},"Cyprus":{"m":[452,507,534,584,596,634,701],"c":[4,4,4,5,5,5,5],"t":[0,0,0,0,0,0,0],"s":[0,0,0,0,0,0,0]},"Czech Republic":{"m":[2627,2636,2628,2643,2679,2719,2628],"c":[12,12,12,12,12,12,12],"t":[0,0,0,0,0,0,0],"s":[1,1,1,1,1,1,1]},"Democratic Republic of the Congo":{"m":[62563,68871,89136,102862,115027,134067,134067],"c":[196,211,255,269,289,346,346],"t":[0,1,1,1,1,1,1],"s":[19,23,25,26,27,32,32]},"Denmark":{"m":[4458,4466,4417,4381,4357,4393,4393],"c":[22,22,22,21,21,21,21],"t":[1,1,1,1,1,1,1],"s":[2,2,2,2,2,2,2]},"Dominica":{"m":[146,145,145,160,167,173,180],"c":[1,1,1,1,1,1,1],"t":[0,0,0,0,0,0,0],"s":[0,0,0,0,0,0,0]},"Dominican Republic":{"m":[138539,143870,145397,147566,149655,153000,153000],"c":[195,196,201,203,203,202,202],"t":[1,1,1,1,1,1,1],"s":[20,21,21,22,22,22,22]},"Ecuador":{"m":[248651,253781,258314,261767,264802,269200,269200],"c":[305,313,315,317,327,334,334],"t":[1,1,1,2,2,2,2],"s":[42,42,42,42,44,44,44]},"El Salvador":{"m":[127573,128881,129194,129467,129963,131016,131016],"c":[163,158,158,155,155,154,154],"t":[1,1,1,1,1,1,1],"s":[22,22,22,22,22,22,22]},"Estonia":{"m":[1135,1146,1121,1146,1125,1122,1122],"c":[4,4,4,4,4,4,4],"t":[0,0,0,0,0,0,0],"s":[0,0,0,0,0,0,0]},"Ethiopia":{"m":[1933,1803,1943,2075,2193,2423,2626],"c":[4,4,5,6,8,8,10],"t":[0,0,0,0,0,0,0],"s":[0,0,0,0,0,0,0]},"Fiji":{"m":[21277,22154,22827,23458,23898,24358,24358],"c":[50,51,52,52,52,52,52],"t":[1,1,1,1,1,1,1],"s":[4,4,4,4,4,4,4]},"Finland":{"m":[4880,4885,4796,4826,4898,4940,4940],"c":[30,31,29,29,29,29,29],"t":[1,1,1,1,1,1,1],"s":[2,2,3,3,3,3,3]},"France":{"m":[39473,39930,38200,38634,39097,39797,39797],"c":[109,108,108,108,108,109,109],"t":[1,1,1,1,1,1,1],"s":[10,10,10,10,10,10,10]},"French Guiana":{"m":[453,488,482,500,507,508,522],"c":[1,1,1,1,1,1,1],"t":[0,0,0,0,0,0,0],"s":[0,0,0,0,0,0,0]},"French Polynesia":{"m":[28147,28704,28965,29397,29700,30022,30022],"c":[94,96,97,97,97,94,94],"t":[1,1,1,1,1,1,1],"s":[10,11,11,11,11,11,11]},"Georgia":{"m":[253,246,258,252,274,313,498],"c":[2,2,2,2,2,2,3],"t":[0,0,0,0,0,0,0],"s":[0,0,0,0,0,0,0]},"Germany":{"m":[39917,39724,39456,39748,39975,40398,40398],"c":[152,150,149,148,150,148,148],"t":[2,2,2,2,2,2,2],"s":[14,14,14,14,14,14,14]},"Ghana":{"m":[83651,89135,96508,101924,106888,113470,113470],"c":[314,328,341,353,370,387,387],"t":[1,1,1,1,1,1,1],"s":[24,25,29,29,29,31,31]},"Greece":{"m":[798,804,792,798,809,807,818],"c":[3,3,2,2,2,2,2],"t":[0,0,0,0,0,0,0],"s":[0,0,0,0,0,0,0]},"Grenada":{"m":[420,438,396,394,402,406,429],"c":[1,1,1,1,1,1,1],"t":[0,0,0,0,0,0,0],"s":[0,0,0,0,0,0,0]},"Guadeloupe":{"m":[517,547,548,550,576,585,628],"c":[3,3,3,3,3,3,3],"t":[0,0,0,0,0,0,0],"s":[0,0,0,0,0,0,0]},"Guam":{"m":[2572,2550,2534,2547,2511,2642,2642],"c":[4,5,5,5,4,4,4],"t":[0,0,0,1,1,1,1],"s":[1,1,1,1,1,1,1]},"Guatemala":{"m":[277755,281465,284780,287475,290068,292639,292639],"c":[441,438,436,439,439,437,437],"t":[2,2,2,2,2,3,3],"s":[49,51,51,51,52,51,51]},"Guernsey":{"m":[63,62,57,60,59,61,60],"c":[1,1,1,1,1,1,1],"t":[0,0,0,0,0,0,0],"s":[0,0,0,0,0,0,0]},"Guyana":{"m":[6001,6264,6417,6645,6834,7033,7400],"c":[11,11,11,12,12,12,12],"t":[0,0,0,0,0,0,0],"s":[0,0,0,0,0,0,0]},"Haiti":{"m":[23723,24192,24911,25525,25560,25793,25793],"c":[46,48,48,50,50,50,50],"t":[1,1,1,1,1,1,1],"s":[5,5,5,5,5,5,5]},"Honduras":{"m":[178214,180646,183405,185182,187341,190310,190310],"c":[238,239,236,236,239,244,244],"t":[1,1,1,1,1,2,2],"s":[31,31,31,31,31,31,31]},"Hong Kong":{"m":[24933,25083,24859,24611,24580,24496,24496],"c":[39,37,35,35,26,27,27],"t":[1,1,1,1,1,1,1],"s":[6,6,6,6,4,4,4]},"Hungary":{"m":[5258,5231,5278,5259,5231,5255,5274],"c":[22,22,21,21,21,21,19],"t":[0,0,0,0,0,0,0],"s":[1,1,1,1,1,1,1]},"Iceland":{"m":[288,300,331,382,415,404,404],"c":[3,3,3,3,4,4,4],"t":[0,0,0,0,0,0,0],"s":[0,0,0,0,0,0,0]},"India":{"m":[13995,14528,14866,14961,15224,15454,15454],"c":[45,46,46,45,45,45,45],"t":[0,0,0,0,0,0,0],"s":[4,4,4,4,4,4,4]},"Indonesia":{"m":[7477,7561,7564,7648,7681,7702,7655],"c":[24,24,24,24,24,24,24],"t":[0,0,0,0,0,0,0],"s":[2,2,2,2,2,2,2]},"Ireland":{"m":[4042,3985,4001,3980,4076,4212,4212],"c":[13,13,13,13,13,12,12],"t":[0,0,0,0,0,0,0],"s":[1,1,1,1,1,1,1]},"Isle of Man":{"m":[297,290,288,281,288,294,285],"c":[1,1,1,1,1,1,1],"t":[0,0,0,0,0,0,0],"s":[0,0,0,0,0,0,0]},"Israel":{"m":[332,306,313,338,329,310,422],"c":[4,4,4,3,3,3,3],"t":[0,0,0,0,0,0,0],"s":[0,0,0,0,0,0,0]},"Italy":{"m":[27182,27486,27702,27993,28409,29154,29154],"c":[97,95,94,94,94,93,93],"t":[0,1,1,1,1,1,1],"s":[10,10,10,10,10,10,10]},"Jamaica":{"m":[6542,6668,6718,6810,6846,6871,6871],"c":[18,18,18,18,18,18,18],"t":[0,0,0,0,0,0,0],"s":[1,1,1,1,1,1,1]},"Japan":{"m":[129858,130340,130260,130251,130096,129622,129622],"c":[261,261,251,231,232,230,230],"t":[3,3,3,3,4,4,4],"s":[28,28,25,22,22,22,22]},"Jersey":{"m":[296,290,281,282,275,270,269],"c":[1,1,1,1,1,1,1],"t":[0,0,0,0,0,0,0],"s":[0,0,0,0,0,0,0]},"Kazakhstan":{"m":[218,230,205,229,218,242,245],"c":[3,2,3,3,3,3,3],"t":[0,0,0,0,0,0,0],"s":[0,0,0,0,0,0,0]},"Kenya":{"m":[14143,14591,15912,17438,19206,21204,21204],"c":[48,54,56,57,69,76,76],"t":[0,0,0,0,0,0,0],"s":[2,2,2,2,3,4,4]},"Kiribati":{"m":[20390,20946,21853,22210,22643,23046,23046],"c":[32,37,42,43,43,43,43],"t":[0,0,0,0,0,0,0],"s":[2,2,2,2,2,2,2]},"Kuwait":{"m":[null,365,359,375,374,361,369],"c":[null,1,1,1,1,1,1],"t":[null,0,0,0,0,0,0],"s":[null,0,0,0,0,0,0]},"Latvia":{"m":[1265,1272,1257,1273,1289,1274,1274],"c":[5,5,5,5,5,5,5],"t":[0,0,0,0,0,0,0],"s":[0,0,0,0,0,0,0]},"Lesotho":{"m":[1179,1303,1369,1474,1562,1890,2278],"c":[6,6,6,6,6,6,8],"t":[0,0,0,0,0,0,0],"s":[0,0,0,0,0,0,0]},"Liberia":{"m":[13275,14538,17823,20335,21441,23217,23217],"c":[48,53,58,67,75,80,80],"t":[0,0,0,0,0,0,0],"s":[4,5,5,6,6,6,6]},"Lithuania":{"m":[938,925,919,943,945,952,952],"c":[5,5,5,5,5,5,5],"t":[0,0,0,0,0,0,0],"s":[0,0,0,0,0,0,0]},"Luxembourg":{"m":[458,505,523,526,541,522,526],"c":[1,1,2,2,2,2,2],"t":[0,0,0,0,0,0,0],"s":[0,0,0,0,0,0,0]},"Macau":{"m":[1455,1463,1456,1456,1446,1445,1445],"c":[3,2,2,2,2,2,2],"t":[0,0,0,0,0,0,0],"s":[0,0,0,0,0,0,0]},"Madagascar":{"m":[12257,12887,13547,14353,15372,17331,20395],"c":[40,42,42,43,44,46,52],"t":[0,0,0,0,0,0,0],"s":[2,2,2,3,4,4,5]},"Malawi":{"m":[2941,3143,3612,3872,4776,5937,7857],"c":[8,8,12,12,13,18,21],"t":[0,0,0,0,0,0,0],"s":[0,0,0,0,0,2,2]},"Malaysia":{"m":[10504,10845,10719,10829,11086,11341,11341],"c":[33,31,28,27,24,24,24],"t":[0,0,0,0,0,0,0],"s":[0,0,0,0,0,0,0]},"Malta":{"m":[214,215,223,244,241,263,320],"c":[1,1,1,1,1,1,1],"t":[0,0,0,0,0,0,0],"s":[0,0,0,0,0,0,0]},"Marshall Islands":{"m":[7089,6976,6977,6832,6762,6660,6660],"c":[12,13,13,13,13,13,13],"t":[0,0,0,0,0,0,0],"s":[2,2,2,2,2,2,2]},"Martinique":{"m":[231,252,261,258,275,273,285],"c":[1,1,1,1,1,1,1],"t":[0,0,0,0,0,0,0],"s":[0,0,0,0,0,0,0]},"Mauritius":{"m":[529,562,552,566,576,585,585],"c":[3,3,3,3,3,3,3],"t":[0,0,0,0,0,0,0],"s":[0,0,0,0,0,0,0]},"Mexico":{"m":[1455774,1481530,1498296,1507720,1516406,1534058,1534058],"c":[1846,1843,1849,1863,1876,1878,1878],"t":[13,13,13,13,13,14,14],"s":[220,222,222,227,230,230,230]},"Micronesia":{"m":[6238,6307,6107,5966,5940,5915,5915],"c":[22,24,23,23,22,22,22],"t":[0,0,0,0,0,0,0],"s":[1,1,1,1,1,1,1]},"Moldova":{"m":[412,430,448,455,457,457,471],"c":[4,4,2,2,2,2,2],"t":[0,0,0,0,0,0,0],"s":[0,0,0,0,0,0,0]},"Mongolia":{"m":[11895,12261,12301,12477,12444,12624,12624],"c":[24,24,24,24,24,24,24],"t":[0,0,0,0,0,0,0],"s":[2,2,2,2,2,2,2]},"Montenegro":{"m":[23,36,30,32,31,34,65],"c":[1,1,1,1,1,1,1],"t":[0,0,0,0,0,0,0],"s":[0,0,0,0,0,0,0]},"Mozambique":{"m":[12274,15032,15549,18443,24733,31633,39282],"c":[34,44,50,56,69,80,90],"t":[0,0,0,0,0,0,0],"s":[3,4,5,5,7,8,10]},"Namibia":{"m":[903,952,998,1110,1185,1297,1297],"c":[4,4,4,5,5,5,5],"t":[0,0,0,0,0,0,0],"s":[0,0,0,0,0,0,0]},"Nauru":{"m":[122,126,133,133,132,131,146],"c":[1,1,1,1,1,1,1],"t":[0,0,0,0,0,0,0],"s":[0,0,0,0,0,0,0]},"Netherlands":{"m":[9421,9326,9365,9185,9167,9117,9117],"c":[25,24,24,24,24,24,24],"t":[1,1,1,1,1,1,1],"s":[3,3,3,3,3,3,3]},"New Caledonia":{"m":[2440,2500,2483,2494,2526,2531,2585],"c":[9,9,9,9,9,9,9],"t":[0,0,0,0,0,0,0],"s":[1,1,1,1,1,1,1]},"New Zealand":{"m":[114215,115236,116883,117319,117909,118209,118209],"c":[225,228,229,228,226,219,219],"t":[1,1,1,1,1,1,1],"s":[30,30,30,30,30,29,29]},"Nicaragua":{"m":[100089,100331,101133,101361,101907,103732,103732],"c":[112,112,109,109,109,109,109],"t":[0,0,0,0,0,0,0],"s":[12,12,12,12,12,12,12]},"Nigeria":{"m":[177280,192144,211219,221172,232654,250341,250341],"c":[649,722,758,769,810,840,840],"t":[1,1,1,1,1,1,1],"s":[54,59,62,68,71,77,77]},"Niue":{"m":[309,308,312,317,319,323,400],"c":[2,2,2,2,2,1,1],"t":[0,0,0,0,0,0,0],"s":[0,0,0,0,0,0,0]},"Northern Mariana Islands":{"m":[839,865,897,906,896,911,938],"c":[1,1,1,1,1,1,1],"t":[0,0,0,0,0,0,0],"s":[0,0,0,0,0,0,0]},"Norway":{"m":[4598,4564,4525,4505,4492,4521,4521],"c":[21,20,20,19,19,19,19],"t":[0,0,0,0,0,0,0],"s":[2,2,2,2,2,2,2]},"Palau":{"m":[515,509,532,543,549,421,572],"c":[1,1,1,1,1,1,1],"t":[0,0,0,0,0,0,0],"s":[0,0,0,0,0,0,0]},"Panama":{"m":[58082,59526,60108,61009,61980,62946,62946],"c":[73,73,73,72,75,77,77],"t":[1,1,1,1,1,1,1],"s":[7,7,7,7,7,7,7]},"Papua New Guinea":{"m":[28249,30825,35033,36626,38760,41268,41268],"c":[80,81,87,92,94,96,96],"t":[0,0,0,0,0,0,0],"s":[2,2,2,2,2,3,3]},"Paraguay":{"m":[94836,96114,97389,98498,100121,102395,102395],"c":[134,134,133,133,133,135,135],"t":[1,1,1,1,1,1,1],"s":[11,11,11,11,11,11,11]},"Peru":{"m":[605045,619045,624569,630099,637180,648045,648045],"c":[759,780,780,779,784,797,797],"t":[2,3,3,3,4,4,4],"s":[104,112,112,112,115,115,115]},"Philippines":{"m":[785164,805209,833045,853254,867271,882461,882461],"c":[1227,1239,1256,1272,1296,1324,1324],"t":[2,2,2,2,2,3,3],"s":[107,115,123,125,128,131,131]},"Poland":{"m":[2033,2058,2089,2184,2178,2249,2249],"c":[12,13,11,11,11,11,11],"t":[0,0,0,0,0,0,0],"s":[0,0,0,0,0,0,0]},"Portugal":{"m":[45227,45576,45675,46849,47916,48840,48840],"c":[66,67,62,60,62,64,64],"t":[0,1,1,1,1,1,1],"s":[6,6,7,7,7,7,7]},"Puerto Rico":{"m":[23306,23395,23473,23243,23222,23454,23454],"c":[39,39,38,38,38,38,38],"t":[0,0,0,1,1,1,1],"s":[5,5,5,5,5,5,5]},"Republic of the Congo":{"m":[7903,8542,9892,11481,12626,13691,13691],"c":[27,27,28,32,36,37,37],"t":[0,0,0,0,0,0,0],"s":[2,2,3,4,4,4,4]},"Reunion":{"m":[957,958,841,836,838,859,859],"c":[4,4,4,4,4,4,4],"t":[0,0,0,0,0,0,0],"s":[0,0,0,0,0,0,0]},"Romania":{"m":[3077,3064,3087,3082,3103,3029,3029],"c":[15,15,15,15,15,15,15],"t":[0,0,0,0,0,0,0],"s":[0,0,0,0,0,0,0]},"Russia":{"m":[0,0,0,4995,5101,18132,18306],"c":[0,0,0,69,57,56,51],"t":[0,0,0,0,0,0,0],"s":[0,0,0,3,3,3,2]},"Rwanda":{"m":[749,755,843,1154,1537,2489,2489],"c":[3,3,3,6,9,10,10],"t":[0,0,0,0,0,0,0],"s":[0,0,0,0,0,0,0]},"Saint Kitts and Nevis":{"m":[227,230,212,219,227,244,292],"c":[1,1,1,1,1,1,1],"t":[0,0,0,0,0,0,0],"s":[0,0,0,0,0,0,0]},"Saint Lucia":{"m":[377,395,394,392,404,420,435],"c":[2,2,2,2,2,2,2],"t":[0,0,0,0,0,0,0],"s":[0,0,0,0,0,0,0]},"Saint Vincent":{"m":[707,716,715,726,717,728,767],"c":[3,3,3,3,3,3,3],"t":[0,0,0,0,0,0,0],"s":[0,0,0,0,0,0,0]},"Samoa":{"m":[82092,83740,83740,87695,88726,89662,89662],"c":[158,162,162,165,168,168,168],"t":[1,1,1,1,1,1,1],"s":[20,20,20,20,20,20,20]},"Serbia":{"m":[371,368,361,369,379,374,374],"c":[3,3,3,3,3,3,3],"t":[0,0,0,0,0,0,0],"s":[0,0,0,0,0,0,0]},"Sierra Leone":{"m":[21286,22787,26108,28867,31080,34617,34617],"c":[69,79,86,90,94,94,94],"t":[0,0,0,0,0,0,0],"s":[5,7,9,9,10,11,11]},"Singapore":{"m":[3449,3439,3401,3302,3284,3227,3227],"c":[10,7,7,6,6,6,6],"t":[0,0,0,0,0,0,0],"s":[1,1,1,1,1,1,1]},"Sint Maarten":{"m":[277,297,286,292,284,289,358],"c":[1,1,1,1,1,1,1],"t":[0,0,0,0,0,0,0],"s":[0,0,0,0,0,0,0]},"Slovakia":{"m":[284,302,309,305,316,332,332],"c":[4,4,4,4,4,4,4],"t":[0,0,0,0,0,0,0],"s":[0,0,0,0,0,0,0]},"Slovenia":{"m":[426,431,449,445,440,456,456],"c":[3,3,2,2,2,2,2],"t":[0,0,0,0,0,0,0],"s":[0,0,0,0,0,0,0]},"Solomon Islands":{"m":[1240,1332,1374,1375,1524,1627,3232],"c":[5,5,5,5,5,6,10],"t":[0,0,0,0,0,0,0],"s":[0,0,0,0,0,0,0]},"South Africa":{"m":[67344,68772,69438,70690,71889,74455,74455],"c":[190,193,195,193,194,197,197],"t":[1,1,2,2,2,2,2],"s":[17,17,17,17,18,18,18]},"South Korea":{"m":[88418,88622,88603,88607,88621,88576,88576],"c":[103,101,100,100,99,99,99],"t":[1,1,1,1,1,1,1],"s":[12,12,12,12,12,12,12]},"Spain":{"m":[58061,59730,61455,63524,65948,68486,68486],"c":[138,137,137,136,136,138,138],"t":[1,1,1,1,1,1,1],"s":[15,15,15,15,15,15,15]},"Sri Lanka":{"m":[1597,1631,1671,1662,1674,1709,1732],"c":[4,4,5,5,5,4,4],"t":[0,0,0,0,0,0,0],"s":[0,0,0,0,0,0,0]},"Suriname":{"m":[1630,1747,1759,1797,1848,1887,1991],"c":[5,5,5,6,6,6,6],"t":[0,0,0,0,0,0,0],"s":[0,0,0,0,0,0,0]},"Swaziland":{"m":[2057,2091,2158,2198,2253,2348,2598],"c":[6,6,6,6,6,6,6],"t":[0,0,0,0,0,0,0],"s":[0,0,0,0,0,0,0]},"Sweden":{"m":[9716,9649,9528,9531,9474,9489,9489],"c":[40,40,40,40,40,40,40],"t":[1,1,1,1,1,1,1],"s":[4,4,4,4,4,4,4]},"Switzerland":{"m":[9034,9071,9160,9205,9175,9237,9237],"c":[36,35,35,34,34,34,34],"t":[1,1,1,1,1,1,1],"s":[5,5,5,5,5,5,5]},"Taiwan":{"m":[61034,61607,62098,62229,62390,62772,62772],"c":[117,108,98,100,99,97,97],"t":[1,1,1,1,1,1,1],"s":[17,16,16,16,16,16,16]},"Tanzania":{"m":[1726,1793,2309,2999,3969,5022,6259],"c":[6,8,13,23,25,34,45],"t":[0,0,0,0,0,0,0],"s":[0,0,0,0,0,0,1]},"Thailand":{"m":[22691,23043,23116,23450,23970,24301,24301],"c":[43,41,41,42,42,43,43],"t":[0,0,0,0,1,1,1],"s":[4,4,4,4,4,4,4]},"Togo":{"m":[4736,5320,5997,6500,7141,7684,7684],"c":[19,21,23,23,25,28,28],"t":[0,0,0,0,0,0,0],"s":[2,2,2,2,3,3,3]},"Tonga":{"m":[65532,66361,68305,68600,68404,68609,68609],"c":[170,173,175,175,175,175,175],"t":[1,1,1,1,1,1,1],"s":[21,21,21,21,21,21,21]},"Trinidad and Tobago":{"m":[3497,3524,3505,3477,3488,3497,3497],"c":[9,9,9,10,10,10,10],"t":[0,0,0,0,0,0,0],"s":[1,1,1,1,1,1,1]},"Turkey":{"m":[538,512,573,658,708,698,808],"c":[7,8,9,9,7,7,7],"t":[0,0,0,0,0,0,0],"s":[0,0,0,0,0,0,0]},"Tuvalu":{"m":[268,296,335,344,348,366,381],"c":[1,1,1,1,1,1,1],"t":[0,0,0,0,0,0,0],"s":[0,0,0,0,0,0,0]},"Uganda":{"m":[16823,17887,18955,20693,22138,25210,25210],"c":[33,36,38,38,39,54,54],"t":[0,0,0,0,0,0,0],"s":[3,3,3,3,3,3,3]},"Ukraine":{"m":[11153,11242,11216,10344,10053,9903,9903],"c":[48,48,46,46,44,42,42],"t":[1,1,1,1,1,1,1],"s":[1,1,2,2,2,2,2]},"United Arab Emirates":{"m":[1631,1699,1693,1688,1695,1810,2002],"c":[6,6,6,6,6,6,6],"t":[0,0,0,0,0,0,0],"s":[1,1,1,1,1,1,1]},"United Kingdom":{"m":[187415,188187,186809,186933,186350,186418,190066],"c":[323,320,320,317,307,303,298],"t":[2,2,2,2,2,2,2],"s":[45,45,45,44,41,41,41]},"United States":{"m":[6681829,6721032,6763019,6804028,6868793,6929956,6929956],"c":[14274,14459,14676,14614,14593,14578,14578],"t":[81,81,82,82,89,97,97],"s":[1629,1642,1671,1681,1693,1709,1709]},"Uruguay":{"m":[106177,107103,106855,106911,108060,109905,112449],"c":[139,134,129,129,130,130,132],"t":[1,1,1,1,1,1,1],"s":[18,18,18,18,18,18,18]},"Vanuatu":{"m":[9615,10210,11051,11304,11940,12820,12820],"c":[35,37,37,37,39,40,40],"t":[0,0,0,0,0,0,0],"s":[1,1,1,1,1,2,2]},"Venezuela":{"m":[166688,168539,173125,175753,176623,177309,177309],"c":[231,228,233,235,234,235,235],"t":[1,1,1,1,1,1,1],"s":[34,34,34,33,33,33,33]},"Virgin Islands":{"m":[561,589,589,616,638,633,704],"c":[2,2,2,2,2,2,2],"t":[0,0,0,0,0,0,0],"s":[0,0,0,0,0,0,0]},"Zambia":{"m":[4428,4681,5053,5313,5906,7072,7072],"c":[13,13,17,16,17,20,20],"t":[0,0,0,0,0,0,0],"s":[1,1,1,1,1,1,1]},"Zimbabwe":{"m":[32937,34330,36152,38289,41262,46071,46071],"c":[80,87,91,91,100,102,102],"t":[0,0,0,0,0,0,0],"s":[7,7,8,8,9,11,11]}};
+
+// ─────────────────────────────────────────────
+// ISO MAPPING  (LDS name → ISO 3166-1 numeric)
+// ─────────────────────────────────────────────
+const N2I = {"Albania":8,"American Samoa":16,"Angola":24,"Antigua and Barbuda":28,"Argentina":32,"Armenia":51,"Aruba":533,"Australia":36,"Austria":40,"Bahamas":44,"Bahrain":48,"Barbados":52,"Belgium":56,"Belize":84,"Benin":204,"Bolivia":68,"Bosnia and Herzegovina":70,"Botswana":72,"Brazil":76,"Bulgaria":100,"Burundi":108,"Cambodia":116,"Cameroon":120,"Canada":124,"Cape Verde":132,"Cayman Islands":136,"Central African Republic":140,"Chile":152,"China":156,"Colombia":170,"Cook Islands":184,"Costa Rica":188,"Cote d'Ivoire":384,"Croatia":191,"Cuba":192,"Cyprus":196,"Czech Republic":203,"Democratic Republic of the Congo":180,"Denmark":208,"Dominica":212,"Dominican Republic":214,"Ecuador":218,"El Salvador":222,"Estonia":233,"Ethiopia":231,"Fiji":242,"Finland":246,"France":250,"French Guiana":254,"French Polynesia":258,"Georgia":268,"Germany":276,"Ghana":288,"Greece":300,"Grenada":308,"Guadeloupe":312,"Guam":316,"Guatemala":320,"Guyana":328,"Haiti":332,"Honduras":340,"Hong Kong":344,"Hungary":348,"Iceland":352,"India":356,"Indonesia":360,"Ireland":372,"Israel":376,"Italy":380,"Jamaica":388,"Japan":392,"Kazakhstan":398,"Kenya":404,"Kiribati":296,"Kuwait":414,"Latvia":428,"Lesotho":426,"Liberia":430,"Lithuania":440,"Luxembourg":442,"Macau":446,"Madagascar":450,"Malawi":454,"Malaysia":458,"Malta":470,"Marshall Islands":584,"Martinique":474,"Mauritius":480,"Mexico":484,"Micronesia":583,"Moldova":498,"Mongolia":496,"Montenegro":499,"Mozambique":508,"Namibia":516,"Nauru":520,"Netherlands":528,"New Caledonia":540,"New Zealand":554,"Nicaragua":558,"Nigeria":566,"Niue":570,"Norway":578,"Palau":585,"Panama":591,"Papua New Guinea":598,"Paraguay":600,"Peru":604,"Philippines":608,"Poland":616,"Portugal":620,"Puerto Rico":630,"Republic of the Congo":178,"Reunion":638,"Romania":642,"Russia":643,"Rwanda":646,"Saint Kitts and Nevis":659,"Saint Lucia":662,"Saint Vincent":670,"Samoa":882,"Serbia":688,"Sierra Leone":694,"Singapore":702,"Slovakia":703,"Slovenia":705,"Solomon Islands":90,"South Africa":710,"South Korea":410,"Spain":724,"Sri Lanka":144,"Suriname":740,"Swaziland":748,"Sweden":752,"Switzerland":756,"Taiwan":158,"Tanzania":834,"Thailand":764,"Togo":768,"Tonga":776,"Trinidad and Tobago":780,"Turkey":792,"Tuvalu":798,"Uganda":800,"Ukraine":804,"United Arab Emirates":784,"United Kingdom":826,"United States":840,"Uruguay":858,"Vanuatu":548,"Venezuela":862,"Zambia":894,"Zimbabwe":716};
+const I2N = Object.fromEntries(Object.entries(N2I).map(([k,v])=>[v,k]));
+
+// ─────────────────────────────────────────────
+// HELPERS
+// ─────────────────────────────────────────────
+const fmtN = v => v == null ? '—' : Number(v).toLocaleString();
+const fmtP = (v,d=1) => v == null ? '—' : (v>=0?'+':'')+v.toFixed(d)+'%';
+const fmtM = v => v>=1e6?(v/1e6).toFixed(2)+'M':v>=1e3?(v/1e3).toFixed(0)+'K':String(v);
+
+function pct(a,b){ return (a==null||b==null||a===0)?null:((b-a)/a*100); }
+function getLatest(arr){ for(let i=arr.length-1;i>=0;i--) if(arr[i]!=null) return arr[i]; return null; }
+function getFirst(arr){ for(let i=0;i<arr.length;i++) if(arr[i]!=null&&arr[i]>0) return {v:arr[i],i}; return null; }
+function notNull(arr){ return arr.filter(v=>v!==null); }
+
+Chart.defaults.color='#8b91a8';
+Chart.defaults.borderColor='#2e3450';
+Chart.defaults.font.family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif";
+Chart.defaults.font.size=11;
+
+const CHARTS = {};
+function mkChart(id, cfg){
+  if(CHARTS[id]) CHARTS[id].destroy();
+  const canvas = document.getElementById(id);
+  if(!canvas) return;
+  CHARTS[id] = new Chart(canvas.getContext('2d'), cfg);
+  return CHARTS[id];
+}
+
+function lineOpts(fmt=fmtN, extraOpts={}){
+  return {
+    responsive:true, maintainAspectRatio:false,
+    interaction:{mode:'index',intersect:false},
+    plugins:{
+      legend:{display:false},
+      tooltip:{callbacks:{label:c=>` ${fmt(c.raw)}`}}
+    },
+    scales:{
+      x:{grid:{color:'#1e2438'},ticks:{maxRotation:0}},
+      y:{grid:{color:'#1e2438'},ticks:{callback:fmt}}
+    },
+    ...extraOpts
+  };
+}
+
+// ─────────────────────────────────────────────
+// GLOBAL STATS
+// ─────────────────────────────────────────────
+function globalTotals(){
+  return YEARS.map((_,yi)=>{
+    let m=0,c=0,t=0;
+    for(const d of Object.values(DATA)){
+      if(d.m[yi]!=null) m+=d.m[yi];
+      if(d.c[yi]!=null) c+=d.c[yi];
+      if(d.t[yi]!=null) t+=d.t[yi];
+    }
+    return {m,c,t};
+  });
+}
+
+function buildGlobalKPIs(){
+  const tots = globalTotals();
+  const first = tots[0], last = tots[tots.length-1];
+  const kpis = [
+    {lbl:'Total Members (2025)', val:fmtM(last.m), delta:`+${fmtM(last.m-first.m)} since 2018 (${fmtP(pct(first.m,last.m))})`, cls:''},
+    {lbl:'Temples (2025)', val:String(last.t), delta:`+${last.t-first.t} since 2018`, cls:''},
+    {lbl:'Congregations (2025)', val:fmtN(last.c), delta:`+${fmtN(last.c-first.c)} since 2018`, cls:''},
+    {lbl:'Fastest Region', val:'Africa', delta:'+53% since 2018', cls:''},
+    {lbl:'Fastest Country', val:'Mozambique', delta:'+220% since 2018', cls:''},
+    {lbl:'Countries w/ Data', val:'160', delta:'across 7 data points', cls:'neu'},
+  ];
+  const row = document.getElementById('g-kpis');
+  row.innerHTML = kpis.map(k=>`<div class="kpi"><div class="lbl">${k.lbl}</div><div class="val">${k.val}</div><div class="delta ${k.cls}">${k.delta}</div></div>`).join('');
+}
+
+function buildGlobalCharts(){
+  const tots = globalTotals();
+  const mArr = tots.map(t=>t.m);
+  const cArr = tots.map(t=>t.c);
+  const tArr = tots.map(t=>t.t);
+
+  // YoY % change
+  const yoyLabels=[], yoyData=[];
+  for(let i=1;i<YEARS.length;i++){
+    const gap = YEARS[i]-YEARS[i-1];
+    const p = (mArr[i]-mArr[i-1])/mArr[i-1]*100;
+    yoyLabels.push(`→${YEARS[i]}`);
+    yoyData.push(parseFloat(p.toFixed(3)));
+  }
+  mkChart('g-yoy',{type:'bar',data:{labels:yoyLabels,datasets:[{data:yoyData,backgroundColor:yoyData.map(v=>v>=0?'rgba(78,201,140,0.75)':'rgba(233,107,78,0.75)'),borderRadius:3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>` ${fmtP(c.raw,3)}`}}},scales:{x:{grid:{display:false}},y:{grid:{color:'#1e2438'},ticks:{callback:v=>v+'%'}}}}});
+
+  mkChart('g-members',{type:'line',data:{labels:YL,datasets:[{data:mArr,borderColor:'#4e7de9',backgroundColor:'rgba(78,125,233,.1)',fill:true,tension:.3,pointRadius:4}]},options:lineOpts(fmtM)});
+  mkChart('g-temples',{type:'line',data:{labels:YL,datasets:[{data:tArr,borderColor:'#e96b4e',backgroundColor:'rgba(233,107,78,.1)',fill:true,tension:.3,pointRadius:4}]},options:lineOpts(fmtN)});
+  mkChart('g-cong',{type:'line',data:{labels:YL,datasets:[{data:cArr,borderColor:'#4ec98c',backgroundColor:'rgba(78,201,140,.1)',fill:true,tension:.3,pointRadius:4}]},options:lineOpts(fmtN)});
+}
+
+// ─────────────────────────────────────────────
+// WORLD MAP (D3)
+// ─────────────────────────────────────────────
+function buildMap(){
+  const tooltip = document.getElementById('map-tooltip');
+  const container = document.getElementById('map-container');
+
+  // pct change 2018→2025 per country
+  const pctByISO = {};
+  for(const [name,d] of Object.entries(DATA)){
+    const iso = N2I[name]; if(!iso) continue;
+    const m0=d.m[0], m6=getLatest(d.m);
+    if(m0!=null&&m0>0&&m6!=null) pctByISO[iso]=(m6-m0)/m0*100;
+  }
+
+  const w=960, h=480;
+  const svg = d3.select('#map-container').append('svg')
+    .attr('viewBox',`0 0 ${w} ${h}`)
+    .style('width','100%').style('display','block');
+
+  const proj = d3.geoNaturalEarth1().scale(153).translate([w/2,h/2]);
+  const path = d3.geoPath().projection(proj);
+
+  // Diverging colour: red at -20, yellow at 0, green at +100
+  const colorScale = v => {
+    if(v==null) return '#2a2f45';
+    const clamp = Math.max(-25, Math.min(150, v));
+    // -25→0: interpolate red→yellow; 0→150: yellow→green
+    if(clamp < 0){
+      const t = (clamp+25)/25;
+      return d3.interpolateRgb('#e96b4e','#f5c842')(t);
+    } else {
+      const t = Math.min(clamp/100,1);
+      return d3.interpolateRgb('#f5c842','#4ec98c')(t);
+    }
+  };
+
+  d3.json('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json').then(world=>{
+    const countries = topojson.feature(world, world.objects.countries);
+
+    svg.append('g').selectAll('path')
+      .data(countries.features).join('path')
+      .attr('d', path)
+      .attr('fill', d => colorScale(pctByISO[+d.id]))
+      .attr('stroke','#1a1d27').attr('stroke-width',.4)
+      .style('cursor', d => I2N[+d.id] && DATA[I2N[+d.id]] ? 'pointer' : 'default')
+      .on('mousemove', function(event,d){
+        const name = I2N[+d.id];
+        if(!name) return;
+        const v = pctByISO[+d.id];
+        tooltip.style.display='block';
+        tooltip.style.left=(event.clientX+14)+'px';
+        tooltip.style.top=(event.clientY-10)+'px';
+        tooltip.querySelector('.tt-name').textContent=name;
+        tooltip.querySelector('.tt-pct').textContent = v!=null?`Mbr change 2018→2025: ${fmtP(v)}`:'No data';
+        d3.select(this).attr('fill-opacity',.7);
+      })
+      .on('mouseleave', function(event,d){
+        tooltip.style.display='none';
+        d3.select(this).attr('fill-opacity',1);
+      })
+      .on('click',(event,d)=>{
+        const name = I2N[+d.id];
+        if(name && DATA[name]) selectCountry(name);
+      });
+  }).catch(()=>{
+    svg.append('text').attr('x',w/2).attr('y',h/2)
+      .attr('text-anchor','middle').attr('fill','#8b91a8')
+      .text('Map requires network access. Use the search bar above to explore countries.');
+  });
+}
+
+// ─────────────────────────────────────────────
+// COUNTRY VIEW
+// ─────────────────────────────────────────────
+// ─────────────────────────────────────────────
+// SUMMARY PARAGRAPH
+// ─────────────────────────────────────────────
+function buildCountrySummary(name, d){
+  const mLast  = getLatest(d.m), cLast = getLatest(d.c), tLast = getLatest(d.t);
+  const mFirst = getFirst(d.m),  cFirst = getFirst(d.c);
+
+  if(!mLast || !mFirst || mLast === 0){
+    return `No membership data is available for ${name} in this dataset.`;
+  }
+
+  const mPct   = pct(mFirst.v, mLast);
+  const cPct   = cFirst && cFirst.v > 0 ? pct(cFirst.v, cLast) : null;
+  const mpc    = cLast > 0 ? mLast / cLast : null;
+  const tFirst = d.t[0];
+  const tGained= (tFirst != null && tLast != null) ? tLast - tFirst : null;
+
+  // ── Sentence 1: membership size + trend ──
+  let sizeDesc;
+  if      (mLast >= 1e6)  sizeDesc = `one of the largest LDS populations in the world at ${fmtM(mLast)} members`;
+  else if (mLast >= 500e3) sizeDesc = `a major LDS presence with ${fmtN(mLast)} members`;
+  else if (mLast >= 100e3) sizeDesc = `a substantial LDS community of ${fmtN(mLast)} members`;
+  else if (mLast >= 10e3)  sizeDesc = `a mid-sized LDS community of ${fmtN(mLast)} members`;
+  else if (mLast >= 1000)  sizeDesc = `a small LDS community of ${fmtN(mLast)} members`;
+  else                     sizeDesc = `a very small LDS presence of ${fmtN(mLast)} members`;
+
+  let growthDesc;
+  if      (mPct >  100) growthDesc = `more than doubling (+${mPct.toFixed(0)}%) since 2018`;
+  else if (mPct >   50) growthDesc = `growing by over half (+${mPct.toFixed(0)}%) since 2018`;
+  else if (mPct >   20) growthDesc = `growing strongly at +${mPct.toFixed(0)}% since 2018`;
+  else if (mPct >   10) growthDesc = `growing at a moderate +${mPct.toFixed(0)}% since 2018`;
+  else if (mPct >    3) growthDesc = `growing modestly at +${mPct.toFixed(1)}% since 2018`;
+  else if (mPct >    0) growthDesc = `essentially flat at +${mPct.toFixed(1)}% since 2018`;
+  else if (mPct >   -5) growthDesc = `slightly declining at ${mPct.toFixed(1)}% since 2018`;
+  else                   growthDesc = `declining at ${mPct.toFixed(1)}% since 2018`;
+
+  const s1 = `${name} has ${sizeDesc}, ${growthDesc}.`;
+
+  // ── Sentence 2: congregation analysis ──
+  let s2 = '';
+  if(cPct != null && cLast > 0){
+    const diverge = mPct > 5 && cPct < -5;
+    const bothDown = mPct < 0 && cPct < 0;
+    const fastCong = cPct > mPct + 10 && cPct > 10;
+    const stable   = Math.abs(cPct) <= 3;
+
+    if(diverge){
+      s2 = `Despite membership growth, congregations have shrunk by ${Math.abs(cPct).toFixed(0)}%—a pattern typically driven by high inactivity rates and unit consolidations.`;
+    } else if(bothDown){
+      s2 = `Both membership and congregations are declining, pointing to genuine organizational contraction rather than just roll-pruning.`;
+    } else if(fastCong){
+      s2 = `Notably, congregations (+${cPct.toFixed(0)}%) have expanded faster than membership, suggesting the church is planting new units ahead of the membership curve.`;
+    } else if(stable){
+      s2 = `Congregation counts have held steady, broadly tracking membership changes.`;
+    } else if(cPct > 0){
+      s2 = `The ${fmtN(cLast)} congregations represent a +${cPct.toFixed(0)}% increase since 2018, in line with membership growth.`;
+    } else {
+      s2 = `Congregations have contracted slightly (${cPct.toFixed(0)}%) even as membership has changed, pointing to some consolidation.`;
+    }
+  }
+
+  // ── Sentence 3: temple milestone (only when noteworthy) ──
+  let s3 = '';
+  if(tGained > 0 && tFirst === 0){
+    s3 = `${name} received its first temple during this period—a significant institutional milestone—and now has ${tLast === 1 ? 'one temple' : `${tLast} temples`}.`;
+  } else if(tGained > 0){
+    s3 = `The temple count rose from ${tFirst} to ${tLast} during this period, reflecting ongoing institutional investment in the region.`;
+  } else if(tLast > 1){
+    s3 = `${name} has ${tLast} temples, pointing to a well-established LDS presence.`;
+  }
+
+  // ── Sentence 4: activity level based on members per congregation ──
+  // Global average is roughly 555 members/congregation (17.5M members / 31.5K congregations)
+  let s4 = '';
+  if(mpc){
+    const r = mpc.toFixed(0);
+    if(mpc > 900){
+      s4 = `With ${r} members per congregation—far above the global average of ~555—activity levels appear quite low; a large portion of the membership is likely nominally on the rolls but not regularly attending.`;
+    } else if(mpc > 650){
+      s4 = `At ${r} members per congregation, activity levels are below average, suggesting many members are less engaged than the global norm.`;
+    } else if(mpc > 450){
+      s4 = `With ${r} members per congregation, activity levels are broadly typical for a mature LDS community.`;
+    } else if(mpc > 250){
+      s4 = `At ${r} members per congregation—below the global average—unit sizes are relatively small, a sign of a more actively participating membership.`;
+    } else {
+      s4 = `With just ${r} members per congregation, units are notably small, suggesting a highly active and closely engaged membership relative to the total on the rolls.`;
+    }
+  }
+
+  return [s1, s2, s3, s4].filter(Boolean).join(' ');
+}
+
+function selectCountry(name){
+  const d = DATA[name]; if(!d) return;
+  document.getElementById('world-view').style.display='none';
+  document.getElementById('country-view').style.display='block';
+  document.getElementById('country-name-nav').textContent=name;
+  document.getElementById('c-trend-lbl').textContent=name;
+  document.getElementById('c-dist-name').textContent=name;
+  window.scrollTo(0,0);
+
+  document.getElementById('c-summary').textContent = buildCountrySummary(name, d);
+  buildCountryKPIs(name, d);
+  buildCountryTrends(name, d);
+  buildCountryDistributions(name, d);
+}
+
+function buildCountryKPIs(name, d){
+  const mLast=getLatest(d.m), cLast=getLatest(d.c), tLast=getLatest(d.t);
+  const mFirst=getFirst(d.m), cFirst=getFirst(d.c);
+  const mpc = cLast>0 ? mLast/cLast : null;
+  const mPct = mFirst ? pct(mFirst.v, mLast) : null;
+  const cPct = cFirst ? pct(cFirst.v, cLast) : null;
+  const mDelta = mFirst ? mLast-mFirst.v : null;
+
+  const cls = v => v==null?'neu':v>=0?'':'neg';
+  const kpis = [
+    {lbl:'Members (2025)', val:fmtN(mLast), delta:`${fmtP(mPct)} since 2018  (${mDelta!=null?(mDelta>=0?'+':'')+fmtN(mDelta):'—'})`, cls:cls(mPct)},
+    {lbl:'Congregations (2025)', val:fmtN(cLast), delta:`${fmtP(cPct)} since 2018`, cls:cls(cPct)},
+    {lbl:'Temples (2025)', val:fmtN(tLast), delta:tLast===0?'No temples':tLast===1?'1 temple':'', cls:'neu'},
+    {lbl:'Members / Congregation', val:mpc!=null?mpc.toFixed(1):'—', delta:'2025 ratio', cls:'neu'},
+    {lbl:'Congregation % Change', val:fmtP(cPct), delta:'2018 → 2025', cls:cls(cPct)},
+  ];
+  document.getElementById('c-kpis').innerHTML = kpis.map(k=>`<div class="kpi"><div class="lbl">${k.lbl}</div><div class="val">${k.val}</div><div class="delta ${k.cls}">${k.delta}</div></div>`).join('');
+}
+
+function buildCountryTrends(name, d){
+  const mpc = d.m.map((m,i)=>d.c[i]>0&&m!=null?+(m/d.c[i]).toFixed(1):null);
+
+  mkChart('c-members',{type:'line',data:{labels:YL,datasets:[{data:d.m,borderColor:'#4e7de9',backgroundColor:'rgba(78,125,233,.15)',fill:true,tension:.3,pointRadius:4,spanGaps:true}]},options:lineOpts(fmtN)});
+  mkChart('c-cong',{type:'line',data:{labels:YL,datasets:[{data:d.c,borderColor:'#4ec98c',backgroundColor:'rgba(78,201,140,.15)',fill:true,tension:.3,pointRadius:4,spanGaps:true}]},options:lineOpts(fmtN)});
+  mkChart('c-temples',{type:'line',data:{labels:YL,datasets:[{data:d.t,borderColor:'#e96b4e',backgroundColor:'rgba(233,107,78,.15)',fill:true,tension:.3,pointRadius:4,spanGaps:true}]},options:lineOpts(fmtN)});
+  mkChart('c-mpc',{type:'line',data:{labels:YL,datasets:[{data:mpc,borderColor:'#f5c842',backgroundColor:'rgba(245,200,66,.15)',fill:true,tension:.3,pointRadius:4,spanGaps:true}]},options:lineOpts(v=>`${v}`)});
+
+  // YoY % change in congregations
+  const congPctLabels=[], congPctData=[];
+  for(let i=1;i<YEARS.length;i++){
+    const prev=d.c[i-1], curr=d.c[i];
+    if(prev!=null&&curr!=null&&prev>0){
+      congPctLabels.push(`${YEARS[i-1]}→${YEARS[i]}`);
+      congPctData.push(parseFloat(((curr-prev)/prev*100).toFixed(2)));
+    }
+  }
+  mkChart('c-cong-pct',{type:'bar',data:{labels:congPctLabels,datasets:[{data:congPctData,backgroundColor:congPctData.map(v=>v>=0?'rgba(78,201,140,.75)':'rgba(233,107,78,.75)'),borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>` ${fmtP(c.raw,2)}`}}},scales:{x:{grid:{display:false}},y:{grid:{color:'#1e2438'},ticks:{callback:v=>v+'%'}}}}});
+}
+
+// ─────────────────────────────────────────────
+// HISTOGRAMS
+// ─────────────────────────────────────────────
+function mkDensity(canvasId, noteId, allVals, selVal, unit='%', nPoints=300){
+  const clean = allVals.filter(v=>v!=null&&isFinite(v)&&!isNaN(v));
+  if(!clean.length) return;
+  const n = clean.length;
+
+  // Silverman's rule-of-thumb bandwidth
+  const mean = clean.reduce((a,b)=>a+b,0)/n;
+  const std  = Math.sqrt(clean.reduce((s,x)=>s+(x-mean)**2,0)/n) || 1;
+  const bw   = 1.06 * std * Math.pow(n,-0.2);
+
+  // Evaluation range: clip display to 1st–99th percentile + 1 bw padding
+  const sorted = [...clean].sort((a,b)=>a-b);
+  const p01 = sorted[Math.max(0,Math.floor(0.01*n))];
+  const p99 = sorted[Math.min(n-1,Math.floor(0.99*n))];
+  const lo  = p01 - bw, hi = p99 + bw;
+  const step = (hi-lo)/nPoints;
+
+  // Gaussian KDE
+  const gauss = t => Math.exp(-0.5*t*t)/Math.sqrt(2*Math.PI);
+  const xs = Array.from({length:nPoints},(_,i)=>lo+i*step);
+  const ys = xs.map(x=>clean.reduce((s,xi)=>s+gauss((x-xi)/bw),0)/(n*bw));
+
+  // Percentile of selVal
+  let selPct = null;
+  if(selVal!=null&&isFinite(selVal)){
+    selPct = sorted.filter(v=>v<=selVal).length/n*100;
+  }
+
+  // Annotation: vertical line at selVal
+  const annotations = {};
+  if(selVal!=null&&isFinite(selVal)){
+    const inRange = selVal>=lo && selVal<=hi;
+    annotations.vLine = {
+      type:'line',
+      scaleID:'x',
+      value: selVal,
+      borderColor:'#f5c842',
+      borderWidth:2,
+      borderDash:[5,4],
+      label:{
+        display:true,
+        content:`${selVal.toFixed(1)}${unit}  ·  ${selPct.toFixed(0)}th %ile`,
+        position:'start',
+        color:'#f5c842',
+        backgroundColor:'rgba(15,17,23,.85)',
+        font:{size:10,weight:'600'},
+        padding:{x:5,y:3},
+        yAdjust:6,
+      }
+    };
+    // If outside clipped range, add an edge arrow label instead
+    if(!inRange){
+      annotations.vLine.value = selVal < lo ? lo : hi;
+      annotations.vLine.label.content = `← ${selVal.toFixed(1)}${unit}  ·  ${selPct.toFixed(0)}th %ile`;
+    }
+  }
+
+  mkChart(canvasId,{
+    type:'line',
+    data:{
+      datasets:[{
+        data: xs.map((x,i)=>({x,y:ys[i]})),
+        borderColor:'#4e7de9',
+        backgroundColor:'rgba(78,125,233,.18)',
+        fill:true,
+        tension:0.4,
+        pointRadius:0,
+        borderWidth:2,
+      }]
+    },
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      plugins:{
+        legend:{display:false},
+        tooltip:{
+          mode:'index', intersect:false,
+          callbacks:{
+            title:ctxArr=>`${parseFloat(ctxArr[0].label).toFixed(1)}${unit}`,
+            label:()=>''
+          }
+        },
+        annotation:{annotations}
+      },
+      scales:{
+        x:{
+          type:'linear',
+          min:lo, max:hi,
+          grid:{color:'#1e2438'},
+          ticks:{maxTicksLimit:7,callback:v=>v.toFixed(0)+unit}
+        },
+        y:{
+          grid:{color:'#1e2438'},
+          ticks:{display:false}
+        }
+      }
+    }
+  });
+
+  const note = document.getElementById(noteId);
+  if(note){
+    note.textContent = selVal!=null&&isFinite(selVal)
+      ? `${selVal.toFixed(1)}${unit} · ${selPct.toFixed(0)}th percentile among ${n} countries`
+      : 'No data for this country';
+  }
+}
+
+function buildCountryDistributions(name, d){
+  // --- Members % change ---
+  const mVals=[], mSel = (() => {
+    const f=getFirst(d.m), l=getLatest(d.m);
+    return f&&l?pct(f.v,l):null;
+  })();
+  for(const [n,dd] of Object.entries(DATA)){
+    const f=getFirst(dd.m), l=getLatest(dd.m);
+    if(f&&l) mVals.push(pct(f.v,l));
+  }
+  mkDensity('d-members','dn-members', mVals, mSel, '%');
+
+  // --- Congregations % change ---
+  const cVals=[], cSel = (() => {
+    const f=getFirst(d.c), l=getLatest(d.c);
+    return f&&l?pct(f.v,l):null;
+  })();
+  for(const [n,dd] of Object.entries(DATA)){
+    const f=getFirst(dd.c), l=getLatest(dd.c);
+    if(f&&l) cVals.push(pct(f.v,l));
+  }
+  mkDensity('d-cong','dn-cong', cVals, cSel, '%');
+
+  // --- Temples absolute change ---
+  const tVals=[], tSel = (() => {
+    const f=d.t[0], l=getLatest(d.t);
+    return f!=null&&l!=null?l-f:null;
+  })();
+  for(const [n,dd] of Object.entries(DATA)){
+    const f=dd.t[0], l=getLatest(dd.t);
+    if(f!=null&&l!=null) tVals.push(l-f);
+  }
+  mkDensity('d-temples','dn-temples', tVals, tSel, ' temples');
+
+  // --- Members per congregation (2025) ---
+  const mpcVals=[], mpcSel = (() => {
+    const m=getLatest(d.m), c=getLatest(d.c);
+    return c>0?m/c:null;
+  })();
+  for(const [n,dd] of Object.entries(DATA)){
+    const m=getLatest(dd.m), c=getLatest(dd.c);
+    if(m!=null&&c!=null&&c>0) mpcVals.push(m/c);
+  }
+  mkDensity('d-mpc','dn-mpc', mpcVals, mpcSel, ' mbr/cong');
+}
+
+// ─────────────────────────────────────────────
+// SEARCH
+// ─────────────────────────────────────────────
+function initSearch(){
+  const input = document.getElementById('search');
+  const list  = document.getElementById('search-list');
+  const names = Object.keys(DATA).sort();
+
+  function render(q){
+    const matches = q ? names.filter(n=>n.toLowerCase().includes(q.toLowerCase())).slice(0,12) : [];
+    if(!matches.length){ list.classList.remove('open'); return; }
+    list.innerHTML = matches.map(n=>`<div onclick="selectCountry('${n.replace(/'/g,"\\'")}');document.getElementById('search').value='';document.getElementById('search-list').classList.remove('open')">${n}</div>`).join('');
+    list.classList.add('open');
+  }
+
+  input.addEventListener('input', e=>render(e.target.value));
+  input.addEventListener('keydown', e=>{ if(e.key==='Escape'){list.classList.remove('open');input.value='';} });
+  document.addEventListener('click', e=>{ if(!e.target.closest('#search-wrap')) list.classList.remove('open'); });
+}
+
+// ─────────────────────────────────────────────
+// NAVIGATION
+// ─────────────────────────────────────────────
+function showWorld(){
+  document.getElementById('country-view').style.display='none';
+  document.getElementById('world-view').style.display='block';
+  window.scrollTo(0,0);
+}
+
+// ─────────────────────────────────────────────
+// INIT
+// ─────────────────────────────────────────────
+buildGlobalKPIs();
+buildGlobalCharts();
+buildMap();
+initSearch();
+</script>
+</body>
+</html>
