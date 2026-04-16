@@ -1133,12 +1133,19 @@ function setWorldView(view){
 function initSearch(){
   const input = document.getElementById('search');
   const list  = document.getElementById('search-list');
-  const names = Object.keys(DATA).sort();
+  const countries = Object.keys(DATA).sort().map(n=>({name:n,type:'country'}));
+  const states    = Object.keys(STATE_DATA).sort().map(n=>({name:n,type:'state'}));
+  const entries   = [...countries, ...states].sort((a,b)=>a.name.localeCompare(b.name));
 
   function render(q){
-    const matches = q ? names.filter(n=>n.toLowerCase().includes(q.toLowerCase())).slice(0,12) : [];
+    const matches = q ? entries.filter(e=>e.name.toLowerCase().includes(q.toLowerCase())).slice(0,12) : [];
     if(!matches.length){ list.classList.remove('open'); return; }
-    list.innerHTML = matches.map(n=>`<div onclick="selectCountry('${n.replace(/'/g,"\\'")}');document.getElementById('search').value='';document.getElementById('search-list').classList.remove('open')">${n}</div>`).join('');
+    list.innerHTML = matches.map(e=>{
+      const safe = e.name.replace(/'/g,"\\'");
+      const fn   = e.type==='state' ? `selectState('${safe}')` : `selectCountry('${safe}')`;
+      const badge = e.type==='state' ? ` <span style="font-size:.75em;opacity:.6">(US state)</span>` : '';
+      return `<div onclick="${fn};document.getElementById('search').value='';document.getElementById('search-list').classList.remove('open')">${e.name}${badge}</div>`;
+    }).join('');
     list.classList.add('open');
   }
 
