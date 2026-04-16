@@ -31,8 +31,8 @@ nav .nav-credit{color:var(--mu);font-size:.75rem}
 .src-btn:hover{background:var(--br)}
 nav .yr-label{color:var(--mu);font-size:.75rem;white-space:nowrap}
 .yr-select{background:var(--sf2);border:1px solid var(--br);color:var(--tx);padding:4px 6px;border-radius:6px;font-size:.78rem;cursor:pointer;outline:none}
-#back-btn{background:var(--sf2);border:1px solid var(--br);color:var(--tx);padding:5px 14px;border-radius:6px;cursor:pointer;font-size:.85rem}
-#back-btn:hover{background:var(--br)}
+#back-btn,#sv-back-btn{background:var(--sf2);border:1px solid var(--br);color:var(--tx);padding:5px 14px;border-radius:6px;cursor:pointer;font-size:.85rem}
+#back-btn:hover,#sv-back-btn:hover{background:var(--br)}
 #country-name-nav{font-size:1rem;font-weight:600}
 #search-wrap{position:relative}
 #search{background:var(--sf2);border:1px solid var(--br);color:var(--tx);padding:5px 12px;border-radius:6px;width:220px;font-size:.85rem;outline:none}
@@ -43,8 +43,9 @@ nav .yr-label{color:var(--mu);font-size:.75rem;white-space:nowrap}
 #search-list div:hover{background:var(--sf2)}
 
 /* VIEWS */
-#world-view,#country-view{padding:20px 24px 48px}
+#world-view,#country-view,#state-view{padding:20px 24px 48px}
 #country-view{display:none}
+#state-view{display:none}
 
 /* MAP */
 #map-container{position:relative;background:var(--sf);border:1px solid var(--br);border-radius:12px;overflow:hidden;margin-bottom:24px}
@@ -82,6 +83,10 @@ nav .yr-label{color:var(--mu);font-size:.75rem;white-space:nowrap}
 
 /* histogram note */
 .hist-note{font-size:.75rem;color:var(--ac4);margin-top:6px;min-height:14px}
+.chart-sub{font-size:.82rem;color:var(--mu);margin:-8px 0 18px;line-height:1.6}
+.sp-toggle{display:inline-flex;align-items:center;gap:8px;font-size:.82rem;color:var(--mu);cursor:pointer;margin-bottom:14px;padding:5px 12px;border:1px solid var(--br);border-radius:6px;background:var(--sf2);user-select:none;transition:border-color .15s,color .15s}
+.sp-toggle:hover{border-color:var(--ac);color:var(--tx)}
+.sp-toggle input{accent-color:var(--ac4);cursor:pointer;width:13px;height:13px}
 
 /* country header */
 .c-header{display:flex;align-items:center;gap:16px;margin-bottom:20px}
@@ -101,7 +106,7 @@ nav .yr-label{color:var(--mu);font-size:.75rem;white-space:nowrap}
   <span class="sub">2018 – 2025</span>
   <span class="spacer"></span>
   <div id="search-wrap">
-    <input id="search" type="text" placeholder="Search a country…" autocomplete="off">
+    <input id="search" type="text" placeholder="Search a country or state…" autocomplete="off">
     <div id="search-list"></div>
   </div>
   <span class="yr-label">Year range:</span>
@@ -133,12 +138,22 @@ nav .yr-label{color:var(--mu);font-size:.75rem;white-space:nowrap}
 
   <div class="view-tabs">
     <button class="view-tab active" id="tab-country" onclick="setWorldView('country')">Countries</button>
-    <button class="view-tab" id="tab-region" onclick="setWorldView('region')">Regions</button>
+    <button class="view-tab" id="tab-states" onclick="setWorldView('states')">U.S. States</button>
+    <button class="view-tab" id="tab-region" onclick="setWorldView('region')">World Regions</button>
+    <button class="view-tab" id="tab-us-region" onclick="setWorldView('us-region')">U.S. State Regions</button>
   </div>
 
   <!-- Country content -->
   <div id="country-content">
     <div class="kpi-row" id="g-kpis"></div>
+
+    <div class="sec-hd">Global Trends</div>
+    <div class="g4">
+      <div class="chart-card"><div class="ct">Year-over-Year % Change · Members</div><canvas id="g-yoy"></canvas></div>
+      <div class="chart-card"><div class="ct">Total Members Worldwide</div><canvas id="g-members"></canvas></div>
+      <div class="chart-card"><div class="ct">Operating Temples Worldwide</div><canvas id="g-temples"></canvas></div>
+      <div class="chart-card"><div class="ct">Congregations Worldwide</div><canvas id="g-cong"></canvas></div>
+    </div>
 
     <div id="map-container">
       <div id="map-legend">
@@ -148,14 +163,6 @@ nav .yr-label{color:var(--mu);font-size:.75rem;white-space:nowrap}
         <span style="color:var(--ac3)">+100%+</span>
         <span style="margin-left:12px;color:var(--mu)">Click a country to explore</span>
       </div>
-    </div>
-
-    <div class="sec-hd">Global Trends</div>
-    <div class="g4">
-      <div class="chart-card"><div class="ct">Year-over-Year % Change · Members</div><canvas id="g-yoy"></canvas></div>
-      <div class="chart-card"><div class="ct">Total Members Worldwide</div><canvas id="g-members"></canvas></div>
-      <div class="chart-card"><div class="ct">Temples Worldwide</div><canvas id="g-temples"></canvas></div>
-      <div class="chart-card"><div class="ct">Congregations Worldwide</div><canvas id="g-cong"></canvas></div>
     </div>
   </div>
 
@@ -170,6 +177,41 @@ nav .yr-label{color:var(--mu);font-size:.75rem;white-space:nowrap}
     </div>
     <div class="g1">
       <div class="chart-card tall-r"><div class="ct">Members per Congregation · 2025</div><canvas id="r-mpc"></canvas></div>
+    </div>
+  </div>
+
+  <!-- U.S. State Regions content -->
+  <div id="us-region-content" style="display:none">
+    <div class="sec-hd">U.S. Regional Comparison · <span id="us-region-yr-range">2018 → 2025</span></div>
+    <div class="g2">
+      <div class="chart-card tall-r"><div class="ct">Members · Absolute Change</div><canvas id="ur-m-abs"></canvas></div>
+      <div class="chart-card tall-r"><div class="ct">Members · % Change</div><canvas id="ur-m-pct"></canvas></div>
+      <div class="chart-card tall-r"><div class="ct">Congregations · Absolute Change</div><canvas id="ur-c-abs"></canvas></div>
+      <div class="chart-card tall-r"><div class="ct">Congregations · % Change</div><canvas id="ur-c-pct"></canvas></div>
+    </div>
+    <div class="g1">
+      <div class="chart-card tall-r"><div class="ct">Members per Congregation · 2025</div><canvas id="ur-mpc"></canvas></div>
+    </div>
+  </div>
+
+  <!-- States content -->
+  <div id="states-content" style="display:none">
+    <div class="kpi-row" id="su-kpis"></div>
+    <div class="sec-hd">U.S. Trends</div>
+    <div class="g4">
+      <div class="chart-card"><div class="ct">Year-over-Year % Change · Members</div><canvas id="su-yoy"></canvas></div>
+      <div class="chart-card"><div class="ct">Total U.S. Members</div><canvas id="su-members"></canvas></div>
+      <div class="chart-card"><div class="ct">Total U.S. Congregations</div><canvas id="su-cong"></canvas></div>
+      <div class="chart-card"><div class="ct">Members per Congregation</div><canvas id="su-mpc"></canvas></div>
+    </div>
+    <div id="us-map-container" style="position:relative;background:var(--sf);border:1px solid var(--br);border-radius:12px;overflow:hidden;margin-top:8px">
+      <div id="us-map-legend" style="display:flex;align-items:center;gap:8px;padding:10px 16px;font-size:.75rem;color:var(--mu)">
+        <span>Membership % change <span id="us-map-legend-yr">2018–2025</span>:</span>
+        <span style="color:var(--ac2)">−20%</span>
+        <div style="height:10px;width:200px;border-radius:4px;background:linear-gradient(to right,#e96b4e,#f5c842,#4ec98c)"></div>
+        <span style="color:var(--ac3)">+20%+</span>
+        <span style="margin-left:12px;color:var(--mu)">Click a state to explore</span>
+      </div>
     </div>
   </div>
 
@@ -196,7 +238,7 @@ nav .yr-label{color:var(--mu);font-size:.75rem;white-space:nowrap}
   <div class="g4">
     <div class="chart-card"><div class="ct">Members</div><canvas id="c-members"></canvas></div>
     <div class="chart-card"><div class="ct">Congregations</div><canvas id="c-cong"></canvas></div>
-    <div class="chart-card"><div class="ct">Temples</div><canvas id="c-temples"></canvas></div>
+    <div class="chart-card"><div class="ct">Operating Temples</div><canvas id="c-temples"></canvas></div>
     <div class="chart-card"><div class="ct">Members per Congregation</div><canvas id="c-mpc"></canvas></div>
   </div>
 
@@ -211,7 +253,19 @@ nav .yr-label{color:var(--mu);font-size:.75rem;white-space:nowrap}
   </div>
 
   <div class="sec-hd">How does <span id="c-dist-name" style="color:var(--ac4)"></span> compare to all countries?</div>
-  <p style="font-size:.82rem;color:var(--mu);margin:-8px 0 18px;line-height:1.6">Each chart shows the distribution of all countries for that metric — the curve represents how common each value is. The dashed line marks where the selected country falls, and the label shows its value and percentile rank among all countries with data.</p>
+  <p class="chart-sub">Each gray line is a country; the gold line is the selected country. Values show % change from the start year.</p>
+  <label class="sp-toggle"><input type="checkbox" id="c-filter-toggle" onchange="toggleSpaghettiFilter('c')"> Show selected country only</label>
+  <div class="g2">
+    <div class="chart-card tall">
+      <div class="ct">Members · % Change from Start Year</div>
+      <canvas id="c-spaghetti-m"></canvas>
+    </div>
+    <div class="chart-card tall">
+      <div class="ct">Congregations · % Change from Start Year</div>
+      <canvas id="c-spaghetti-c"></canvas>
+    </div>
+  </div>
+  <p class="chart-sub">Distribution of all countries for each metric — the curve shows how common each value is. The dashed line marks where this country falls, with its value and percentile rank.</p>
   <div class="g4">
     <div class="chart-card">
       <div class="ct" id="dt-members">Members · % Change 2018→2025</div>
@@ -224,7 +278,7 @@ nav .yr-label{color:var(--mu);font-size:.75rem;white-space:nowrap}
       <div class="hist-note" id="dn-cong"></div>
     </div>
     <div class="chart-card">
-      <div class="ct" id="dt-temples">Temples · Absolute Change 2018→2025</div>
+      <div class="ct" id="dt-temples">Operating Temples · Absolute Change 2018→2025</div>
       <canvas id="d-temples"></canvas>
       <div class="hist-note" id="dn-temples"></div>
     </div>
@@ -236,6 +290,79 @@ nav .yr-label{color:var(--mu);font-size:.75rem;white-space:nowrap}
   </div>
 
 </div><!-- /country-view -->
+
+<!-- ══════════════════════ STATE VIEW ══════════════════════ -->
+<div id="state-view">
+
+  <div class="c-header">
+    <button id="sv-back-btn" onclick="showStates()">← U.S. States</button>
+    <h2 id="sv-state-name"></h2>
+  </div>
+
+  <div class="summary-box">
+    <div class="summary-title">📋 Summary</div>
+    <div id="sv-summary"></div>
+  </div>
+
+  <div class="kpi-row" id="sv-kpis"></div>
+
+  <div class="sec-hd">Trends · <span id="sv-trend-lbl"></span></div>
+  <div class="g4">
+    <div class="chart-card"><div class="ct">Members</div><canvas id="sv-members"></canvas></div>
+    <div class="chart-card"><div class="ct">Congregations</div><canvas id="sv-cong"></canvas></div>
+    <div class="chart-card"><div class="ct">Operating Temples</div><canvas id="sv-temples"></canvas></div>
+    <div class="chart-card"><div class="ct">Members per Congregation</div><canvas id="sv-mpc"></canvas></div>
+  </div>
+
+  <div class="sec-hd">% Change in Members · Year-over-Year</div>
+  <div class="g1">
+    <div class="chart-card tall"><div class="ct">Membership count change vs prior data point</div><canvas id="sv-mem-pct"></canvas></div>
+  </div>
+
+  <div class="sec-hd">% Change in Congregations · Year-over-Year</div>
+  <div class="g1">
+    <div class="chart-card tall"><div class="ct">Congregation count change vs prior data point</div><canvas id="sv-cong-pct"></canvas></div>
+  </div>
+
+  <div class="sec-hd">How does <span id="sv-dist-name" style="color:var(--ac4)"></span> compare to all U.S. states?</div>
+  <p class="chart-sub">Each gray line is a state; the gold line is the selected state. Values show % change from the start year.</p>
+  <label class="sp-toggle"><input type="checkbox" id="sv-filter-toggle" onchange="toggleSpaghettiFilter('sv')"> Show selected state only</label>
+  <div class="g2">
+    <div class="chart-card tall">
+      <div class="ct">Members · % Change from Start Year</div>
+      <canvas id="sv-spaghetti-m"></canvas>
+    </div>
+    <div class="chart-card tall">
+      <div class="ct">Congregations · % Change from Start Year</div>
+      <canvas id="sv-spaghetti-c"></canvas>
+    </div>
+  </div>
+  <p class="chart-sub">Distribution of all states for each metric — the curve shows how common each value is. The dashed line marks where this state falls, with its value and percentile rank.</p>
+  <div class="g4">
+    <div class="chart-card">
+      <div class="ct" id="sv-dt-members">Members · % Change 2018→2025</div>
+      <canvas id="sv-d-members"></canvas>
+      <div class="hist-note" id="sv-dn-members"></div>
+    </div>
+    <div class="chart-card">
+      <div class="ct" id="sv-dt-cong">Congregations · % Change 2018→2025</div>
+      <canvas id="sv-d-cong"></canvas>
+      <div class="hist-note" id="sv-dn-cong"></div>
+    </div>
+    <div class="chart-card">
+      <div class="ct" id="sv-dt-temples">Operating Temples · Absolute Change 2018→2025</div>
+      <canvas id="sv-d-temples"></canvas>
+      <div class="hist-note" id="sv-dn-temples"></div>
+    </div>
+    <div class="chart-card">
+      <div class="ct">Members per Congregation · 2025</div>
+      <canvas id="sv-d-mpc"></canvas>
+      <div class="hist-note" id="sv-dn-mpc"></div>
+    </div>
+  </div>
+
+</div><!-- /state-view -->
+
 
 <script>
 // ─────────────────────────────────────────────
@@ -263,6 +390,29 @@ const fmtM = v => v>=1e6?(v/1e6).toFixed(2)+'M':v>=1e3?(v/1e3).toFixed(0)+'K':St
 
 function pct(a,b){ return (a==null||b==null||a===0)?null:((b-a)/a*100); }
 function getLatest(arr){ for(let i=END_IDX;i>=START_IDX;i--) if(arr[i]!=null) return arr[i]; return null; }
+
+// Insert 2020 label/null gap when the active range spans 2019→2021
+function gapLabels(si, ei){
+  const lbls = YL.slice(si, ei+1);
+  const g = lbls.indexOf('2019');
+  if(g !== -1 && lbls[g+1] === '2021') lbls.splice(g+1, 0, '2020');
+  return lbls;
+}
+// For full 7-element data arrays (e.g. d.m, d.c): slice then optionally insert gap
+function gapData(arr, si, ei){
+  const sliced = arr.slice(si, ei+1);
+  const yrs = YEARS.slice(si, ei+1);
+  const g = yrs.indexOf(2019);
+  if(g !== -1 && yrs[g+1] === 2021){ const a=[...sliced]; a.splice(g+1,0,null); return a; }
+  return sliced;
+}
+// For already-sliced arrays (e.g. totals output): just insert gap at the right position
+function applyGap(arr, si, ei){
+  const yrs = YEARS.slice(si, ei+1);
+  const g = yrs.indexOf(2019);
+  if(g !== -1 && yrs[g+1] === 2021){ const a=[...arr]; a.splice(g+1,0,null); return a; }
+  return [...arr];
+}
 function getFirst(arr){ for(let i=START_IDX;i<=END_IDX;i++) if(arr[i]!=null&&arr[i]>0) return {v:arr[i],i}; return null; }
 function notNull(arr){ return arr.filter(v=>v!==null); }
 
@@ -338,7 +488,7 @@ function buildGlobalKPIs(){
 
   const kpis = [
     {lbl:`Total Members (${eYr})`, val:fmtM(last.m), delta:`+${fmtM(last.m-first.m)} since ${sYr} (${fmtP(pct(first.m,last.m))})`, cls:''},
-    {lbl:`Temples (${eYr})`, val:String(last.t), delta:`+${last.t-first.t} since ${sYr}`, cls:''},
+    {lbl:`Operating Temples (${eYr})`, val:String(last.t), delta:`+${last.t-first.t} since ${sYr}`, cls:''},
     {lbl:`Congregations (${eYr})`, val:fmtN(last.c), delta:`+${fmtN(last.c-first.c)} since ${sYr}`, cls:''},
     {lbl:'Fastest Region', val:fastReg, delta:`${fmtP(fastRegPct)} since ${sYr}`, cls:''},
     {lbl:'Fastest Country', val:fastCtry, delta:`${fmtP(fastCtryPct,0)} since ${sYr}`, cls:''},
@@ -349,25 +499,26 @@ function buildGlobalKPIs(){
 }
 
 function buildGlobalCharts(){
-  const tots = globalTotals();
+  const tots = globalTotals();  // already spans START_IDX..END_IDX
   const activeYrs = YEARS.slice(START_IDX, END_IDX+1);
-  const activeYL  = YL.slice(START_IDX, END_IDX+1);
-  const mArr = tots.map(t=>t.m);
-  const cArr = tots.map(t=>t.c);
-  const tArr = tots.map(t=>t.t);
+  const activeYL  = gapLabels(START_IDX, END_IDX);
+  const rawM = tots.map(t=>t.m);
+  const mArr = applyGap(rawM, START_IDX, END_IDX);
+  const cArr = applyGap(tots.map(t=>t.c), START_IDX, END_IDX);
+  const tArr = applyGap(tots.map(t=>t.t), START_IDX, END_IDX);
 
-  // YoY % change
+  // YoY % change (use raw slice, no gap null)
   const yoyLabels=[], yoyData=[];
   for(let i=1;i<activeYrs.length;i++){
-    const p = (mArr[i]-mArr[i-1])/mArr[i-1]*100;
+    const p = (rawM[i]-rawM[i-1])/rawM[i-1]*100;
     yoyLabels.push(`→${activeYrs[i]}`);
     yoyData.push(parseFloat(p.toFixed(3)));
   }
   mkChart('g-yoy',{type:'bar',data:{labels:yoyLabels,datasets:[{data:yoyData,backgroundColor:yoyData.map(v=>v>=0?'rgba(78,201,140,0.75)':'rgba(233,107,78,0.75)'),borderRadius:3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>` ${fmtP(c.raw,3)}`}}},scales:{x:{grid:{display:false}},y:{grid:{color:'#1e2438'},ticks:{callback:v=>v+'%'}}}}});
 
-  mkChart('g-members',{type:'line',data:{labels:activeYL,datasets:[{data:mArr,borderColor:'#4e7de9',backgroundColor:'rgba(78,125,233,.1)',fill:true,tension:.3,pointRadius:4}]},options:lineOpts(fmtM)});
-  mkChart('g-temples',{type:'line',data:{labels:activeYL,datasets:[{data:tArr,borderColor:'#e96b4e',backgroundColor:'rgba(233,107,78,.1)',fill:true,tension:.3,pointRadius:4}]},options:lineOpts(fmtN)});
-  mkChart('g-cong',{type:'line',data:{labels:activeYL,datasets:[{data:cArr,borderColor:'#4ec98c',backgroundColor:'rgba(78,201,140,.1)',fill:true,tension:.3,pointRadius:4}]},options:lineOpts(fmtN)});
+  mkChart('g-members',{type:'line',data:{labels:activeYL,datasets:[{data:mArr,borderColor:'#4e7de9',backgroundColor:'rgba(78,125,233,.1)',fill:true,tension:.3,pointRadius:4,spanGaps:true}]},options:lineOpts(fmtM)});
+  mkChart('g-temples',{type:'line',data:{labels:activeYL,datasets:[{data:tArr,borderColor:'#e96b4e',backgroundColor:'rgba(233,107,78,.1)',fill:true,tension:.3,pointRadius:4,spanGaps:true}]},options:lineOpts(fmtN)});
+  mkChart('g-cong',{type:'line',data:{labels:activeYL,datasets:[{data:cArr,borderColor:'#4ec98c',backgroundColor:'rgba(78,201,140,.1)',fill:true,tension:.3,pointRadius:4,spanGaps:true}]},options:lineOpts(fmtN)});
 }
 
 // ─────────────────────────────────────────────
@@ -381,6 +532,18 @@ const colorScale = v => {
     return d3.interpolateRgb('#e96b4e','#f5c842')(t);
   } else {
     const t = Math.min(clamp/100,1);
+    return d3.interpolateRgb('#f5c842','#4ec98c')(t);
+  }
+};
+
+const usColorScale = v => {
+  if(v==null) return '#2a2f45';
+  const clamp = Math.max(-20, Math.min(20, v));
+  if(clamp < 0){
+    const t = (clamp+20)/20;
+    return d3.interpolateRgb('#e96b4e','#f5c842')(t);
+  } else {
+    const t = clamp/20;
     return d3.interpolateRgb('#f5c842','#4ec98c')(t);
   }
 };
@@ -559,9 +722,11 @@ function selectCountry(name){
   const stale = ['m','c','t','s'].every(k => d[k][5] === d[k][6]);
   document.getElementById('c-stale-warning').style.display = stale ? 'block' : 'none';
 
+  document.getElementById('c-filter-toggle').checked = false;
   buildCountryKPIs(name, d);
   buildCountryTrends(name, d);
   buildCountryDistributions(name, d);
+  buildSpaghettiCharts(name, DATA, 'c-spaghetti-m', 'c-spaghetti-c', 'c-dist-name');
 }
 
 function buildCountryKPIs(name, d){
@@ -577,7 +742,7 @@ function buildCountryKPIs(name, d){
   const kpis = [
     {lbl:`Members (${eYr})`, val:fmtN(mLast), delta:`${fmtP(mPct)} since ${sYr}  (${mDelta!=null?(mDelta>=0?'+':'')+fmtN(mDelta):'—'})`, cls:cls(mPct)},
     {lbl:`Congregations (${eYr})`, val:fmtN(cLast), delta:`${fmtP(cPct)} since ${sYr}`, cls:cls(cPct)},
-    {lbl:`Temples (${eYr})`, val:fmtN(tLast), delta:tLast===0?'No temples':tLast===1?'1 temple':'', cls:'neu'},
+    {lbl:`Operating Temples (${eYr})`, val:fmtN(tLast), delta:tLast===0?'No temples':tLast===1?'1 temple':'', cls:'neu'},
     {lbl:'Members / Congregation', val:mpc!=null?mpc.toFixed(1):'—', delta:`${eYr} ratio`, cls:'neu'},
     {lbl:'Congregation % Change', val:fmtP(cPct), delta:`${sYr} → ${eYr}`, cls:cls(cPct)},
   ];
@@ -585,10 +750,10 @@ function buildCountryKPIs(name, d){
 }
 
 function buildCountryTrends(name, d){
-  const activeYL = YL.slice(START_IDX, END_IDX+1);
-  const mSlice = d.m.slice(START_IDX, END_IDX+1);
-  const cSlice = d.c.slice(START_IDX, END_IDX+1);
-  const tSlice = d.t.slice(START_IDX, END_IDX+1);
+  const activeYL = gapLabels(START_IDX, END_IDX);
+  const mSlice = gapData(d.m, START_IDX, END_IDX);
+  const cSlice = gapData(d.c, START_IDX, END_IDX);
+  const tSlice = gapData(d.t, START_IDX, END_IDX);
   const mpc = mSlice.map((m,i)=>cSlice[i]>0&&m!=null?+(m/cSlice[i]).toFixed(1):null);
 
   mkChart('c-members',{type:'line',data:{labels:activeYL,datasets:[{data:mSlice,borderColor:'#4e7de9',backgroundColor:'rgba(78,125,233,.15)',fill:true,tension:.3,pointRadius:4,spanGaps:true}]},options:lineOpts(fmtN)});
@@ -732,7 +897,7 @@ function buildCountryDistributions(name, d){
   const sYr = YEARS[START_IDX], eYr = YEARS[END_IDX];
   document.getElementById('dt-members').textContent = `Members · % Change ${sYr}→${eYr}`;
   document.getElementById('dt-cong').textContent    = `Congregations · % Change ${sYr}→${eYr}`;
-  document.getElementById('dt-temples').textContent = `Temples · Absolute Change ${sYr}→${eYr}`;
+  document.getElementById('dt-temples').textContent = `Operating Temples · Absolute Change ${sYr}→${eYr}`;
 
   // --- Members % change ---
   const mVals=[], mSel = (() => {
@@ -868,13 +1033,98 @@ function buildRegionCharts(){
   mkRegionChart('r-mpc',   'mpc',  v=>v.toFixed(0)+' mbr/cong');
 }
 
+// ─────────────────────────────────────────────
+// U.S. STATE REGIONS
+// ─────────────────────────────────────────────
+const US_REGIONS = {
+  'West':      ['Alaska','Arizona','California','Colorado','Hawaii','Idaho','Montana','Nevada',
+                 'New Mexico','Oregon','Utah','Washington','Wyoming'],
+  'Midwest':   ['Illinois','Indiana','Iowa','Kansas','Michigan','Minnesota','Missouri','Nebraska',
+                 'North Dakota','Ohio','South Dakota','Wisconsin'],
+  'South':     ['Alabama','Arkansas','Delaware','District of Columbia','Florida','Georgia','Kentucky',
+                 'Louisiana','Maryland','Mississippi','North Carolina','Oklahoma','South Carolina',
+                 'Tennessee','Texas','Virginia','West Virginia'],
+  'Northeast': ['Connecticut','Maine','Massachusetts','New Hampshire','New Jersey','New York',
+                 'Pennsylvania','Rhode Island','Vermont'],
+};
+
+const US_REGION_COLORS = ['#4e7de9','#4ec98c','#f5c842','#e96b4e'];
+
+function usRegionAggs(){
+  const out = {};
+  Object.entries(US_REGIONS).forEach(([region, states]) => {
+    let m0=0, mL=0, c0=0, cL=0;
+    for(const name of states){
+      const d = STATE_DATA[name]; if(!d) continue;
+      if(d.m[START_IDX]!=null) m0+=d.m[START_IDX]; const ml=getLatest(d.m); if(ml!=null) mL+=ml;
+      if(d.c[START_IDX]!=null) c0+=d.c[START_IDX]; const cl=getLatest(d.c); if(cl!=null) cL+=cl;
+    }
+    out[region] = {
+      mAbs: mL-m0,
+      mPct: m0>0 ? (mL-m0)/m0*100 : 0,
+      cAbs: cL-c0,
+      cPct: c0>0 ? (cL-c0)/c0*100 : 0,
+      mpc:  cL>0 ? mL/cL : 0,
+    };
+  });
+  return out;
+}
+
+function buildUSRegionCharts(){
+  const aggs = usRegionAggs();
+  const labels = Object.keys(US_REGIONS);
+  const bgs = labels.map((_,i) => US_REGION_COLORS[i % US_REGION_COLORS.length]);
+
+  const sYr = YEARS[START_IDX], eYr = YEARS[END_IDX];
+  document.getElementById('us-region-yr-range').textContent = `${sYr} → ${eYr}`;
+
+  function hbarOpts(fmt){
+    return {
+      indexAxis: 'y',
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {legend:{display:false}, tooltip:{callbacks:{label:c=>` ${fmt(c.raw)}`}}},
+      scales: {
+        x: {grid:{color:'#1e2438'}, ticks:{callback:fmt, maxTicksLimit:6}},
+        y: {grid:{display:false}}
+      }
+    };
+  }
+
+  function sorted(k){
+    const pairs = labels.map((r,i) => ({label:r, val:+aggs[r][k].toFixed(1), bg:bgs[i]}));
+    pairs.sort((a,b) => b.val - a.val);
+    return {labels:pairs.map(p=>p.label), data:pairs.map(p=>p.val), bgs:pairs.map(p=>p.bg)};
+  }
+
+  function mkUSRegionChart(id, key, fmt){
+    const s = sorted(key);
+    mkChart(id, {type:'bar', data:{labels:s.labels, datasets:[{data:s.data, backgroundColor:s.bgs, borderRadius:3}]}, options:hbarOpts(fmt)});
+  }
+
+  mkUSRegionChart('ur-m-abs', 'mAbs', v=>fmtN(Math.round(v)));
+  mkUSRegionChart('ur-m-pct', 'mPct', v=>v.toFixed(1)+'%');
+  mkUSRegionChart('ur-c-abs', 'cAbs', v=>fmtN(Math.round(v)));
+  mkUSRegionChart('ur-c-pct', 'cPct', v=>v.toFixed(1)+'%');
+  mkUSRegionChart('ur-mpc',   'mpc',  v=>v.toFixed(0)+' mbr/cong');
+}
+
 function setWorldView(view){
-  const isRegion = view === 'region';
-  document.getElementById('country-content').style.display = isRegion ? 'none' : 'block';
-  document.getElementById('region-content').style.display  = isRegion ? 'block' : 'none';
-  document.getElementById('tab-country').classList.toggle('active', !isRegion);
-  document.getElementById('tab-region').classList.toggle('active',   isRegion);
-  if(isRegion) buildRegionCharts();
+  const isRegion   = view === 'region';
+  const isStates   = view === 'states';
+  const isUSRegion = view === 'us-region';
+  const isCountry  = !isRegion && !isStates && !isUSRegion;
+  document.getElementById('country-content').style.display   = isCountry  ? 'block' : 'none';
+  document.getElementById('region-content').style.display    = isRegion   ? 'block' : 'none';
+  document.getElementById('states-content').style.display    = isStates   ? 'block' : 'none';
+  document.getElementById('us-region-content').style.display = isUSRegion ? 'block' : 'none';
+  document.getElementById('tab-country').classList.toggle('active',   isCountry);
+  document.getElementById('tab-region').classList.toggle('active',    isRegion);
+  document.getElementById('tab-states').classList.toggle('active',    isStates);
+  document.getElementById('tab-us-region').classList.toggle('active', isUSRegion);
+  if(isRegion)   buildRegionCharts();
+  if(isStates)   { buildUSKPIs(); buildUSCharts(); buildUSMap(); }
+  if(isUSRegion) buildUSRegionCharts();
 }
 
 // ─────────────────────────────────────────────
@@ -912,25 +1162,454 @@ function onYearChange(){
 
   // Update year range labels
   const rng = `${YEARS[START_IDX]} → ${YEARS[END_IDX]}`;
-  const rngEl = document.getElementById('region-yr-range');
-  if(rngEl) rngEl.textContent = rng;
+  ['region-yr-range','us-region-yr-range'].forEach(id => {
+    const el = document.getElementById(id); if(el) el.textContent = rng;
+  });
 
   buildGlobalKPIs();
   buildGlobalCharts();
   refreshMapColors();
 
   if(document.getElementById('region-content').style.display !== 'none') buildRegionCharts();
+  if(document.getElementById('us-region-content').style.display !== 'none') buildUSRegionCharts();
 
   const cv = document.getElementById('country-view');
   if(cv.style.display !== 'none'){
     const name = document.getElementById('country-name-nav').textContent;
     if(name && DATA[name]) selectCountry(name);
   }
+  const sv = document.getElementById('state-view');
+  if(sv.style.display !== 'none'){
+    const name = document.getElementById('sv-state-name').textContent;
+    if(name && STATE_DATA[name]) selectState(name);
+  }
+  if(document.getElementById('states-content').style.display !== 'none'){
+    buildUSKPIs(); buildUSCharts(); refreshUSMapColors();
+  }
 }
 
 function showWorld(){
   document.getElementById('country-view').style.display='none';
+  document.getElementById('state-view').style.display='none';
   document.getElementById('world-view').style.display='block';
+  window.scrollTo(0,0);
+}
+
+
+// ─────────────────────────────────────────────
+// STATE DATA
+// ─────────────────────────────────────────────
+const STATE_DATA = {"Alabama":{"m":[37913,37765,38845,39832,40540,41239,41252],"c":[76,76,76,76,75,73,75],"t":[1,1,1,1,1,1,1],"s":[7,8,8,8,8,8,8]},"Alaska":{"m":[33298,33495,33250,33574,33948,33987,33574],"c":[80,80,80,81,82,81,82],"t":[1,1,1,1,1,1,1],"s":[8,8,9,9,9,9,9]},"Arizona":{"m":[432161,436521,438249,439411,442879,444789,442094],"c":[904,926,940,930,924,904,892],"t":[6,6,6,6,6,6,6],"s":[115,115,116,116,117,118,120]},"Arkansas":{"m":[31765,32307,34027,35405,36630,37524,38035],"c":[69,69,71,73,74,76,79],"t":[0,0,0,0,1,1,1],"s":[7,7,7,7,7,7,8]},"California":{"m":[761054,756507,734989,728995,728598,728639,725648],"c":[1240,1229,1189,1134,1112,1099,1085],"t":[7,7,7,7,8,8,8],"s":[154,153,147,146,147,147,145]},"Colorado":{"m":[150958,150509,149007,148708,149186,149722,148945],"c":[305,311,314,310,310,310,315],"t":[2,2,2,2,2,2,3],"s":[35,35,35,35,35,35,36]},"Connecticut":{"m":[15834,15946,15625,15838,16030,16366,16442],"c":[35,36,37,36,34,31,31],"t":[1,1,1,1,1,1,1],"s":[3,3,3,3,3,3,3]},"Delaware":{"m":[5620,5634,5595,5613,5736,5865,6018],"c":[12,12,12,12,11,10,10],"t":[0,0,0,0,0,0,0],"s":[2,2,2,2,2,2,2]},"District of Columbia":{"m":[2805,3144,3136,3168,3215,3337,3648],"c":[4,4,4,4,4,4,4],"t":[0,0,0,0,0,0,0],"s":[0,0,0,0,0,0,0]},"Florida":{"m":[158617,160266,164558,168527,172918,176291,178456],"c":[270,267,282,282,274,278,287],"t":[2,2,2,2,2,3,3],"s":[32,33,34,34,32,32,33]},"Georgia":{"m":[85927,87411,87908,89285,91142,92583,92581],"c":[160,164,167,164,162,161,163],"t":[1,1,1,1,1,1,1],"s":[17,17,19,19,19,19,19]},"Hawaii":{"m":[74699,75009,74858,74952,75635,76357,75827],"c":[141,141,142,143,143,142,146],"t":[2,2,2,2,2,2,2],"s":[16,16,16,16,16,16,17]},"Idaho":{"m":[456496,462069,471241,473894,476118,481049,482905],"c":[1156,1181,1213,1213,1228,1274,1323],"t":[5,5,6,6,6,6,6],"s":[132,132,136,137,138,142,147]},"Illinois":{"m":[57001,56888,56535,57015,57837,58886,58832],"c":[121,119,118,116,117,119,121],"t":[2,2,2,2,2,2,2],"s":[12,12,12,12,12,12,12]},"Indiana":{"m":[45395,45952,46253,46823,47789,48851,48878],"c":[101,101,99,101,101,101,102],"t":[1,1,1,1,1,1,1],"s":[11,11,12,12,12,13,13]},"Iowa":{"m":[28408,28402,28471,28697,29285,29762,29981],"c":[66,68,71,70,68,68,69],"t":[0,0,0,0,0,0,0],"s":[8,8,8,8,8,8,8]},"Kansas":{"m":[38077,38311,38640,39356,39793,40003,39838],"c":[75,75,74,74,74,75,75],"t":[0,0,0,0,0,0,0],"s":[7,7,7,7,7,7,8]},"Kentucky":{"m":[35779,35886,37077,37830,38535,39875,39792],"c":[78,79,83,83,83,81,83],"t":[1,1,1,1,1,1,1],"s":[8,8,8,8,8,8,8]},"Louisiana":{"m":[29750,29589,29550,29727,29913,30076,29913],"c":[55,55,53,52,51,53,52],"t":[1,1,1,1,1,1,1],"s":[7,7,7,7,7,7,7]},"Maine":{"m":[10994,10958,10987,11054,11233,11384,11275],"c":[26,26,26,26,26,27,26],"t":[0,0,0,0,0,0,0],"s":[2,2,2,2,2,2,3]},"Maryland":{"m":[44094,43411,43309,43296,44094,44649,44671],"c":[78,77,83,82,82,83,84],"t":[1,1,1,1,1,1,1],"s":[9,9,10,10,10,10,10]},"Massachusetts":{"m":[27805,28040,27932,28197,28667,28940,29541],"c":[57,57,57,57,57,55,56],"t":[1,1,1,1,1,1,1],"s":[6,6,7,7,7,7,7]},"Michigan":{"m":[45039,45074,45185,45547,46044,46847,47105],"c":[95,96,96,99,99,99,100],"t":[1,1,1,1,1,1,1],"s":[8,8,9,10,10,10,10]},"Minnesota":{"m":[33331,33276,32863,33365,33759,34112,34002],"c":[75,75,74,75,75,75,77],"t":[1,1,1,1,1,1,1],"s":[8,8,8,8,8,8,8]},"Mississippi":{"m":[21561,21649,21936,22189,22297,22402,22000],"c":[51,50,49,49,49,48,49],"t":[0,0,0,0,0,0,0],"s":[4,4,4,4,4,4,4]},"Missouri":{"m":[71774,72525,75375,77959,80440,83213,84311],"c":[153,154,159,160,164,177,181],"t":[2,2,2,2,2,2,2],"s":[18,18,18,18,19,19,22]},"Montana":{"m":[50333,50552,51289,51715,52068,52446,52050],"c":[124,126,127,129,133,135,140],"t":[1,1,1,1,2,2,2],"s":[13,13,13,13,13,13,14]},"Nebraska":{"m":[25046,25098,25055,25229,25935,26299,26199],"c":[55,57,57,57,57,57,57],"t":[1,1,1,1,1,1,1],"s":[4,5,5,5,5,5,5]},"Nevada":{"m":[184565,184703,182569,181975,182786,183097,181842],"c":[345,350,362,353,343,337,339],"t":[2,2,2,2,2,2,3],"s":[42,42,42,42,43,43,43]},"New Hampshire":{"m":[8875,8872,8967,8996,8553,8713,8575],"c":[21,21,21,21,18,18,18],"t":[0,0,0,0,0,0,0],"s":[3,3,3,3,3,3,3]},"New Jersey":{"m":[33926,34173,34163,34536,35453,36374,36632],"c":[64,64,66,65,62,61,61],"t":[0,0,0,0,0,0,0],"s":[6,6,6,6,6,6,6]},"New Mexico":{"m":[69333,69488,69096,69055,69432,69451,68699],"c":[138,138,137,137,137,137,137],"t":[1,1,1,1,1,1,2],"s":[14,14,14,14,14,14,14]},"New York":{"m":[82731,83293,82866,84857,87605,90634,92133],"c":[139,140,143,144,145,146,144],"t":[2,2,2,2,2,2,2],"s":[17,17,17,17,17,17,17]},"North Carolina":{"m":[87768,89083,91521,94018,95875,97653,98483],"c":[166,173,179,181,183,188,192],"t":[1,1,1,1,1,1,1],"s":[17,17,18,19,20,20,20]},"North Dakota":{"m":[11406,11550,11287,11487,11682,11896,11807],"c":[25,26,26,26,26,27,27],"t":[1,1,1,1,1,1,1],"s":[3,3,3,3,3,3,3]},"Ohio":{"m":[62326,62623,63007,63814,64595,65809,65991],"c":[124,125,127,125,127,128,132],"t":[1,1,1,1,1,1,1],"s":[13,13,14,15,15,15,15]},"Oklahoma":{"m":[48268,49227,50800,51847,52844,53614,53890],"c":[93,93,93,93,95,94,98],"t":[1,1,1,1,1,1,1],"s":[9,9,9,9,11,11,13]},"Oregon":{"m":[153338,153540,151151,150207,150170,150416,148062],"c":[304,306,301,296,291,287,278],"t":[2,2,2,2,2,2,2],"s":[35,35,35,35,34,34,34]},"Pennsylvania":{"m":[51954,52290,52149,52193,53025,54015,54354],"c":[108,108,107,106,107,105,105],"t":[1,1,1,1,1,2,2],"s":[12,12,13,13,13,13,13]},"Rhode Island":{"m":[4165,4259,4283,4351,4796,4861,5025],"c":[8,8,8,8,9,9,9],"t":[0,0,0,0,0,0,0],"s":[1,1,1,1,1,1,1]},"South Carolina":{"m":[40887,41358,42902,44230,45810,46586,46753],"c":[69,71,77,79,83,83,89],"t":[1,1,1,1,1,1,1],"s":[7,9,9,9,10,10,11]},"South Dakota":{"m":[10654,10610,11297,11494,11601,11979,12064],"c":[33,30,30,31,31,32,31],"t":[0,0,0,0,0,0,0],"s":[2,2,2,2,2,2,2]},"Tennessee":{"m":[51863,52920,55456,57422,59202,60865,61991],"c":[111,110,112,114,117,116,121],"t":[2,2,2,2,2,2,2],"s":[12,12,12,12,12,12,14]},"Texas":{"m":[357625,362037,371007,378281,385600,392400,395964],"c":[698,723,737,744,751,754,756],"t":[4,4,4,4,5,5,5],"s":[75,77,78,78,79,81,83]},"Utah":{"m":[2109578,2126216,2161526,2173560,2190610,2205134,2206370],"c":[5146,5229,5375,5412,5417,5386,5365],"t":[17,17,17,17,18,23,24],"s":[596,604,620,629,633,640,647]},"Vermont":{"m":[4622,4623,4655,4631,4624,4647,4685],"c":[11,12,12,12,12,10,9],"t":[0,0,0,0,0,0,0],"s":[1,1,1,1,1,1,1]},"Virginia":{"m":[95873,96496,96748,97449,98786,100031,99973],"c":[200,204,216,215,210,213,212],"t":[0,0,0,0,1,1,1],"s":[22,22,22,22,22,22,25]},"Washington":{"m":[289068,289479,283609,281389,281802,282266,278576],"c":[542,544,521,489,482,473,473],"t":[3,3,3,3,4,4,4],"s":[62,62,61,59,60,61,62]},"West Virginia":{"m":[17045,17143,17179,17294,17557,17762,17663],"c":[34,35,34,35,37,38,39],"t":[0,0,0,0,0,0,0],"s":[4,4,4,4,4,4,4]},"Wisconsin":{"m":[27003,27125,27582,27943,28430,28741,28950],"c":[66,67,67,68,69,69,69],"t":[0,0,0,0,0,0,0],"s":[6,6,6,6,6,6,6]},"Wyoming":{"m":[67421,67729,67454,67797,67691,67518,66665],"c":[167,171,172,172,172,171,173],"t":[1,1,1,1,1,2,2],"s":[17,17,19,19,19,19,19]}};
+
+// ─────────────────────────────────────────────
+// U.S. STATES OVERVIEW
+// ─────────────────────────────────────────────
+function usTotals(){
+  const result = [];
+  for(let yi=START_IDX;yi<=END_IDX;yi++){
+    let m=0,c=0,t=0;
+    for(const d of Object.values(STATE_DATA)){
+      if(d.m[yi]!=null) m+=d.m[yi];
+      if(d.c[yi]!=null) c+=d.c[yi];
+      if(d.t[yi]!=null) t+=d.t[yi];
+    }
+    result.push({m,c,t});
+  }
+  return result;
+}
+
+function buildUSKPIs(){
+  const tots = usTotals();
+  const first = tots[0], last = tots[tots.length-1];
+  const sYr = YEARS[START_IDX], eYr = YEARS[END_IDX];
+
+  let fastState='—', fastStatePct=-Infinity;
+  for(const [name,d] of Object.entries(STATE_DATA)){
+    const m0=d.m[START_IDX], mL=getLatest(d.m);
+    if(m0!=null&&m0>0&&mL!=null){ const p=(mL-m0)/m0*100; if(p>fastStatePct){fastStatePct=p;fastState=name;} }
+  }
+
+  let fastRegion='—', fastRegionPct=-Infinity;
+  for(const [region, agg] of Object.entries(usRegionAggs())){
+    if(agg.mPct > fastRegionPct){ fastRegionPct=agg.mPct; fastRegion=region; }
+  }
+
+  const kpis = [
+    {lbl:`Total U.S. Members (${eYr})`, val:fmtM(last.m), delta:`+${fmtM(last.m-first.m)} since ${sYr} (${fmtP(pct(first.m,last.m))})`, cls:''},
+    {lbl:`Total Congregations (${eYr})`, val:fmtN(last.c), delta:`+${fmtN(last.c-first.c)} since ${sYr}`, cls:''},
+    {lbl:`Operating Temples (${eYr})`, val:String(last.t), delta:`+${last.t-first.t} since ${sYr}`, cls:''},
+    {lbl:'Fastest-Growing Region', val:fastRegion, delta:`${fmtP(fastRegionPct,1)} since ${sYr}`, cls:''},
+    {lbl:'Fastest-Growing State', val:fastState, delta:`${fmtP(fastStatePct,1)} since ${sYr}`, cls:''},
+    {lbl:'States w/ Data', val:'51', delta:'50 states + D.C.', cls:'neu'},
+  ];
+  const row = document.getElementById('su-kpis');
+  if(row) row.innerHTML = kpis.map(k=>`<div class="kpi"><div class="lbl">${k.lbl}</div><div class="val">${k.val}</div><div class="delta ${k.cls}">${k.delta}</div></div>`).join('');
+}
+
+function buildUSCharts(){
+  const tots = usTotals();  // already spans START_IDX..END_IDX
+  const activeYL = gapLabels(START_IDX, END_IDX);
+  const rawM = tots.map(t=>t.m);
+  const mArr = applyGap(rawM, START_IDX, END_IDX);
+  const cArr = applyGap(tots.map(t=>t.c), START_IDX, END_IDX);
+  const mpcArr = applyGap(tots.map(t=>t.c>0?+(t.m/t.c).toFixed(1):null), START_IDX, END_IDX);
+
+  // YoY % change (use raw slice, no gap null)
+  const yoyLabels=[], yoyData=[];
+  for(let i=1;i<rawM.length;i++){
+    const p=(rawM[i]-rawM[i-1])/rawM[i-1]*100;
+    yoyLabels.push(`→${YEARS[START_IDX+i]}`);
+    yoyData.push(parseFloat(p.toFixed(3)));
+  }
+  mkChart('su-yoy',{type:'bar',data:{labels:yoyLabels,datasets:[{data:yoyData,backgroundColor:yoyData.map(v=>v>=0?'rgba(78,201,140,0.75)':'rgba(233,107,78,0.75)'),borderRadius:3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>` ${fmtP(c.raw,3)}`}}},scales:{x:{grid:{display:false}},y:{grid:{color:'#1e2438'},ticks:{callback:v=>v+'%'}}}}});
+  mkChart('su-members',{type:'line',data:{labels:activeYL,datasets:[{data:mArr,borderColor:'#4e7de9',backgroundColor:'rgba(78,125,233,.1)',fill:true,tension:.3,pointRadius:4,spanGaps:true}]},options:lineOpts(fmtM)});
+  mkChart('su-cong',{type:'line',data:{labels:activeYL,datasets:[{data:cArr,borderColor:'#4ec98c',backgroundColor:'rgba(78,201,140,.1)',fill:true,tension:.3,pointRadius:4,spanGaps:true}]},options:lineOpts(fmtN)});
+  mkChart('su-mpc',{type:'line',data:{labels:activeYL,datasets:[{data:mpcArr,borderColor:'#f5c842',backgroundColor:'rgba(245,200,66,.1)',fill:true,tension:.3,pointRadius:4,spanGaps:true}]},options:lineOpts(v=>`${v}`)});
+}
+
+// ─────────────────────────────────────────────
+// U.S. MAP (D3)
+// ─────────────────────────────────────────────
+const S2F = {"Alabama":1,"Alaska":2,"Arizona":4,"Arkansas":5,"California":6,
+  "Colorado":8,"Connecticut":9,"Delaware":10,"District of Columbia":11,
+  "Florida":12,"Georgia":13,"Hawaii":15,"Idaho":16,"Illinois":17,
+  "Indiana":18,"Iowa":19,"Kansas":20,"Kentucky":21,"Louisiana":22,
+  "Maine":23,"Maryland":24,"Massachusetts":25,"Michigan":26,
+  "Minnesota":27,"Mississippi":28,"Missouri":29,"Montana":30,
+  "Nebraska":31,"Nevada":32,"New Hampshire":33,"New Jersey":34,
+  "New Mexico":35,"New York":36,"North Carolina":37,"North Dakota":38,
+  "Ohio":39,"Oklahoma":40,"Oregon":41,"Pennsylvania":42,
+  "Rhode Island":44,"South Carolina":45,"South Dakota":46,
+  "Tennessee":47,"Texas":48,"Utah":49,"Vermont":50,"Virginia":51,
+  "Washington":53,"West Virginia":54,"Wisconsin":55,"Wyoming":56};
+const F2S = Object.fromEntries(Object.entries(S2F).map(([k,v])=>[v,k]));
+let US_MAP_PATHS = null, usPctByFIPS = {}, US_MAP_BUILT = false;
+
+function computeUsPctByFIPS(){
+  const result = {};
+  for(const [name,d] of Object.entries(STATE_DATA)){
+    const fips = S2F[name]; if(!fips) continue;
+    const m0=d.m[START_IDX], mL=getLatest(d.m);
+    if(m0!=null&&m0>0&&mL!=null) result[fips]=(mL-m0)/m0*100;
+  }
+  return result;
+}
+
+function refreshUSMapColors(){
+  usPctByFIPS = computeUsPctByFIPS();
+  if(US_MAP_PATHS) US_MAP_PATHS.attr('fill', d => usColorScale(usPctByFIPS[parseInt(d.id)]));
+  const el = document.getElementById('us-map-legend-yr');
+  if(el) el.textContent = `${YEARS[START_IDX]}–${YEARS[END_IDX]}`;
+}
+
+function buildUSMap(){
+  if(US_MAP_BUILT){ refreshUSMapColors(); return; }
+  US_MAP_BUILT = true;
+  const tooltip = document.getElementById('map-tooltip');
+  usPctByFIPS = computeUsPctByFIPS();
+  const w=960, h=580;
+  const svg = d3.select('#us-map-container').append('svg')
+    .attr('viewBox',`0 0 ${w} ${h}`)
+    .style('width','100%').style('max-height','620px').style('display','block');
+  const proj = d3.geoAlbersUsa().scale(1300).translate([w/2, h/2]);
+  const path = d3.geoPath().projection(proj);
+  d3.json('https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json').then(us=>{
+    const states = topojson.feature(us, us.objects.states);
+    US_MAP_PATHS = svg.append('g').selectAll('path')
+      .data(states.features).join('path')
+      .attr('d', path)
+      .attr('fill', d => usColorScale(usPctByFIPS[parseInt(d.id)]))
+      .attr('stroke','#1a1d27').attr('stroke-width',.6)
+      .style('cursor', d => F2S[parseInt(d.id)] ? 'pointer' : 'default')
+      .on('mousemove', function(event,d){
+        const name = F2S[parseInt(d.id)]; if(!name) return;
+        const v = usPctByFIPS[parseInt(d.id)];
+        tooltip.style.display='block';
+        tooltip.style.left=(event.clientX+14)+'px';
+        tooltip.style.top=(event.clientY-10)+'px';
+        tooltip.querySelector('.tt-name').textContent=name;
+        tooltip.querySelector('.tt-pct').textContent=v!=null?`Mbr change ${YEARS[START_IDX]}→${YEARS[END_IDX]}: ${fmtP(v)}`:'No data';
+        d3.select(this).attr('fill-opacity',.7);
+      })
+      .on('mouseleave', function(){
+        tooltip.style.display='none';
+        d3.select(this).attr('fill-opacity',1);
+      })
+      .on('click',(event,d)=>{
+        const name=F2S[parseInt(d.id)];
+        if(name && STATE_DATA[name]) selectState(name);
+      });
+    // State border mesh
+    svg.append('path')
+      .datum(topojson.mesh(us, us.objects.states, (a,b)=>a!==b))
+      .attr('d', path)
+      .attr('fill','none')
+      .attr('stroke','#0f1117')
+      .attr('stroke-width',.8);
+  }).catch(()=>{
+    svg.append('text').attr('x',w/2).attr('y',h/2)
+      .attr('text-anchor','middle').attr('fill','#8b91a8')
+      .text('Map requires network access. Use the search bar to explore states.');
+  });
+}
+
+function buildStateList(){
+  const eYr = YEARS[END_IDX];
+  const states = Object.entries(STATE_DATA).map(([name,d])=>{
+    const mLast = getLatest(d.m), mFirst = getFirst(d.m);
+    const mPct = mFirst&&mLast ? pct(mFirst.v,mLast) : null;
+    return {name, mLast, mPct};
+  }).sort((a,b)=>(b.mLast||0)-(a.mLast||0));
+
+  const rows = states.map(s=>{
+    const pctStr = s.mPct!=null?(s.mPct>=0?`<span style="color:var(--ac3)">+${s.mPct.toFixed(1)}%</span>`:`<span style="color:var(--ac2)">${s.mPct.toFixed(1)}%</span>`):'—';
+    return `<tr style="cursor:pointer;border-bottom:1px solid var(--br)" onclick="selectState('${s.name.replace(/'/g,"\\'")}')">
+      <td style="padding:10px 16px;font-weight:600">${s.name}</td>
+      <td style="padding:10px 16px;text-align:right">${fmtN(s.mLast)}</td>
+      <td style="padding:10px 16px;text-align:right">${pctStr}</td>
+    </tr>`;
+  }).join('');
+
+  const container = document.getElementById('su-state-list');
+  if(container) container.innerHTML = `
+    <table style="width:100%;border-collapse:collapse;background:var(--sf);border:1px solid var(--br);border-radius:10px;overflow:hidden">
+      <thead><tr style="background:var(--sf2);font-size:.72rem;text-transform:uppercase;letter-spacing:.07em;color:var(--mu)">
+        <th style="padding:10px 16px;text-align:left">State</th>
+        <th style="padding:10px 16px;text-align:right">Members (${eYr})</th>
+        <th style="padding:10px 16px;text-align:right">Change ${YEARS[START_IDX]}→${eYr}</th>
+      </tr></thead>
+      <tbody>${rows}</tbody>
+    </table>`;
+}
+
+// ─────────────────────────────────────────────
+// STATE VIEW (drill-down)
+// ─────────────────────────────────────────────
+function buildStateSummary(name, d){
+  const mLast=getLatest(d.m), cLast=getLatest(d.c), tLast=getLatest(d.t);
+  const mFirst=getFirst(d.m), cFirst=getFirst(d.c);
+  if(!mLast||!mFirst||mLast===0) return `No membership data is available for ${name}.`;
+
+  const sYr=YEARS[START_IDX], eYr=YEARS[END_IDX];
+  const mPct=pct(mFirst.v,mLast);
+  const cPct=cFirst&&cFirst.v>0?pct(cFirst.v,cLast):null;
+  const mpc=cLast>0?mLast/cLast:null;
+
+  let sizeDesc;
+  if     (mLast>=1e6)   sizeDesc=`one of the largest LDS state populations at ${fmtM(mLast)} members`;
+  else if(mLast>=500e3) sizeDesc=`a very large LDS presence with ${fmtN(mLast)} members`;
+  else if(mLast>=100e3) sizeDesc=`a substantial LDS community of ${fmtN(mLast)} members`;
+  else if(mLast>=50e3)  sizeDesc=`a mid-sized LDS community of ${fmtN(mLast)} members`;
+  else if(mLast>=10e3)  sizeDesc=`a smaller LDS community of ${fmtN(mLast)} members`;
+  else                  sizeDesc=`a small LDS community of ${fmtN(mLast)} members`;
+
+  let growthDesc;
+  if     (mPct>20)  growthDesc=`growing strongly at +${mPct.toFixed(0)}% since ${sYr}`;
+  else if(mPct>10)  growthDesc=`growing at a moderate +${mPct.toFixed(0)}% since ${sYr}`;
+  else if(mPct>3)   growthDesc=`growing modestly at +${mPct.toFixed(1)}% since ${sYr}`;
+  else if(mPct>0)   growthDesc=`essentially flat at +${mPct.toFixed(1)}% since ${sYr}`;
+  else if(mPct>-5)  growthDesc=`slightly declining at ${mPct.toFixed(1)}% since ${sYr}`;
+  else              growthDesc=`declining at ${mPct.toFixed(1)}% since ${sYr}`;
+
+  const s1=`${name} has ${sizeDesc}, ${growthDesc}.`;
+
+  let s2='';
+  if(cPct!=null&&cLast>0){
+    if(mPct>5&&cPct<-5) s2=`Despite membership growth, congregations have shrunk by ${Math.abs(cPct).toFixed(0)}%—likely driven by consolidations and shifting activity patterns.`;
+    else if(mPct<0&&cPct<0) s2=`Both membership and congregations are declining, pointing to genuine organizational contraction.`;
+    else if(cPct>mPct+10&&cPct>10) s2=`Notably, congregations (+${cPct.toFixed(0)}%) have expanded faster than membership, suggesting new units being planted ahead of the membership curve.`;
+    else if(Math.abs(cPct)<=3) s2=`Congregation counts have held steady, broadly tracking membership changes.`;
+    else if(cPct>0) s2=`The ${fmtN(cLast)} congregations represent a +${cPct.toFixed(0)}% increase since ${sYr}, in line with membership growth.`;
+    else s2=`Congregations have contracted slightly (${cPct.toFixed(0)}%) even as membership shifted, pointing to some consolidation.`;
+  }
+
+  let s3='';
+  const tFirst=d.t[START_IDX];
+  if(tFirst!=null&&tLast!=null){
+    if(tLast-tFirst>0&&tFirst===0) s3=`${name} received its first temple during this period—a significant milestone.`;
+    else if(tLast-tFirst>0) s3=`The temple count rose from ${tFirst} to ${tLast} during this period.`;
+    else if(tLast>1) s3=`${name} has ${tLast} operating temples.`;
+  }
+
+  let s4='';
+  if(mpc){
+    const r=mpc.toFixed(0);
+    if     (mpc>900) s4=`With ${r} members per congregation—far above average—activity levels appear quite low; a large portion of members may not be regularly attending.`;
+    else if(mpc>650) s4=`At ${r} members per congregation, activity levels are below the national average.`;
+    else if(mpc>450) s4=`With ${r} members per congregation, activity levels are broadly typical for a U.S. LDS community.`;
+    else if(mpc>250) s4=`At ${r} members per congregation—below average—unit sizes are relatively small, a sign of an actively participating membership.`;
+    else             s4=`With just ${r} members per congregation, units are notably small, suggesting a highly engaged membership.`;
+  }
+
+  return [s1,s2,s3,s4].filter(Boolean).join(' ');
+}
+
+function selectState(name){
+  const d = STATE_DATA[name]; if(!d) return;
+  document.getElementById('world-view').style.display='none';
+  document.getElementById('country-view').style.display='none';
+  document.getElementById('state-view').style.display='block';
+  document.getElementById('sv-state-name').textContent=name;
+  document.getElementById('sv-trend-lbl').textContent=name;
+  document.getElementById('sv-dist-name').textContent=name;
+  window.scrollTo(0,0);
+  document.getElementById('sv-summary').textContent=buildStateSummary(name,d);
+  document.getElementById('sv-filter-toggle').checked = false;
+  buildStateKPIs(name,d);
+  buildStateTrends(name,d);
+  buildStateDistributions(name,d);
+  buildSpaghettiCharts(name, STATE_DATA, 'sv-spaghetti-m', 'sv-spaghetti-c', 'sv-dist-name');
+}
+
+function buildStateKPIs(name, d){
+  const mLast=getLatest(d.m), cLast=getLatest(d.c), tLast=getLatest(d.t);
+  const mFirst=getFirst(d.m), cFirst=getFirst(d.c);
+  const mpc=cLast>0?mLast/cLast:null;
+  const mPct=mFirst?pct(mFirst.v,mLast):null;
+  const cPct=cFirst?pct(cFirst.v,cLast):null;
+  const mDelta=mFirst?mLast-mFirst.v:null;
+  const sYr=YEARS[START_IDX], eYr=YEARS[END_IDX];
+  const cls=v=>v==null?'neu':v>=0?'':'neg';
+  const kpis=[
+    {lbl:`Members (${eYr})`, val:fmtN(mLast), delta:`${fmtP(mPct)} since ${sYr}  (${mDelta!=null?(mDelta>=0?'+':'')+fmtN(mDelta):'—'})`, cls:cls(mPct)},
+    {lbl:`Congregations (${eYr})`, val:fmtN(cLast), delta:`${fmtP(cPct)} since ${sYr}`, cls:cls(cPct)},
+    {lbl:`Operating Temples (${eYr})`, val:fmtN(tLast), delta:tLast===0?'No temples':tLast===1?'1 temple':'', cls:'neu'},
+    {lbl:'Members / Congregation', val:mpc!=null?mpc.toFixed(1):'—', delta:`${eYr} ratio`, cls:'neu'},
+    {lbl:'Congregation % Change', val:fmtP(cPct), delta:`${sYr} → ${eYr}`, cls:cls(cPct)},
+  ];
+  document.getElementById('sv-kpis').innerHTML=kpis.map(k=>`<div class="kpi"><div class="lbl">${k.lbl}</div><div class="val">${k.val}</div><div class="delta ${k.cls}">${k.delta}</div></div>`).join('');
+}
+
+function buildStateTrends(name, d){
+  const activeYL=gapLabels(START_IDX,END_IDX);
+  const mSlice=gapData(d.m,START_IDX,END_IDX);
+  const cSlice=gapData(d.c,START_IDX,END_IDX);
+  const tSlice=gapData(d.t,START_IDX,END_IDX);
+  const mpc=mSlice.map((m,i)=>cSlice[i]>0&&m!=null?+(m/cSlice[i]).toFixed(1):null);
+
+  mkChart('sv-members',{type:'line',data:{labels:activeYL,datasets:[{data:mSlice,borderColor:'#4e7de9',backgroundColor:'rgba(78,125,233,.15)',fill:true,tension:.3,pointRadius:4,spanGaps:true}]},options:lineOpts(fmtN)});
+  mkChart('sv-cong',{type:'line',data:{labels:activeYL,datasets:[{data:cSlice,borderColor:'#4ec98c',backgroundColor:'rgba(78,201,140,.15)',fill:true,tension:.3,pointRadius:4,spanGaps:true}]},options:lineOpts(fmtN)});
+  mkChart('sv-temples',{type:'line',data:{labels:activeYL,datasets:[{data:tSlice,borderColor:'#e96b4e',backgroundColor:'rgba(233,107,78,.15)',fill:true,tension:.3,pointRadius:4,spanGaps:true}]},options:lineOpts(fmtN)});
+  mkChart('sv-mpc',{type:'line',data:{labels:activeYL,datasets:[{data:mpc,borderColor:'#f5c842',backgroundColor:'rgba(245,200,66,.15)',fill:true,tension:.3,pointRadius:4,spanGaps:true}]},options:lineOpts(v=>`${v}`)});
+
+  const memPctLabels=[],memPctData=[];
+  for(let i=START_IDX+1;i<=END_IDX;i++){
+    const prev=d.m[i-1],curr=d.m[i];
+    if(prev!=null&&curr!=null&&prev>0){ memPctLabels.push(`${YEARS[i-1]}→${YEARS[i]}`); memPctData.push(parseFloat(((curr-prev)/prev*100).toFixed(2))); }
+  }
+  mkChart('sv-mem-pct',{type:'bar',data:{labels:memPctLabels,datasets:[{data:memPctData,backgroundColor:memPctData.map(v=>v>=0?'rgba(78,125,233,.75)':'rgba(233,107,78,.75)'),borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>` ${fmtP(c.raw,2)}`}}},scales:{x:{grid:{display:false}},y:{grid:{color:'#1e2438'},ticks:{callback:v=>v+'%'}}}}});
+
+  const congPctLabels=[],congPctData=[];
+  for(let i=START_IDX+1;i<=END_IDX;i++){
+    const prev=d.c[i-1],curr=d.c[i];
+    if(prev!=null&&curr!=null&&prev>0){ congPctLabels.push(`${YEARS[i-1]}→${YEARS[i]}`); congPctData.push(parseFloat(((curr-prev)/prev*100).toFixed(2))); }
+  }
+  mkChart('sv-cong-pct',{type:'bar',data:{labels:congPctLabels,datasets:[{data:congPctData,backgroundColor:congPctData.map(v=>v>=0?'rgba(78,201,140,.75)':'rgba(233,107,78,.75)'),borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>` ${fmtP(c.raw,2)}`}}},scales:{x:{grid:{display:false}},y:{grid:{color:'#1e2438'},ticks:{callback:v=>v+'%'}}}}});
+}
+
+function buildStateDistributions(name, d){
+  const sYr=YEARS[START_IDX], eYr=YEARS[END_IDX];
+  document.getElementById('sv-dt-members').textContent=`Members · % Change ${sYr}→${eYr}`;
+  document.getElementById('sv-dt-cong').textContent=`Congregations · % Change ${sYr}→${eYr}`;
+  document.getElementById('sv-dt-temples').textContent=`Operating Temples · Absolute Change ${sYr}→${eYr}`;
+
+  const mVals=[],mSel=(()=>{const f=getFirst(d.m),l=getLatest(d.m);return f&&l?pct(f.v,l):null;})();
+  for(const dd of Object.values(STATE_DATA)){const f=getFirst(dd.m),l=getLatest(dd.m);if(f&&l)mVals.push(pct(f.v,l));}
+  mkDensity('sv-d-members','sv-dn-members',mVals,mSel,'%');
+
+  const cVals=[],cSel=(()=>{const f=getFirst(d.c),l=getLatest(d.c);return f&&l?pct(f.v,l):null;})();
+  for(const dd of Object.values(STATE_DATA)){const f=getFirst(dd.c),l=getLatest(dd.c);if(f&&l)cVals.push(pct(f.v,l));}
+  mkDensity('sv-d-cong','sv-dn-cong',cVals,cSel,'%');
+
+  const tVals=[],tSel=(()=>{const f=d.t[0],l=getLatest(d.t);return f!=null&&l!=null?l-f:null;})();
+  for(const dd of Object.values(STATE_DATA)){const f=dd.t[0],l=getLatest(dd.t);if(f!=null&&l!=null)tVals.push(l-f);}
+  mkDensity('sv-d-temples','sv-dn-temples',tVals,tSel,' temples');
+
+  const mpcVals=[],mpcSel=(()=>{const m=getLatest(d.m),c=getLatest(d.c);return c>0?m/c:null;})();
+  for(const dd of Object.values(STATE_DATA)){const m=getLatest(dd.m),c=getLatest(dd.c);if(m!=null&&c!=null&&c>0)mpcVals.push(m/c);}
+  mkDensity('sv-d-mpc','sv-dn-mpc',mpcVals,mpcSel,' mbr/cong');
+}
+
+// ─────────────────────────────────────────────
+// SPAGHETTI FILTER TOGGLE
+// ─────────────────────────────────────────────
+function toggleSpaghettiFilter(prefix){
+  const checked = document.getElementById(`${prefix}-filter-toggle`).checked;
+  const ids = prefix === 'c'
+    ? ['c-spaghetti-m', 'c-spaghetti-c']
+    : ['sv-spaghetti-m', 'sv-spaghetti-c'];
+  for(const id of ids){
+    const chart = CHARTS[id]; if(!chart) continue;
+    const lastIdx = chart.data.datasets.length - 1;
+    chart.data.datasets.forEach((ds, i) => { if(i !== lastIdx) ds.hidden = checked; });
+    chart.update('none');
+  }
+}
+
+// ─────────────────────────────────────────────
+// SPAGHETTI LINE CHARTS
+// ─────────────────────────────────────────────
+function buildSpaghettiCharts(selName, allData, mId, cId, nameId){
+  const activeYL = gapLabels(START_IDX, END_IDX);
+  document.getElementById(nameId).textContent = selName;
+
+  function pctFromStart(arr){
+    const base = arr[START_IDX];
+    if(base == null || base === 0) return Array(activeYL.length).fill(null);
+    const sliced = gapData(arr, START_IDX, END_IDX);
+    return sliced.map(v => v == null ? null : parseFloat(((v - base) / base * 100).toFixed(2)));
+  }
+
+  const grayDs = {borderColor:'rgba(139,145,168,0.25)', borderWidth:1, pointRadius:0, pointHitRadius:1, tension:.3, spanGaps:true, order:1};
+  const goldDs = {borderColor:'#f5c842', borderWidth:4, pointRadius:4, pointHitRadius:40, pointBackgroundColor:'#f5c842', tension:.3, spanGaps:true, order:0};
+
+  function buildChart(canvasId, metric){
+    const datasets = [];
+    for(const [n2, d2] of Object.entries(allData)){
+      if(n2 === selName) continue;
+      const vals = pctFromStart(d2[metric]);
+      if(vals.every(v => v === null)) continue;
+      datasets.push({data: vals, ...grayDs, label: n2});
+    }
+    datasets.push({data: pctFromStart(allData[selName][metric]), ...goldDs, label: selName});
+    const lastIdx = datasets.length - 1;
+
+    // Fix y-axis to the full data range so toggling gray lines doesn't rescale
+    const allVals = datasets.flatMap(ds => ds.data).filter(v => v != null);
+    const yMin = Math.floor(Math.min(...allVals) / 5) * 5;
+    const yMax = Math.ceil(Math.max(...allVals) / 5) * 5;
+
+    mkChart(canvasId, {
+      type: 'line',
+      data: {labels: activeYL, datasets},
+      options: {
+        animation: {duration: 0},
+        responsive: true,
+        maintainAspectRatio: false,
+        interaction: {mode: 'nearest', intersect: false},
+        plugins: {
+          legend: {display: false},
+          tooltip: {
+            callbacks: {label: c => ` ${c.dataset.label}: ${c.raw != null ? fmtP(c.raw) : '—'}`}
+          }
+        },
+        scales: {
+          x: {grid: {color: '#1e2438'}, ticks: {maxRotation: 0}},
+          y: {min: yMin, max: yMax, grid: {color: '#1e2438'}, ticks: {callback: v => v + '%'}}
+        }
+      }
+    });
+  }
+
+  buildChart(mId, 'm');
+  buildChart(cId, 'c');
+}
+
+function showStates(){
+  document.getElementById('state-view').style.display='none';
+  document.getElementById('country-view').style.display='none';
+  document.getElementById('world-view').style.display='block';
+  setWorldView('states');
   window.scrollTo(0,0);
 }
 
@@ -944,9 +1623,10 @@ initSearch();
 </script>
 
 <footer style="padding:16px 24px;border-top:1px solid var(--br);display:flex;justify-content:flex-end;gap:12px">
-  <a href="https://mormonmetrics.com" target="_blank" rel="noopener" class="src-btn">Created by Mormon Metrics</a>
-  <a href="https://newsroom.churchofjesuschrist.org/facts-and-statistics/state" target="_blank" rel="noopener" class="src-btn">Data accessed from churchofjesuschrist.org</a>
-  <a href="https://github.com/acbass49/scrape_lds_stats" target="_blank" rel="noopener" class="src-btn">View Source Code</a>
+  <a href="https://mormonmetrics.com" target="_blank" rel="noopener" class="src-btn">📊 Created by Mormon Metrics</a>
+  <a href="https://newsroom.churchofjesuschrist.org/facts-and-statistics/state" target="_blank" rel="noopener" class="src-btn">⛪ Data accessed from churchofjesuschrist.org</a>
+  <a href="https://github.com/acbass49/scrape_lds_stats" target="_blank" rel="noopener" class="src-btn">💻 View Source Code</a>
+  <a href="https://github.com/acbass49/scrape_lds_stats/issues/new?title=Bug+Report&labels=bug" target="_blank" rel="noopener" class="src-btn">🐛 Report a Bug</a>
 </footer>
 </body>
 </html>
