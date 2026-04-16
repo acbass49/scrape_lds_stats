@@ -6,7 +6,7 @@ import pandas as pd
 
 BASE_STR = "https://newsroom.churchofjesuschrist.org"
 
-def get_links(base_link):
+def get_links(base_link, base_str=BASE_STR):
     '''Uses base link to get every state or country link on page'''
     res = requests.get(base_link)
     soup = BeautifulSoup(res.content, "html.parser")
@@ -16,7 +16,7 @@ def get_links(base_link):
     if next_data_tag:
         raw = next_data_tag.text
         paths = re.findall(r'facts-and-statistics/(?:country|state)/[a-z0-9-]+', raw)
-        return [BASE_STR + "/" + p for p in sorted(set(paths))]
+        return [base_str + "/" + p for p in sorted(set(paths))]
 
     # Old format: find links in HTML nav
     links = []
@@ -24,7 +24,7 @@ def get_links(base_link):
     for a in soup.find_all("a", href=True):
         href = a["href"]
         if "/facts-and-statistics/country/" in href or "/facts-and-statistics/state/" in href:
-            full = BASE_STR + href
+            full = base_str + href
             if full not in seen:
                 seen.add(full)
                 links.append(full)
