@@ -8,27 +8,41 @@ This project scrapes and visualizes country- and state-level membership statisti
 
 Located in `data/`:
 - CSV files named by pull date (e.g., `country-2025-04-27.csv`, `state-2025-04-27.csv`)
-- File name = date data was pulled; **data inside reflects the prior year**
-- Coverage: years 2018–2025 (7 data points per country/state)
+- **File name = date scraped; data inside represents the previous calendar year** (e.g., `country-2019-11-21.csv` contains 2018 data, `country-2026-04-16.csv` contains 2025 data)
+- Coverage: years 2011–2025 (14 data points per country/state; no 2020 data released)
 - ~160 countries and all 50 U.S. states with 4 metrics: members, congregations, temples, stakes
 
 ### Current data files
 | File | Coverage |
 |------|---------|
-| `country-2019-11-21.csv` | country data |
-| `country-2020-10-01.csv` | country data |
-| `country-2022-04-28.csv` | country data |
-| `country-2023-06-29.csv` | country data |
-| `country-2024-07-23.csv` | country data |
-| `country-2025-04-27.csv` | country data |
-| `country-2026-04-16.csv` | country data |
-| `state-2019-11-21.csv` | U.S. state data |
-| `state-2020-10-01.csv` | U.S. state data |
-| `state-2022-04-28.csv` | U.S. state data |
-| `state-2023-06-29.csv` | U.S. state data |
-| `state-2024-07-23.csv` | U.S. state data |
-| `state-2025-04-27.csv` | U.S. state data |
-| `state-2026-04-16.csv` | U.S. state data |
+| `country-2012-08-13.csv` | country data (2011) |
+| `country-2013-07-25.csv` | country data (2012) |
+| `country-2014-08-21.csv` | country data (2013) |
+| `country-2015-08-13.csv` | country data (2014) |
+| `country-2016-06-17.csv` | country data (2015) |
+| `country-2017-06-22.csv` | country data (2016) |
+| `country-2018-06-13.csv` | country data (2017) |
+| `country-2019-11-21.csv` | country data (2018) |
+| `country-2020-10-01.csv` | country data (2019) |
+| `country-2022-04-28.csv` | country data (2021) |
+| `country-2023-06-29.csv` | country data (2022) |
+| `country-2024-07-23.csv` | country data (2023) |
+| `country-2025-04-27.csv` | country data (2024) |
+| `country-2026-04-16.csv` | country data (2025) |
+| `state-2012-08-13.csv` | U.S. state data (2011) |
+| `state-2013-07-25.csv` | U.S. state data (2012) |
+| `state-2014-08-21.csv` | U.S. state data (2013) |
+| `state-2015-08-13.csv` | U.S. state data (2014) |
+| `state-2016-06-17.csv` | U.S. state data (2015) |
+| `state-2017-06-22.csv` | U.S. state data (2016) |
+| `state-2018-06-13.csv` | U.S. state data (2017) |
+| `state-2019-11-21.csv` | U.S. state data (2018) |
+| `state-2020-10-01.csv` | U.S. state data (2019) |
+| `state-2022-04-28.csv` | U.S. state data (2021) |
+| `state-2023-06-29.csv` | U.S. state data (2022) |
+| `state-2024-07-23.csv` | U.S. state data (2023) |
+| `state-2025-04-27.csv` | U.S. state data (2024) |
+| `state-2026-04-16.csv` | U.S. state data (2025) |
 | `temple-2024-07-23.csv` | temple data |
 | `temple-2025-04-27.csv` | temple data |
 | `social_count.csv` | social media follower counts |
@@ -40,8 +54,48 @@ Located in `data/`:
 | `index.html` | Main GitHub Pages dashboard (single-file, all data embedded) |
 | `data/country_analysis.html` | Exploratory analysis — 8 KPI cards, 10 Chart.js charts |
 | `data/congregation_losses.html` | Deep dive on 38 countries with net congregation losses 2018→2025 |
-| `main.py` | Primary scraper |
+| `main.py` | Primary scraper (newsroom.churchofjesuschrist.org, 2019–present) |
+| `wayback_scrape.py` | Wayback Machine scraper for newsroom.churchofjesuschrist.org snapshots |
+| `mormonnewsroom_scrape.py` | Wayback Machine scraper for old mormonnewsroom.org domain (2011–2017 stats) |
 | `followers_scrape.py` | **Out of scope — never fully working, ignore** |
+
+## Python Environment
+
+Use `.venv` for all Python work in this project:
+```bash
+source .venv/bin/activate
+```
+Do **not** create new venvs (e.g. `venv_test`) — use `.venv` exclusively.
+
+## Scraper Overview
+
+There are two historical scrapers covering different eras of the Church's statistics website:
+
+### `wayback_scrape.py` — newsroom.churchofjesuschrist.org (2019–present domain)
+Scrapes Wayback Machine snapshots of the current domain. Uses CSS selectors `.stat-line.one-fifth` and `.stat-line.w-graph` for both country and state pages.
+
+### `mormonnewsroom_scrape.py` — mormonnewsroom.org (old domain, pre-2019)
+Scrapes 7 snapshots covering **2011–2017 stats** (scrape dates 2012–2018). The old site had three different HTML structures across years, so the parser detects which to use:
+
+| Years (data) | Scrape dates | HTML structure | Parser used |
+|---|---|---|---|
+| 2011–2017 states | all years | `.stat-line.one-fifth` + `.stat-line.w-graph` | Structure 0 |
+| 2016–2017 countries | 2017–2018 snapshots | `div.stat-line` → `div.stat-block` (concatenated text) | Structure 1 |
+| 2012–2015 countries | 2013–2016 snapshots | `div.FAS-country` → `h3.stat-num` / `p.stat-label` pairs | Structure 2 |
+| 2011 countries | 2012 snapshot | `table.facts_stats_table` with label/value rows | Structure 3 |
+
+**Important caveats for mormonnewsroom.org data:**
+- **Stakes, Wards, Branches, Districts are all 0** — the old site did not publish these metrics at the country level
+- State pages do include Stakes (via the `.stat-line.one-fifth` structure)
+- State links are not linked from the US country page on the old site — they are constructed from a hardcoded slug list in `STATE_SLUGS`
+
+### Rate limiting
+Both scrapers use:
+- `time.sleep(10)` between every page request
+- `fetch_with_retry()` with 6 retries and exponential backoff starting at 60s (60, 120, 240, 480, 960s)
+- 60s request timeout
+
+Both scrapers resume automatically if interrupted (they check for existing CSVs and skip already-scraped rows).
 
 ## Dashboard Architecture (`index.html`)
 
