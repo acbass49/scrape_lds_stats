@@ -1,7 +1,7 @@
 Name,TotalChurchMembership,Stakes,Congregations,Wards,Branches,FamilySearchCenters,Temples,Missions,Districts
 Alabama,35167,0,75,0,0,35,1,1,0
 Kentucky,32496,0,76,0,0,22,1,1,0
-North Dakota,0,0,0,0,0,0,1,0,0
+North Dakota,7899,0,17,0,0,8,1,0,0
 Alaska,32464,0,81,0,0,16,1,1,0
 Louisiana,28933,0,53,0,0,13,1,1,0
 Ohio,58757,0,129,0,0,42,1,2,0
@@ -19,11 +19,11 @@ Michigan,42696,0,103,0,0,43,1,2,0
 Rhode Island,3890,0,7,0,0,1,0,0,0
 Connecticut,15255,0,33,0,0,9,0,0,0
 Minnesota,30860,0,77,0,0,22,1,1,0
-South Carolina,0,0,0,0,0,0,0,0,0
+South Carolina,37687,0,63,0,0,20,1,1,0
 Delaware,4982,0,12,0,0,3,0,0,0
 Mississippi,21492,0,44,0,0,16,0,1,0
-South Dakota,0,0,0,0,0,0,0,0,0
-District Of Columbia,0,0,0,0,0,0,0,0,0
+South Dakota,10089,0,33,0,0,11,0,1,0
+District of Columbia,2445,0,3,0,0,0,0,0,0
 Missouri,66695,0,148,0,0,46,1,2,0
 Tennessee,46755,0,103,0,0,31,2,2,0
 Florida,139089,0,236,0,0,67,1,5,0
@@ -36,17 +36,17 @@ Hawaii,71041,0,135,0,0,25,2,1,0
 Nevada,176307,0,324,0,0,28,2,2,0
 Vermont,4388,0,12,0,0,6,0,0,0
 Idaho,417002,0,1081,0,0,63,4,2,0
-New Hampshire,0,0,0,0,0,0,0,0,0
+New Hampshire,8263,0,20,0,0,6,0,1,0
 Virginia,90738,0,197,0,0,35,0,2,0
 Illinois,55855,0,127,0,0,36,2,2,0
-New Jersey,0,0,0,0,0,0,0,0,0
+New Jersey,32228,0,60,0,0,18,0,1,0
 Washington,271625,0,528,0,0,78,3,5,0
 Indiana,41621,0,100,0,0,29,0,1,0
-New Mexico,0,0,0,0,0,0,0,0,0
-West Virginia,0,0,0,0,0,0,0,0,0
+New Mexico,68660,0,136,0,0,30,1,2,0
+West Virginia,16902,0,37,0,0,13,0,1,0
 Iowa,25381,0,69,0,0,28,0,1,0
 New York,78829,0,152,0,0,50,2,4,0
 Wisconsin,25203,0,69,0,0,24,0,1,0
 Kansas,34796,0,75,0,0,24,0,0,0
-North Carolina,0,0,0,0,0,0,0,0,0
+North Carolina,78419,0,154,0,0,44,1,2,0
 Wyoming,64437,0,155,0,0,38,0,0,0
