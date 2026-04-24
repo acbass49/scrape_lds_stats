@@ -182,13 +182,14 @@ nav .yr-label{color:var(--mu);font-size:.75rem;white-space:nowrap}
         <button class="map-metric-btn"        data-m="m-abs"  onclick="setMapMetric('m-abs')">Members Abs</button>
         <button class="map-metric-btn"        data-m="c-pct"  onclick="setMapMetric('c-pct')">Congregations %</button>
         <button class="map-metric-btn"        data-m="c-abs"  onclick="setMapMetric('c-abs')">Congregations Abs</button>
-        <button class="map-metric-btn"        data-m="mpc"    onclick="setMapMetric('mpc')">Members / Congregation</button>
+        <button class="map-metric-btn"        data-m="mpc"    onclick="setMapMetric('mpc')"    id="map-btn-mpc">Members / Congregation</button>
+        <button class="map-metric-btn"        data-m="m-snap" onclick="setMapMetric('m-snap')" id="map-btn-snap">Total Members</button>
       </div>
       <div id="map-legend">
         <span><span id="map-legend-lbl">Members % change</span> <span id="map-legend-yr">2011–2025</span>:</span>
         <span id="map-legend-min" style="color:var(--ac2)">—</span>
         <div style="position:relative;display:inline-block">
-          <div class="grad"></div>
+          <div class="grad" id="map-legend-grad"></div>
           <div id="map-legend-zero" style="position:absolute;top:0;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;pointer-events:none">
             <div style="width:1px;height:10px;background:rgba(255,255,255,0.75)"></div>
             <span style="font-size:.6rem;color:var(--mu);margin-top:1px;white-space:nowrap">0%</span>
@@ -244,13 +245,14 @@ nav .yr-label{color:var(--mu);font-size:.75rem;white-space:nowrap}
         <button class="map-metric-btn"        data-m="m-abs"  onclick="setUSMapMetric('m-abs')">Members Abs</button>
         <button class="map-metric-btn"        data-m="c-pct"  onclick="setUSMapMetric('c-pct')">Congregations %</button>
         <button class="map-metric-btn"        data-m="c-abs"  onclick="setUSMapMetric('c-abs')">Congregations Abs</button>
-        <button class="map-metric-btn"        data-m="mpc"    onclick="setUSMapMetric('mpc')">Members / Congregation</button>
+        <button class="map-metric-btn"        data-m="mpc"    onclick="setUSMapMetric('mpc')"    id="us-map-btn-mpc">Members / Congregation</button>
+        <button class="map-metric-btn"        data-m="m-snap" onclick="setUSMapMetric('m-snap')" id="us-map-btn-snap">Total Members</button>
       </div>
       <div id="us-map-legend" style="display:flex;align-items:center;gap:8px;padding:10px 16px;font-size:.75rem;color:var(--mu)">
         <span><span id="us-map-legend-lbl">Members % change</span> <span id="us-map-legend-yr">2011–2025</span>:</span>
         <span id="us-map-legend-min" style="color:var(--ac2)">—</span>
         <div style="position:relative;display:inline-block">
-          <div style="height:10px;width:200px;border-radius:4px;background:linear-gradient(to right,#e96b4e,#f5c842,#4ec98c)"></div>
+          <div id="us-map-legend-grad" style="height:10px;width:200px;border-radius:4px;background:linear-gradient(to right,#e96b4e,#f5c842,#4ec98c)"></div>
           <div id="us-map-legend-zero" style="position:absolute;top:0;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;pointer-events:none">
             <div style="width:1px;height:10px;background:rgba(255,255,255,0.75)"></div>
             <span style="font-size:.6rem;color:var(--mu);margin-top:1px;white-space:nowrap">0%</span>
@@ -623,11 +625,12 @@ function buildGlobalCharts(){
 // WORLD MAP (D3)
 // ─────────────────────────────────────────────
 const METRIC_CFGS = {
-  'm-pct': {lbl:'Members % change',              isPct:true,  fmt:v=>fmtP(v,0),                              tipLbl:'Members % change'},
-  'm-abs': {lbl:'Members absolute change',        isPct:false, fmt:v=>(v>=0?'+':'-')+fmtM(Math.abs(v)),      tipLbl:'Members abs change'},
-  'c-pct': {lbl:'Congregations % change',         isPct:true,  fmt:v=>fmtP(v,0),                              tipLbl:'Congregations % change'},
-  'c-abs': {lbl:'Congregations absolute change',  isPct:false, fmt:v=>(v>=0?'+':'')+fmtN(v),                 tipLbl:'Congregations abs change'},
-  'mpc':   {lbl:'Members / congregation change',  isPct:false, fmt:v=>(v>=0?'+':'')+v.toFixed(1),            tipLbl:'MPC change'},
+  'm-pct':  {lbl:()=>'Members % change',              isPct:true,  fmt:v=>fmtP(v,0),                            tipLbl:()=>`Members % change ${YEARS[START_IDX]}→${YEARS[END_IDX]}`},
+  'm-abs':  {lbl:()=>'Members absolute change',        isPct:false, fmt:v=>(v>=0?'+':'-')+fmtM(Math.abs(v)),    tipLbl:()=>`Members abs change ${YEARS[START_IDX]}→${YEARS[END_IDX]}`},
+  'c-pct':  {lbl:()=>'Congregations % change',         isPct:true,  fmt:v=>fmtP(v,0),                            tipLbl:()=>`Congregations % change ${YEARS[START_IDX]}→${YEARS[END_IDX]}`},
+  'c-abs':  {lbl:()=>'Congregations absolute change',  isPct:false, fmt:v=>(v>=0?'+':'')+fmtN(v),               tipLbl:()=>`Congregations abs change ${YEARS[START_IDX]}→${YEARS[END_IDX]}`},
+  'mpc':    {lbl:()=>`Members per congregation in ${YEARS[END_IDX]}`, btnLbl:()=>`${YEARS[END_IDX]}: Members per congregation`, isPct:false, flip:true, sequential:true, fmt:v=>v.toFixed(0), tipLbl:()=>`${YEARS[END_IDX]} members/congregation`},
+  'm-snap': {lbl:()=>`Total members in ${YEARS[END_IDX]}`,           btnLbl:()=>`${YEARS[END_IDX]}: Total members`,            isPct:false, sequential:true,               fmt:v=>fmtM(v),    tipLbl:()=>`${YEARS[END_IDX]} total members`},
 };
 let MAP_METRIC='m-pct', US_MAP_METRIC='m-pct';
 
@@ -642,10 +645,17 @@ function computeMapVals(dataObj, keyFn, metric){
     else if(metric==='m-abs'){ if(m0!=null&&mL!=null) val=mL-m0; }
     else if(metric==='c-pct'){ if(c0!=null&&c0>0&&cL!=null) val=(cL-c0)/c0*100; }
     else if(metric==='c-abs'){ if(c0!=null&&cL!=null) val=cL-c0; }
-    else if(metric==='mpc'){ const v0=c0>0&&m0!=null?m0/c0:null,vL=cL>0&&mL!=null?mL/cL:null; if(v0!=null&&vL!=null) val=vL-v0; }
+    else if(metric==='mpc'){ if(cL>0&&mL!=null) val=mL/cL; }
+    else if(metric==='m-snap'){ if(mL!=null) val=mL; }
     if(val!=null) result[key]=val;
   }
   return result;
+}
+
+function updateMetricBtnLabels(){
+  const mpcLbl=METRIC_CFGS['mpc'].btnLbl(), snapLbl=METRIC_CFGS['m-snap'].btnLbl();
+  ['map-btn-mpc','us-map-btn-mpc'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=mpcLbl;});
+  ['map-btn-snap','us-map-btn-snap'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=snapLbl;});
 }
 
 function setMapMetric(metric){
@@ -659,32 +669,49 @@ function setUSMapMetric(metric){
   refreshUSMapColors();
 }
 
-function makeGeoScale(valObj, isGlobal=false, isPct=true){
+function makeGeoScale(valObj, isGlobal=false, isPct=true, flip=false, sequential=false){
   const vals = Object.values(valObj).filter(v=>v!=null&&isFinite(v));
   if(!vals.length) return Object.assign(()=>'#2a2f45',{minV:0,maxV:0});
   const sorted=[...vals].sort((a,b)=>a-b);
-  let rawMin=Math.min(sorted[0], 0);
-  if(isGlobal && isPct && YEARS[START_IDX]===2024 && YEARS[END_IDX]===2025) rawMin=-5;
-  const p95=sorted[Math.floor(sorted.length*0.95)] ?? 0;
-  const rawMax=Math.max(p95,0);
-  let minV, maxV;
-  if(isPct){
-    minV = rawMin<-5 ? Math.floor(rawMin/5)*5 : rawMin;
-    maxV = rawMax>5 ? Math.min(100, Math.ceil(rawMax/5)*5) : rawMax;
+  const p95=sorted[Math.min(sorted.length-1,Math.floor(sorted.length*0.95))];
+
+  let minV, maxV, fn;
+  if(sequential){
+    minV = 0;
+    maxV = p95;
+    fn = v => {
+      if(v==null) return '#2a2f45';
+      const t = Math.max(0, Math.min(1, v/(maxV||1)));
+      if(flip){
+        if(t<0.5) return d3.interpolateRgb('#4ec98c','#f5c842')(t*2);
+        return d3.interpolateRgb('#f5c842','#e96b4e')((t-0.5)*2);
+      } else {
+        if(t<0.5) return d3.interpolateRgb('#e96b4e','#f5c842')(t*2);
+        return d3.interpolateRgb('#f5c842','#4ec98c')((t-0.5)*2);
+      }
+    };
   } else {
-    minV = rawMin;
-    maxV = rawMax;
-  }
-  const fn = v=>{
-    if(v==null) return '#2a2f45';
-    if(v<=0){
-      const t=minV<0 ? Math.max(0,Math.min(1,(v-minV)/(-minV))) : 1;
-      return d3.interpolateRgb('#e96b4e','#f5c842')(t);
+    let rawMin=Math.min(sorted[0], 0);
+    if(isGlobal && isPct && YEARS[START_IDX]===2024 && YEARS[END_IDX]===2025) rawMin=-5;
+    const rawMax=Math.max(p95,0);
+    if(isPct){
+      minV = rawMin<-5 ? Math.floor(rawMin/5)*5 : rawMin;
+      maxV = rawMax>5 ? Math.min(100, Math.ceil(rawMax/5)*5) : rawMax;
     } else {
-      const t=maxV>0 ? Math.max(0,Math.min(1,v/maxV)) : 0;
-      return d3.interpolateRgb('#f5c842','#4ec98c')(t);
+      minV = rawMin;
+      maxV = rawMax;
     }
-  };
+    fn = v => {
+      if(v==null) return '#2a2f45';
+      if(v<=0){
+        const t=minV<0 ? Math.max(0,Math.min(1,(v-minV)/(-minV))) : 1;
+        return flip ? d3.interpolateRgb('#4ec98c','#f5c842')(t) : d3.interpolateRgb('#e96b4e','#f5c842')(t);
+      } else {
+        const t=maxV>0 ? Math.max(0,Math.min(1,v/maxV)) : 0;
+        return flip ? d3.interpolateRgb('#f5c842','#e96b4e')(t) : d3.interpolateRgb('#f5c842','#4ec98c')(t);
+      }
+    };
+  }
   fn.minV=minV; fn.maxV=maxV;
   return fn;
 }
@@ -693,20 +720,26 @@ let usColorScale = ()=>'#2a2f45';
 
 function updateWorldLegend(){
   const mn=colorScale.minV??0, mx=colorScale.maxV??0;
-  const fmt=METRIC_CFGS[MAP_METRIC].fmt;
+  const cfg=METRIC_CFGS[MAP_METRIC];
   const minEl=document.getElementById('map-legend-min');
   const maxEl=document.getElementById('map-legend-max');
-  if(minEl) minEl.textContent=fmt(mn);
-  if(maxEl) maxEl.textContent=fmt(mx);
+  if(minEl){ minEl.textContent=cfg.fmt(mn); minEl.style.color=cfg.flip?'var(--ac3)':'var(--ac2)'; }
+  if(maxEl){ maxEl.textContent=cfg.fmt(mx); maxEl.style.color=cfg.flip?'var(--ac2)':'var(--ac3)'; }
   const lblEl=document.getElementById('map-legend-lbl');
-  if(lblEl) lblEl.textContent=METRIC_CFGS[MAP_METRIC].lbl;
+  if(lblEl) lblEl.textContent=cfg.lbl();
+  const yrEl=document.getElementById('map-legend-yr');
+  if(yrEl) yrEl.style.display=cfg.sequential?'none':'';
+  const grad=document.getElementById('map-legend-grad');
+  if(grad) grad.style.background=cfg.sequential
+    ? (cfg.flip ? 'linear-gradient(to right,#4ec98c,#f5c842,#e96b4e)' : 'linear-gradient(to right,#e96b4e,#f5c842,#4ec98c)')
+    : (cfg.flip ? 'linear-gradient(to right,#4ec98c,#f5c842,#e96b4e)' : 'linear-gradient(to right,#e96b4e,#f5c842,#4ec98c)');
   const zeroEl=document.getElementById('map-legend-zero');
-  if(zeroEl) zeroEl.style.left='50%';
+  if(zeroEl) zeroEl.style.display=cfg.sequential?'none':'flex';
 }
 
 function refreshMapColors(){
   pctByISO = computeMapVals(DATA, name=>N2I[name], MAP_METRIC);
-  colorScale = makeGeoScale(pctByISO, true, METRIC_CFGS[MAP_METRIC].isPct);
+  colorScale = makeGeoScale(pctByISO, true, METRIC_CFGS[MAP_METRIC].isPct, METRIC_CFGS[MAP_METRIC].flip??false, METRIC_CFGS[MAP_METRIC].sequential??false);
   if(MAP_PATHS) MAP_PATHS.attr('fill', d => colorScale(pctByISO[+d.id]));
   const el = document.getElementById('map-legend-yr');
   if(el) el.textContent = `${YEARS[START_IDX]}–${YEARS[END_IDX]}`;
@@ -716,7 +749,7 @@ function refreshMapColors(){
 function buildMap(){
   const tooltip = document.getElementById('map-tooltip');
   pctByISO = computeMapVals(DATA, name=>N2I[name], MAP_METRIC);
-  colorScale = makeGeoScale(pctByISO, true, METRIC_CFGS[MAP_METRIC].isPct);
+  colorScale = makeGeoScale(pctByISO, true, METRIC_CFGS[MAP_METRIC].isPct, METRIC_CFGS[MAP_METRIC].flip??false, METRIC_CFGS[MAP_METRIC].sequential??false);
   updateWorldLegend();
 
   const w=960, h=480;
@@ -744,7 +777,7 @@ function buildMap(){
         tooltip.style.left=(event.clientX+14)+'px';
         tooltip.style.top=(event.clientY-10)+'px';
         tooltip.querySelector('.tt-name').textContent=name;
-        tooltip.querySelector('.tt-pct').textContent = v!=null?`${METRIC_CFGS[MAP_METRIC].tipLbl} ${YEARS[START_IDX]}→${YEARS[END_IDX]}: ${METRIC_CFGS[MAP_METRIC].fmt(v)}`:'No data';
+        tooltip.querySelector('.tt-pct').textContent = v!=null?`${METRIC_CFGS[MAP_METRIC].tipLbl()}: ${METRIC_CFGS[MAP_METRIC].fmt(v)}`:'No data';
         d3.select(this).attr('fill-opacity',.7);
       })
       .on('mouseleave', function(event,d){
@@ -1317,6 +1350,7 @@ function onYearChange(){
   START_IDX = si;
   END_IDX   = ei;
 
+  updateMetricBtnLabels();
   // Update year range labels
   const rng = `${YEARS[START_IDX]} → ${YEARS[END_IDX]}`;
   ['region-yr-range','us-region-yr-range'].forEach(id => {
@@ -1432,20 +1466,26 @@ let US_MAP_PATHS = null, usPctByFIPS = {}, US_MAP_BUILT = false;
 
 function updateUSLegend(){
   const mn=usColorScale.minV??0, mx=usColorScale.maxV??0;
-  const fmt=METRIC_CFGS[US_MAP_METRIC].fmt;
+  const cfg=METRIC_CFGS[US_MAP_METRIC];
   const minEl=document.getElementById('us-map-legend-min');
   const maxEl=document.getElementById('us-map-legend-max');
-  if(minEl) minEl.textContent=fmt(mn);
-  if(maxEl) maxEl.textContent=fmt(mx);
+  if(minEl){ minEl.textContent=cfg.fmt(mn); minEl.style.color=cfg.flip?'var(--ac3)':'var(--ac2)'; }
+  if(maxEl){ maxEl.textContent=cfg.fmt(mx); maxEl.style.color=cfg.flip?'var(--ac2)':'var(--ac3)'; }
   const lblEl=document.getElementById('us-map-legend-lbl');
-  if(lblEl) lblEl.textContent=METRIC_CFGS[US_MAP_METRIC].lbl;
+  if(lblEl) lblEl.textContent=cfg.lbl();
+  const yrEl=document.getElementById('us-map-legend-yr');
+  if(yrEl) yrEl.style.display=cfg.sequential?'none':'';
+  const grad=document.getElementById('us-map-legend-grad');
+  if(grad) grad.style.background=cfg.sequential
+    ? (cfg.flip ? 'linear-gradient(to right,#4ec98c,#f5c842,#e96b4e)' : 'linear-gradient(to right,#e96b4e,#f5c842,#4ec98c)')
+    : (cfg.flip ? 'linear-gradient(to right,#4ec98c,#f5c842,#e96b4e)' : 'linear-gradient(to right,#e96b4e,#f5c842,#4ec98c)');
   const zeroEl=document.getElementById('us-map-legend-zero');
-  if(zeroEl) zeroEl.style.left='50%';
+  if(zeroEl) zeroEl.style.display=cfg.sequential?'none':'flex';
 }
 
 function refreshUSMapColors(){
   usPctByFIPS = computeMapVals(STATE_DATA, name=>S2F[name], US_MAP_METRIC);
-  usColorScale = makeGeoScale(usPctByFIPS, false, METRIC_CFGS[US_MAP_METRIC].isPct);
+  usColorScale = makeGeoScale(usPctByFIPS, false, METRIC_CFGS[US_MAP_METRIC].isPct, METRIC_CFGS[US_MAP_METRIC].flip??false, METRIC_CFGS[US_MAP_METRIC].sequential??false);
   if(US_MAP_PATHS) US_MAP_PATHS.attr('fill', d => usColorScale(usPctByFIPS[parseInt(d.id)]));
   const el = document.getElementById('us-map-legend-yr');
   if(el) el.textContent = `${YEARS[START_IDX]}–${YEARS[END_IDX]}`;
@@ -1457,7 +1497,7 @@ function buildUSMap(){
   US_MAP_BUILT = true;
   const tooltip = document.getElementById('map-tooltip');
   usPctByFIPS = computeMapVals(STATE_DATA, name=>S2F[name], US_MAP_METRIC);
-  usColorScale = makeGeoScale(usPctByFIPS, false, METRIC_CFGS[US_MAP_METRIC].isPct);
+  usColorScale = makeGeoScale(usPctByFIPS, false, METRIC_CFGS[US_MAP_METRIC].isPct, METRIC_CFGS[US_MAP_METRIC].flip??false, METRIC_CFGS[US_MAP_METRIC].sequential??false);
   updateUSLegend();
   const w=960, h=580;
   const svg = d3.select('#us-map-container').append('svg')
@@ -1480,7 +1520,7 @@ function buildUSMap(){
         tooltip.style.left=(event.clientX+14)+'px';
         tooltip.style.top=(event.clientY-10)+'px';
         tooltip.querySelector('.tt-name').textContent=name;
-        tooltip.querySelector('.tt-pct').textContent=v!=null?`${METRIC_CFGS[US_MAP_METRIC].tipLbl} ${YEARS[START_IDX]}→${YEARS[END_IDX]}: ${METRIC_CFGS[US_MAP_METRIC].fmt(v)}`:'No data';
+        tooltip.querySelector('.tt-pct').textContent=v!=null?`${METRIC_CFGS[US_MAP_METRIC].tipLbl()}: ${METRIC_CFGS[US_MAP_METRIC].fmt(v)}`:'No data';
         d3.select(this).attr('fill-opacity',.7);
       })
       .on('mouseleave', function(){
@@ -1768,6 +1808,7 @@ function showStates(){
 // ─────────────────────────────────────────────
 // INIT
 // ─────────────────────────────────────────────
+updateMetricBtnLabels();
 buildGlobalKPIs();
 buildGlobalCharts();
 buildMap();
