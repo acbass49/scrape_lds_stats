@@ -674,11 +674,12 @@ function makeGeoScale(valObj, isGlobal=false, isPct=true, flip=false, sequential
   if(!vals.length) return Object.assign(()=>'#2a2f45',{minV:0,maxV:0});
   const sorted=[...vals].sort((a,b)=>a-b);
   const p95=sorted[Math.min(sorted.length-1,Math.floor(sorted.length*0.95))];
+  const pMax=sorted[sorted.length-1];
 
   let minV, maxV, fn;
   if(sequential){
     minV = 0;
-    maxV = p95;
+    maxV = isGlobal ? p95 : pMax;
     fn = v => {
       if(v==null) return '#2a2f45';
       const t = Math.max(0, Math.min(1, v/(maxV||1)));
@@ -693,10 +694,10 @@ function makeGeoScale(valObj, isGlobal=false, isPct=true, flip=false, sequential
   } else {
     let rawMin=Math.min(sorted[0], 0);
     if(isGlobal && isPct && YEARS[START_IDX]===2024 && YEARS[END_IDX]===2025) rawMin=-5;
-    const rawMax=Math.max(p95,0);
+    const rawMax=Math.max(isGlobal ? p95 : pMax, 0);
     if(isPct){
       minV = rawMin<-5 ? Math.floor(rawMin/5)*5 : rawMin;
-      maxV = rawMax>5 ? Math.min(100, Math.ceil(rawMax/5)*5) : rawMax;
+      maxV = isGlobal && rawMax>5 ? Math.min(100, Math.ceil(rawMax/5)*5) : rawMax;
     } else {
       minV = rawMin;
       maxV = rawMax;
